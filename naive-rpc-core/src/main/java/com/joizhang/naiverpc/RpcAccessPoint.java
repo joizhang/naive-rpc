@@ -4,6 +4,7 @@ import com.joizhang.naiverpc.spi.ServiceSupport;
 
 import java.io.Closeable;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 
 public interface RpcAccessPoint extends Closeable {
@@ -27,6 +28,20 @@ public interface RpcAccessPoint extends Closeable {
      * @return 服务地址
      */
     <T> URI addServiceProvider(T service, Class<T> serviceClass);
+
+    /**
+     * 获取注册中心的引用
+     *
+     * @return 注册中心引用
+     */
+    default NameService getNameService() {
+        try {
+            URI uri = new URI("file:/none");
+            return getNameService(uri);
+        } catch (URISyntaxException e) {
+            return null;
+        }
+    }
 
     /**
      * 获取注册中心的引用

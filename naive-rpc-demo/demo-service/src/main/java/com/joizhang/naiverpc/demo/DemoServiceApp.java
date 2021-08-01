@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
-import java.io.File;
 import java.net.URI;
 
 public class DemoServiceApp {
@@ -18,13 +17,11 @@ public class DemoServiceApp {
 
     public static void main(String[] args) throws Exception {
         String serviceName = HelloService.class.getCanonicalName();
-        File tmpDirFile = new File(System.getProperty("java.io.tmpdir"));
-        File file = new File(tmpDirFile, "naive_rpc_name_service.data");
         HelloService helloService = new HelloServiceImpl();
         logger.info("创建并启动 RpcAccessPoint...");
         try (RpcAccessPoint rpcAccessPoint = ServiceSupport.load(RpcAccessPoint.class);
              Closeable ignored = rpcAccessPoint.startServer()) {
-            NameService nameService = rpcAccessPoint.getNameService(file.toURI());
+            NameService nameService = rpcAccessPoint.getNameService();
             assert nameService != null;
             logger.info("向 RpcAccessPoint 注册 {} 服务...", serviceName);
             URI uri = rpcAccessPoint.addServiceProvider(helloService, HelloService.class);

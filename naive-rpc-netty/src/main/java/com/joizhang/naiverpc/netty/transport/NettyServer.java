@@ -27,12 +27,12 @@ public class NettyServer implements TransportServer {
     public void start(RequestHandlerRegistry requestHandlerRegistry, int port) throws Exception {
         this.port = port;
         this.requestHandlerRegistry = requestHandlerRegistry;
+
         EventLoopGroup acceptEventGroup = newEventLoopGroup();
         EventLoopGroup ioEventGroup = newEventLoopGroup();
         ChannelHandler channelHandlerPipeline = newChannelHandlerPipeline();
         ServerBootstrap serverBootstrap = newBootstrap(channelHandlerPipeline, acceptEventGroup, ioEventGroup);
         Channel channel = doBind(serverBootstrap);
-
         this.acceptEventGroup = acceptEventGroup;
         this.ioEventGroup = ioEventGroup;
         this.channel = channel;

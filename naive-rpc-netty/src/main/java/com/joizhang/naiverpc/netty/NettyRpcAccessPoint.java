@@ -13,6 +13,7 @@ import java.io.Closeable;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 
@@ -53,7 +54,7 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     @Override
     public synchronized Closeable startServer() throws Exception {
-        if (null == server) {
+        if (Objects.isNull(server)) {
             server = ServiceSupport.load(TransportServer.class);
             server.start(RequestHandlerRegistry.getInstance(), port);
         }

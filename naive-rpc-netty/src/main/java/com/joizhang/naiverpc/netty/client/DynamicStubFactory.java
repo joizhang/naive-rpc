@@ -9,8 +9,8 @@ import java.util.Map;
 public class DynamicStubFactory implements StubFactory {
 
     private final static String STUB_SOURCE_TEMPLATE =
-            "package com.joizhang.naiverpc.client.stubs;\n" +
-                    "import com.joizhang.naiverpc.serialize.SerializeSupport;\n" +
+            "package com.joizhang.naiverpc.netty.client.stubs;\n" +
+                    "import com.joizhang.naiverpc.netty.serialize.SerializeSupport;\n" +
                     "\n" +
                     "public class %s extends AbstractStub implements %s {\n" +
                     "    @Override\n" +
@@ -34,7 +34,7 @@ public class DynamicStubFactory implements StubFactory {
             // 填充模板
             String stubSimpleName = serviceClass.getSimpleName() + "Stub";
             String classFullName = serviceClass.getName();
-            String stubFullName = "com.joizhang.naiverpc.client.stubs." + stubSimpleName;
+            String stubFullName = "com.joizhang.naiverpc.netty.client.stubs." + stubSimpleName;
             String methodName = serviceClass.getMethods()[0].getName();
 
             String source = String.format(STUB_SOURCE_TEMPLATE, stubSimpleName, classFullName, methodName, classFullName, methodName);

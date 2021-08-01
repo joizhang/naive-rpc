@@ -21,8 +21,15 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.joizhang</groupId>
-            <artifactId>naive-rpc-core</artifactId>
+            <artifactId>naive-rpc-netty</artifactId>
             <version>2021.07</version>
         </dependency>
 
