@@ -1,0 +1,3 @@
+com.joizhang.naiverpc.netty.serialize.StringSerializer
+com.joizhang.naiverpc.netty.serialize.MetadataSerializer
+com.joizhang.naiverpc.netty.serialize.RpcRequestSerializer

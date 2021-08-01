@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>naive-rpc-demo</artifactId>
+    <packaging>pom</packaging>
+    <version>2021.07</version>
+    <modules>
+        <module>demo-api</module>
+        <module>demo-client</module>
+        <module>demo-service</module>
+    </modules>
+
+    <name>naive-rpc-demo</name>
+
+    <parent>
+        <groupId>com.joizhang</groupId>
+        <artifactId>naive-rpc</artifactId>
+        <version>2021.07</version>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+    </build>
+</project>
