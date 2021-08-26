@@ -46,7 +46,7 @@ public interface RpcAccessPoint extends Closeable {
     /**
      * 获取注册中心的引用
      *
-     * @param nameServiceUri 注册中心URI
+     * @param nameServiceUri 注册中心 URI
      * @return 注册中心引用
      */
     default NameService getNameService(URI nameServiceUri) {

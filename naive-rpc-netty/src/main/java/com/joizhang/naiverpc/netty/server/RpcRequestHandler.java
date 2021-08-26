@@ -48,7 +48,7 @@ public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistr
             return new Command(new ResponseHeader(type(), header.getVersion(), header.getRequestId(), Code.NO_PROVIDER.getCode(), "No provider!"), new byte[0]);
         } catch (Throwable t) {
             // 发生异常，返回UNKNOWN_ERROR错误响应。
-            logger.warn("Exception: ", t);
+            logger.error("Exception: ", t);
             return new Command(new ResponseHeader(type(), header.getVersion(), header.getRequestId(), Code.UNKNOWN_ERROR.getCode(), t.getMessage()), new byte[0]);
         }
     }

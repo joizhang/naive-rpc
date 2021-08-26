@@ -23,10 +23,13 @@ public class DemoServiceApp {
              Closeable ignored = rpcAccessPoint.startServer()) {
             NameService nameService = rpcAccessPoint.getNameService();
             assert nameService != null;
+
             logger.info("向 RpcAccessPoint 注册 {} 服务...", serviceName);
             URI uri = rpcAccessPoint.addServiceProvider(helloService, HelloService.class);
-            logger.info("服务名: {}, 向 NameService 注册...", serviceName);
+
+            logger.info("向 NameService 注册 {} 服务的地址 {} ...", serviceName, uri);
             nameService.registerService(serviceName, uri);
+
             logger.info("开始提供服务，按任何键退出.");
             //noinspection ResultOfMethodCallIgnored
             System.in.read();

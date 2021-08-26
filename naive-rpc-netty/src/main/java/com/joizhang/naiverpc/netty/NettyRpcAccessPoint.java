@@ -59,7 +59,7 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
             server.start(RequestHandlerRegistry.getInstance(), port);
         }
         return () -> {
-            if(null != server) {
+            if(server != null) {
                 server.stop();
             }
         };
@@ -67,7 +67,7 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     @Override
     public void close() {
-        if(null != server) {
+        if(server != null) {
             server.stop();
         }
         client.close();
