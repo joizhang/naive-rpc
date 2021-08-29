@@ -28,12 +28,12 @@ public class NettyClient implements TransportClient {
         inFlightRequests = new InFlightRequests();
     }
 
-    private Bootstrap newBootstrap(ChannelHandler channelHandler, EventLoopGroup ioEventGroup) {
+    private Bootstrap newBootstrap() {
         Bootstrap bootstrap = new Bootstrap();
-        bootstrap.channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
-                .group(ioEventGroup)
-                .handler(channelHandler)
-                .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+        bootstrap.group(ioEventGroup)
+                .channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
+                .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                .handler(newChannelHandlerPipeline());
         return bootstrap;
     }
 
@@ -42,30 +42,29 @@ public class NettyClient implements TransportClient {
         return new NettyTransport(createChannel(address, connectionTimeout), inFlightRequests);
     }
 
-    private synchronized Channel createChannel(SocketAddress address, long connectionTimeout) throws InterruptedException, TimeoutException {
+    private synchronized Channel createChannel(SocketAddress address, long connectionTimeout)
+            throws InterruptedException, TimeoutException {
         if (address == null) {
             throw new IllegalArgumentException("address must not be null!");
         }
         if (ioEventGroup == null) {
             ioEventGroup = newIoEventGroup();
         }
-        if (bootstrap == null){
-            ChannelHandler channelHandlerPipeline = newChannelHandlerPipeline();
-            bootstrap = newBootstrap(channelHandlerPipeline, ioEventGroup);
+        if (bootstrap == null) {
+            bootstrap = newBootstrap();
         }
-        ChannelFuture channelFuture;
-        Channel channel;
-        channelFuture = bootstrap.connect(address);
+        ChannelFuture channelFuture = bootstrap.connect(address);
         if (!channelFuture.await(connectionTimeout)) {
             throw new TimeoutException();
         }
-        channel = channelFuture.channel();
+        Channel channel = channelFuture.channel();
         if (channel == null || !channel.isActive()) {
             throw new IllegalStateException();
         }
         channels.add(channel);
         return channel;
     }
+
     private ChannelHandler newChannelHandlerPipeline() {
         return new ChannelInitializer<Channel>() {
             @Override
@@ -89,7 +88,7 @@ public class NettyClient implements TransportClient {
     @Override
     public void close() {
         for (Channel channel : channels) {
-            if(null != channel) {
+            if (null != channel) {
                 channel.close();
             }
         }

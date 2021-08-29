@@ -27,10 +27,9 @@ public class NettyServer implements TransportServer {
     public void start(RequestHandlerRegistry requestHandlerRegistry, int port) throws Exception {
         this.port = port;
         this.requestHandlerRegistry = requestHandlerRegistry;
-        this.bootstrap = new ServerBootstrap();
         this.bossGroup = newEventLoopGroup();
         this.workerGroup = newEventLoopGroup();
-        this.initBootstrap();
+        this.bootstrap = newBootstrap();
         this.channel = doBind();
     }
 
@@ -42,13 +41,15 @@ public class NettyServer implements TransportServer {
         }
     }
 
-    private void initBootstrap() {
+    private ServerBootstrap newBootstrap() {
+        ServerBootstrap serverBootstrap = new ServerBootstrap();
         bootstrap.group(this.bossGroup, this.workerGroup)
                 .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .childHandler(newChannelHandlerPipeline());
+        return serverBootstrap;
     }
 
     private ChannelHandler newChannelHandlerPipeline() {
