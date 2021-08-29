@@ -19,8 +19,8 @@ import java.util.concurrent.TimeoutException;
 
 public class NettyClient implements TransportClient {
 
-    private EventLoopGroup ioEventGroup;
     private Bootstrap bootstrap;
+    private EventLoopGroup ioEventGroup;
     private final InFlightRequests inFlightRequests;
     private final List<Channel> channels = new LinkedList<>();
 

@@ -10,52 +10,28 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.netty.handler.timeout.IdleStateHandler;
+
+import java.util.concurrent.TimeUnit;
 
 public class NettyServer implements TransportServer {
 
-    private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
-
     private int port;
     private RequestHandlerRegistry requestHandlerRegistry;
-    private EventLoopGroup acceptEventGroup;
-    private EventLoopGroup ioEventGroup;
+    private ServerBootstrap bootstrap;
+    private EventLoopGroup bossGroup;
+    private EventLoopGroup workerGroup;
     private Channel channel;
 
     @Override
     public void start(RequestHandlerRegistry requestHandlerRegistry, int port) throws Exception {
         this.port = port;
         this.requestHandlerRegistry = requestHandlerRegistry;
-
-        EventLoopGroup acceptEventGroup = newEventLoopGroup();
-        EventLoopGroup ioEventGroup = newEventLoopGroup();
-        ChannelHandler channelHandlerPipeline = newChannelHandlerPipeline();
-        ServerBootstrap serverBootstrap = newBootstrap(channelHandlerPipeline, acceptEventGroup, ioEventGroup);
-        Channel channel = doBind(serverBootstrap);
-        this.acceptEventGroup = acceptEventGroup;
-        this.ioEventGroup = ioEventGroup;
-        this.channel = channel;
-
-    }
-
-    @Override
-    public void stop() {
-        if (acceptEventGroup != null) {
-            acceptEventGroup.shutdownGracefully();
-        }
-        if (ioEventGroup != null) {
-            ioEventGroup.shutdownGracefully();
-        }
-        if (channel != null) {
-            channel.close();
-        }
-    }
-
-    private Channel doBind(ServerBootstrap serverBootstrap) throws Exception {
-        return serverBootstrap.bind(port)
-                .sync()
-                .channel();
+        this.bootstrap = new ServerBootstrap();
+        this.bossGroup = newEventLoopGroup();
+        this.workerGroup = newEventLoopGroup();
+        this.initBootstrap();
+        this.channel = doBind();
     }
 
     private EventLoopGroup newEventLoopGroup() {
@@ -66,24 +42,43 @@ public class NettyServer implements TransportServer {
         }
     }
 
+    private void initBootstrap() {
+        bootstrap.group(this.bossGroup, this.workerGroup)
+                .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
+                .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
+                .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)
+                .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                .childHandler(newChannelHandlerPipeline());
+    }
+
     private ChannelHandler newChannelHandlerPipeline() {
         return new ChannelInitializer<Channel>() {
             @Override
             protected void initChannel(Channel channel) {
                 channel.pipeline()
-                        .addLast(new RequestDecoder())
-                        .addLast(new ResponseEncoder())
-                        .addLast(new RequestInvocation(requestHandlerRegistry));
+                        .addLast("decoder", new RequestDecoder())
+                        .addLast("encoder", new ResponseEncoder())
+                        .addLast("server-idle-handler", new IdleStateHandler(0, 20, 0, TimeUnit.SECONDS))
+                        .addLast("handler", new RequestInvocation(requestHandlerRegistry));
             }
         };
     }
 
-    private ServerBootstrap newBootstrap(ChannelHandler channelHandler, EventLoopGroup acceptEventGroup, EventLoopGroup ioEventGroup) {
-        ServerBootstrap serverBootstrap = new ServerBootstrap();
-        serverBootstrap.channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
-                .group(acceptEventGroup, ioEventGroup)
-                .childHandler(channelHandler)
-                .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
-        return serverBootstrap;
+    private Channel doBind() throws Exception {
+        return bootstrap.bind(port).sync().channel();
     }
+
+    @Override
+    public void stop() {
+        if (bossGroup != null) {
+            bossGroup.shutdownGracefully();
+        }
+        if (workerGroup != null) {
+            workerGroup.shutdownGracefully();
+        }
+        if (channel != null) {
+            channel.close();
+        }
+    }
+
 }

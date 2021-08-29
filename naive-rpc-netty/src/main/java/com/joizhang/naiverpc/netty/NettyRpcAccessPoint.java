@@ -34,6 +34,19 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
     private final ServiceProviderRegistry serviceProviderRegistry = ServiceSupport.load(ServiceProviderRegistry.class);
 
     @Override
+    public synchronized Closeable startServer() throws Exception {
+        if (Objects.isNull(server)) {
+            server = ServiceSupport.load(TransportServer.class);
+            server.start(RequestHandlerRegistry.getInstance(), port);
+        }
+        return () -> {
+            if(server != null) {
+                server.stop();
+            }
+        };
+    }
+
+    @Override
     public <T> T getRemoteService(URI uri, Class<T> serviceClass) {
         Transport transport = clientMap.computeIfAbsent(uri, this::createTransport);
         return stubFactory.createStub(transport, serviceClass);
@@ -46,23 +59,11 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public synchronized <T> URI addServiceProvider(T service, Class<T> serviceClass) {
         serviceProviderRegistry.addServiceProvider(serviceClass, service);
         return uri;
-    }
-
-    @Override
-    public synchronized Closeable startServer() throws Exception {
-        if (Objects.isNull(server)) {
-            server = ServiceSupport.load(TransportServer.class);
-            server.start(RequestHandlerRegistry.getInstance(), port);
-        }
-        return () -> {
-            if(server != null) {
-                server.stop();
-            }
-        };
     }
 
     @Override

@@ -26,6 +26,8 @@ public class LocalFileNameService implements NameService {
 
     private File file = new File(System.getProperty("java.io.tmpdir"), "naive_rpc_name_service.data");
 
+    private static Metadata metadata = null;
+
     @Override
     public Collection<String> supportedSchemes() {
         return schemes;
@@ -50,7 +52,6 @@ public class LocalFileNameService implements NameService {
             FileLock lock = fileChannel.lock();
             try {
                 int fileLength = (int) raf.length();
-                Metadata metadata;
                 byte[] bytes;
                 if (fileLength > 0) {
                     bytes = new byte[(int) raf.length()];
@@ -58,7 +59,6 @@ public class LocalFileNameService implements NameService {
                     while (buffer.hasRemaining()) {
                         fileChannel.read(buffer);
                     }
-
                     metadata = SerializeSupport.parse(bytes);
                 } else {
                     metadata = new Metadata();
@@ -67,8 +67,6 @@ public class LocalFileNameService implements NameService {
                 if (!uris.contains(uri)) {
                     uris.add(uri);
                 }
-                logger.info(metadata.toString());
-
                 bytes = SerializeSupport.serialize(metadata);
                 fileChannel.truncate(bytes.length);
                 fileChannel.position(0L);
@@ -105,5 +103,10 @@ public class LocalFileNameService implements NameService {
         } else {
             return uris.get(ThreadLocalRandom.current().nextInt(uris.size()));
         }
+    }
+
+    @Override
+    public void displayMetaData() {
+        logger.info(metadata.toString());
     }
 }

@@ -2,16 +2,19 @@ package com.joizhang.naiverpc.transport.command;
 
 public class Header {
 
-    private int requestId;
-    private int version;
     private int type;
+    private int version;
+    private int requestId;
 
-    public Header() {}
+    public Header() {
+    }
+
     public Header(int type, int version, int requestId) {
-        this.requestId = requestId;
         this.type = type;
         this.version = version;
+        this.requestId = requestId;
     }
+
     public int getRequestId() {
         return requestId;
     }

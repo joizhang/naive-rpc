@@ -9,10 +9,19 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.*;
 
 public class DemoClientApp {
 
     private static final Logger logger = LoggerFactory.getLogger(DemoClientApp.class);
+
+    private static final ExecutorService SERVICE = new ThreadPoolExecutor(
+            4,
+            4,
+            0, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<>(50),
+            Executors.defaultThreadFactory(),
+            new ThreadPoolExecutor.DiscardPolicy());
 
     public static void main(String[] args) throws IOException {
         String serviceName = HelloService.class.getCanonicalName();
@@ -24,11 +33,24 @@ public class DemoClientApp {
             assert uri != null;
             logger.info("找到服务{}，提供者: {}.", serviceName, uri);
             HelloService helloService = rpcAccessPoint.getRemoteService(uri, HelloService.class);
-            for (int i = 0; i < 100; i++) {
-                // logger.info("请求服务, name: {}...", name);
-                String response = helloService.hello(name);
-                logger.info("收到响应: {}.", response);
-            }
+
+            String response = helloService.hello(name);
+            logger.info("收到响应: {}.", response);
+//            SERVICE.submit(()-> {
+//                // logger.info("请求服务, name: {}...", name);
+//                String response = helloService.hello(name);
+//                logger.info("收到响应: {}.", response);
+//            });
+
+//            for (int i = 0; i < 10; i++) {
+//                String response = helloService.hello(name);
+//                logger.info("收到响应: {}.", response);
+//                SERVICE.submit(()-> {
+//                    // logger.info("请求服务, name: {}...", name);
+//                    String response = helloService.hello(name);
+//                    logger.info("收到响应: {}.", response);
+//                });
+//            }
 
         }
     }

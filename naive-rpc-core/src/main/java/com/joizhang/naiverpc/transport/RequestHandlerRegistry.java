@@ -27,7 +27,8 @@ public class RequestHandlerRegistry {
         Collection<RequestHandler> requestHandlers = ServiceSupport.loadAll(RequestHandler.class);
         for (RequestHandler requestHandler : requestHandlers) {
             handlerMap.put(requestHandler.type(), requestHandler);
-            logger.info("Load request handler, type: {}, class: {}.", requestHandler.type(), requestHandler.getClass().getCanonicalName());
+            logger.info("Load request handler, type: {}, class: {}.",
+                    requestHandler.type(), requestHandler.getClass().getCanonicalName());
         }
     }
 

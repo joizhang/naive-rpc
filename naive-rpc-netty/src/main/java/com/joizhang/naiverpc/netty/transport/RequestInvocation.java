@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 
 @ChannelHandler.Sharable
 public class RequestInvocation extends SimpleChannelInboundHandler<Command> {
+
     private static final Logger logger = LoggerFactory.getLogger(RequestInvocation.class);
+
     private final RequestHandlerRegistry requestHandlerRegistry;
 
     RequestInvocation(RequestHandlerRegistry requestHandlerRegistry) {
