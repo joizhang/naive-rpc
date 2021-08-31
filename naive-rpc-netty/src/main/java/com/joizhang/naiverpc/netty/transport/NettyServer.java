@@ -43,7 +43,7 @@ public class NettyServer implements TransportServer {
 
     private ServerBootstrap newBootstrap() {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
-        bootstrap.group(this.bossGroup, this.workerGroup)
+        serverBootstrap.group(this.bossGroup, this.workerGroup)
                 .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)

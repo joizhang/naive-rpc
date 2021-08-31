@@ -16,7 +16,7 @@ public interface RpcAccessPoint extends Closeable {
      *
      * @return 服务实例，用于程序停止的时候安全关闭服务。
      */
-    Closeable startServer() throws Exception;
+    Closeable startServer(int port) throws Exception;
 
     /**
      * 服务端注册服务的实现实例

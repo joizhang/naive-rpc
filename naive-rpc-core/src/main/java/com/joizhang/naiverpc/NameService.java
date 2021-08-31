@@ -6,8 +6,6 @@ import java.util.Collection;
 
 public interface NameService {
 
-    String FILE_NONE = "file:/none";
-
     /**
      * 所有支持的协议
      */

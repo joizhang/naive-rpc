@@ -29,7 +29,7 @@ public class DemoServiceApp {
     public static void main(String[] args) throws Exception {
         logger.info("创建并启动 RpcAccessPoint...");
         try (RpcAccessPoint rpcAccessPoint = ServiceSupport.load(RpcAccessPoint.class);
-             Closeable ignored = rpcAccessPoint.startServer()) {
+             Closeable ignored = rpcAccessPoint.startServer(9999)) {
             NameService nameService = rpcAccessPoint.getNameService();
             Objects.requireNonNull(nameService);
 

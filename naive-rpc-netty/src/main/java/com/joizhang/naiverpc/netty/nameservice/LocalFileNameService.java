@@ -24,7 +24,7 @@ public class LocalFileNameService implements NameService {
 
     private static final Collection<String> schemes = Collections.singleton("file");
 
-    private File file = new File(System.getProperty("java.io.tmpdir"), "naive_rpc_name_service.data");
+    private File file = null;
 
     private static Metadata metadata = null;
 
@@ -36,9 +36,7 @@ public class LocalFileNameService implements NameService {
     @Override
     public void connect(URI nameServiceUri) {
         if (schemes.contains(nameServiceUri.getScheme())) {
-            if (!FILE_NONE.equals(nameServiceUri.getPath())) {
-                file = new File(nameServiceUri);
-            }
+            file = new File(nameServiceUri);
         } else {
             throw new RuntimeException("Unsupported scheme!");
         }

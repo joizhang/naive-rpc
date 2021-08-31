@@ -10,6 +10,7 @@ import com.joizhang.naiverpc.transport.TransportClient;
 import com.joizhang.naiverpc.transport.TransportServer;
 
 import java.io.Closeable;
+import java.net.Inet4Address;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Map;
@@ -19,13 +20,11 @@ import java.util.concurrent.TimeoutException;
 
 public class NettyRpcAccessPoint implements RpcAccessPoint {
 
-    private final String host = "localhost";
-    private final int port = 9999;
-    private final URI uri = URI.create("rpc://" + host + ":" + port);
+    private URI uri;
 
     private TransportServer server = null;
 
-    private final TransportClient client = ServiceSupport.load(TransportClient.class);
+    private TransportClient client = null;
 
     private final Map<URI, Transport> clientMap = new ConcurrentHashMap<>();
 
@@ -34,8 +33,10 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
     private final ServiceProviderRegistry serviceProviderRegistry = ServiceSupport.load(ServiceProviderRegistry.class);
 
     @Override
-    public synchronized Closeable startServer() throws Exception {
+    public synchronized Closeable startServer(int port) throws Exception {
         if (Objects.isNull(server)) {
+            String host = Inet4Address.getLocalHost().getHostAddress();
+            this.uri = URI.create("rpc://" + host + ":" + port);
             server = ServiceSupport.load(TransportServer.class);
             server.start(RequestHandlerRegistry.getInstance(), port);
         }
@@ -54,6 +55,7 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     private Transport createTransport(URI uri) {
         try {
+            client = ServiceSupport.load(TransportClient.class);
             return client.createTransport(new InetSocketAddress(uri.getHost(), uri.getPort()),30000L);
         } catch (InterruptedException | TimeoutException e) {
             throw new RuntimeException(e);
@@ -71,7 +73,9 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
         if(server != null) {
             server.stop();
         }
-        client.close();
+        if (client != null) {
+            client.close();
+        }
     }
 
 }
