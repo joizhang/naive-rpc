@@ -15,6 +15,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import java.net.SocketAddress;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class NettyClient implements TransportClient {
@@ -28,21 +29,20 @@ public class NettyClient implements TransportClient {
         inFlightRequests = new InFlightRequests();
     }
 
-    private Bootstrap newBootstrap() {
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(ioEventGroup)
-                .channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
-                .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                .handler(newChannelHandlerPipeline());
-        return bootstrap;
+    @Override
+    public Transport createTransport(SocketAddress address, long connectionTimeout)
+            throws InterruptedException, TimeoutException {
+        return createTransport(address, connectionTimeout, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public Transport createTransport(SocketAddress address, long connectionTimeout) throws InterruptedException, TimeoutException {
-        return new NettyTransport(createChannel(address, connectionTimeout), inFlightRequests);
+    public Transport createTransport(SocketAddress address, long connectionTimeout, TimeUnit timeUnit)
+            throws InterruptedException, TimeoutException {
+        Channel channel = createChannel(address, connectionTimeout, timeUnit);
+        return new NettyTransport(channel, inFlightRequests);
     }
 
-    private synchronized Channel createChannel(SocketAddress address, long connectionTimeout)
+    private synchronized Channel createChannel(SocketAddress address, long connectionTimeout, TimeUnit timeUnit)
             throws InterruptedException, TimeoutException {
         if (address == null) {
             throw new IllegalArgumentException("address must not be null!");
@@ -54,7 +54,7 @@ public class NettyClient implements TransportClient {
             bootstrap = newBootstrap();
         }
         ChannelFuture channelFuture = bootstrap.connect(address);
-        if (!channelFuture.await(connectionTimeout)) {
+        if (!channelFuture.await(connectionTimeout, timeUnit)) {
             throw new TimeoutException();
         }
         Channel channel = channelFuture.channel();
@@ -63,6 +63,23 @@ public class NettyClient implements TransportClient {
         }
         channels.add(channel);
         return channel;
+    }
+
+    private EventLoopGroup newIoEventGroup() {
+        if (Epoll.isAvailable()) {
+            return new EpollEventLoopGroup();
+        } else {
+            return new NioEventLoopGroup();
+        }
+    }
+
+    private Bootstrap newBootstrap() {
+        Bootstrap bootstrap = new Bootstrap();
+        bootstrap.group(ioEventGroup)
+                .channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
+                .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                .handler(newChannelHandlerPipeline());
+        return bootstrap;
     }
 
     private ChannelHandler newChannelHandlerPipeline() {
@@ -77,13 +94,6 @@ public class NettyClient implements TransportClient {
         };
     }
 
-    private EventLoopGroup newIoEventGroup() {
-        if (Epoll.isAvailable()) {
-            return new EpollEventLoopGroup();
-        } else {
-            return new NioEventLoopGroup();
-        }
-    }
 
     @Override
     public void close() {

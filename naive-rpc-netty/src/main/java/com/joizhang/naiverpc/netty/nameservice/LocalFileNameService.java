@@ -1,6 +1,6 @@
 package com.joizhang.naiverpc.netty.nameservice;
 
-import com.joizhang.naiverpc.NameService;
+import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

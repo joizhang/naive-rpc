@@ -1,13 +1,13 @@
 package com.joizhang.naiverpc;
 
+import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.spi.ServiceSupport;
 
 import java.io.Closeable;
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collection;
-import java.util.Objects;
 
 public interface RpcAccessPoint extends Closeable {
 
@@ -16,7 +16,7 @@ public interface RpcAccessPoint extends Closeable {
      *
      * @return 服务实例，用于程序停止的时候安全关闭服务。
      */
-    Closeable startServer(int port) throws Exception;
+    Closeable startServer(String host, int port) throws Exception;
 
     /**
      * 服务端注册服务的实现实例
@@ -44,9 +44,11 @@ public interface RpcAccessPoint extends Closeable {
      * @return 注册中心引用
      */
     default NameService getNameService() {
-        String path = Objects.requireNonNull(RpcAccessPoint.class.getResource("/")).getPath();
-        File file = new File(path, "simple_rpc_name_service.data");
-        return getNameService(file.toURI());
+        URL path = RpcAccessPoint.class.getProtectionDomain().getCodeSource().getLocation();
+        File file = new File(path.getPath());
+        File parentFile = file.getParentFile();
+        File nameServiceData = new File(parentFile, "simple_rpc_name_service.data");
+        return getNameService(nameServiceData.toURI());
     }
 
     /**

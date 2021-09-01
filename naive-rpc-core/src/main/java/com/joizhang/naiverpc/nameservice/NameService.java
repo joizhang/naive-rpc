@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc;
+package com.joizhang.naiverpc.nameservice;
 
 import java.io.IOException;
 import java.net.URI;
