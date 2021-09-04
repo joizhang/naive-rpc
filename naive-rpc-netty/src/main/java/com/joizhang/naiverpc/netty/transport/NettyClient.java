@@ -3,6 +3,7 @@ package com.joizhang.naiverpc.netty.transport;
 import com.joizhang.naiverpc.transport.Transport;
 import com.joizhang.naiverpc.transport.InFlightRequests;
 import com.joizhang.naiverpc.transport.TransportClient;
+import com.joizhang.naiverpc.utils.Constants;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -48,7 +49,8 @@ public class NettyClient implements TransportClient {
             throw new IllegalArgumentException("address must not be null!");
         }
         if (ioEventGroup == null) {
-            ioEventGroup = newIoEventGroup();
+            ioEventGroup = NettyEventLoopFactory.eventLoopGroup(
+                    Constants.DEFAULT_IO_THREADS, "NettyClientWorker");
         }
         if (bootstrap == null) {
             bootstrap = newBootstrap();
@@ -65,18 +67,10 @@ public class NettyClient implements TransportClient {
         return channel;
     }
 
-    private EventLoopGroup newIoEventGroup() {
-        if (Epoll.isAvailable()) {
-            return new EpollEventLoopGroup();
-        } else {
-            return new NioEventLoopGroup();
-        }
-    }
-
     private Bootstrap newBootstrap() {
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(ioEventGroup)
-                .channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
+                .channel(NettyEventLoopFactory.socketChannelClass())
                 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .handler(newChannelHandlerPipeline());
         return bootstrap;

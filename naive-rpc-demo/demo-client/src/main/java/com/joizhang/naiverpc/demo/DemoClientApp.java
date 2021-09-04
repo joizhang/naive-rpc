@@ -42,32 +42,32 @@ public class DemoClientApp {
             UserService userService = DemoClientApp.lookupService(rpcAccessPoint, nameService, UserService.class);
 
             int loopTime = 100;
-//            CountDownLatch latch1 = new CountDownLatch(loopTime);
-//            for (int i = 0; i < loopTime; i++) {
-//                final int seq = i;
-//                service.execute(()-> {
-//                    String response = helloService.hello("joizhang " + seq);
-//                    logger.info("收到响应: {}.", response);
-//                    latch1.countDown();
-//                });
-//            }
-//            latch1.await();
-
-            CountDownLatch latch2 = new CountDownLatch(loopTime);
+            CountDownLatch latch1 = new CountDownLatch(loopTime);
             for (int i = 0; i < loopTime; i++) {
                 final int seq = i;
                 service.execute(()-> {
-                    User user = new User();
-                    user.setUsername("joizhang");
-                    user.setAge((short) 28);
-                    user.setGender((byte) 1);
-                    user.setVersion(seq);
-                    User response = userService.incrementVersion(user);
+                    String response = helloService.hello("joizhang " + seq);
                     logger.info("收到响应: {}.", response);
-                    latch2.countDown();
+                    latch1.countDown();
                 });
             }
-            latch2.await();
+            latch1.await();
+
+//            CountDownLatch latch2 = new CountDownLatch(loopTime);
+//            for (int i = 0; i < loopTime; i++) {
+//                final int seq = i;
+//                service.execute(()-> {
+//                    User user = new User();
+//                    user.setUsername("joizhang");
+//                    user.setAge((short) 28);
+//                    user.setGender((byte) 1);
+//                    user.setVersion(seq);
+//                    User response = userService.incrementVersion(user);
+//                    logger.info("收到响应: {}.", response);
+//                    latch2.countDown();
+//                });
+//            }
+//            latch2.await();
 
             service.shutdown();
         } catch (InterruptedException e) {

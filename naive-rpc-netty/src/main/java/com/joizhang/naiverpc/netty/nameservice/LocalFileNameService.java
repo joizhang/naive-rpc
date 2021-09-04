@@ -105,6 +105,7 @@ public class LocalFileNameService implements NameService {
 
     @Override
     public void displayMetaData() {
+        logger.info(file.getPath());
         logger.info(metadata.toString());
     }
 }

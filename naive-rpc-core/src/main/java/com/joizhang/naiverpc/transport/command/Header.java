@@ -4,6 +4,10 @@ public class Header {
 
     private int type;
     private int version;
+
+    /**
+     * 标识唯一请求
+     */
     private int requestId;
 
     public Header() {

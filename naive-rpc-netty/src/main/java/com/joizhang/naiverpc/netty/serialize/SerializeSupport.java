@@ -54,9 +54,9 @@ public class SerializeSupport {
         return parse(buffer, 0, buffer.length);
     }
 
+    @SuppressWarnings("unchecked")
     private static <E> E parse(byte[] buffer, int offset, int length) {
         byte type = parseEntryType(buffer);
-        @SuppressWarnings("unchecked")
         Class<E> eClass = (Class<E>) typeMap.get(type);
         if (null == eClass) {
             throw new SerializeException(String.format("Unknown entry type: %d!", type));
@@ -66,8 +66,8 @@ public class SerializeSupport {
 
     }
 
+    @SuppressWarnings("unchecked")
     public static <E> byte[] serialize(E entry) {
-        @SuppressWarnings("unchecked")
         Serializer<E> serializer = (Serializer<E>) serializerMap.get(entry.getClass());
         if (serializer == null) {
             throw new SerializeException(String.format("Unknown entry class type: %s", entry.getClass().toString()));
