@@ -1,5 +1,6 @@
-package com.joizhang.naiverpc.netty.transport;
+package com.joizhang.naiverpc.netty.transport.client;
 
+import com.joizhang.naiverpc.netty.transport.CommandEncoder;
 import com.joizhang.naiverpc.transport.command.Header;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

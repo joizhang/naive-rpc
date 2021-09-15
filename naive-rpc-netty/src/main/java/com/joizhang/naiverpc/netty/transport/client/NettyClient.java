@@ -1,5 +1,6 @@
-package com.joizhang.naiverpc.netty.transport;
+package com.joizhang.naiverpc.netty.transport.client;
 
+import com.joizhang.naiverpc.netty.transport.*;
 import com.joizhang.naiverpc.transport.Transport;
 import com.joizhang.naiverpc.transport.InFlightRequests;
 import com.joizhang.naiverpc.transport.TransportClient;
@@ -7,11 +8,6 @@ import com.joizhang.naiverpc.utils.Constants;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
-import io.netty.channel.epoll.Epoll;
-import io.netty.channel.epoll.EpollEventLoopGroup;
-import io.netty.channel.epoll.EpollSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.SocketAddress;
 import java.util.LinkedList;

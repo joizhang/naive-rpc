@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.netty.transport;
+package com.joizhang.naiverpc.netty.transport.client;
 
 import com.joizhang.naiverpc.transport.Transport;
 import com.joizhang.naiverpc.transport.command.Command;
