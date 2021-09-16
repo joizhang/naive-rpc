@@ -1,23 +1,23 @@
 package com.joizhang.naiverpc.netty;
 
 import com.joizhang.naiverpc.RpcAccessPoint;
-import com.joizhang.naiverpc.client.StubFactory;
+import com.joizhang.naiverpc.proxy.StubFactory;
 import com.joizhang.naiverpc.spi.ServiceSupport;
-import com.joizhang.naiverpc.transport.Transport;
-import com.joizhang.naiverpc.server.ServiceProviderRegistry;
-import com.joizhang.naiverpc.transport.RequestHandlerRegistry;
-import com.joizhang.naiverpc.transport.TransportClient;
-import com.joizhang.naiverpc.transport.TransportServer;
+import com.joizhang.naiverpc.remoting.Transport;
+import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
+import com.joizhang.naiverpc.remoting.transport.RequestHandlerRegistry;
+import com.joizhang.naiverpc.remoting.TransportClient;
+import com.joizhang.naiverpc.remoting.TransportServer;
+import com.joizhang.naiverpc.spi.Singleton;
 
 import java.io.Closeable;
 import java.net.*;
-import java.util.Enumeration;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+@Singleton
 public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     private URI uri;

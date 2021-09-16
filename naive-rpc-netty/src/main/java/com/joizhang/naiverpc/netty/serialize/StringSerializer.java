@@ -23,7 +23,7 @@ public class StringSerializer implements Serializer<String> {
     }
 
     @Override
-    public byte type() {
+    public byte getContentTypeId() {
         return Types.TYPE_STRING;
     }
 

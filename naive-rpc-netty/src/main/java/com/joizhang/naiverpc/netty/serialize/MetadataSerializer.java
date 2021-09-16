@@ -80,7 +80,7 @@ public class MetadataSerializer implements Serializer<Metadata> {
     }
 
     @Override
-    public byte type() {
+    public byte getContentTypeId() {
         return Types.TYPE_METADATA;
     }
 

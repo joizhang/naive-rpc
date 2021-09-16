@@ -1,6 +1,6 @@
 package com.joizhang.naiverpc.netty.serialize;
 
-import com.joizhang.naiverpc.netty.client.stubs.RpcRequest;
+import com.joizhang.naiverpc.remoting.command.RpcRequest;
 import com.joizhang.naiverpc.serialize.Serializer;
 
 import java.nio.ByteBuffer;
@@ -10,9 +10,11 @@ public class RpcRequestSerializer implements Serializer<RpcRequest> {
 
     @Override
     public int size(RpcRequest request) {
-        return Integer.BYTES + request.getInterfaceName().getBytes(StandardCharsets.UTF_8).length +
-                Integer.BYTES + request.getMethodName().getBytes(StandardCharsets.UTF_8).length +
-                Integer.BYTES + request.getSerializedArguments().length;
+        int size = 0;
+        size += Integer.BYTES + request.getInterfaceName().getBytes(StandardCharsets.UTF_8).length;
+        size += Integer.BYTES + request.getMethodName().getBytes(StandardCharsets.UTF_8).length;
+        size += Integer.BYTES + request.getArgs().length;
+        return size;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class RpcRequestSerializer implements Serializer<RpcRequest> {
         buffer.putInt(tmpBytes.length);
         buffer.put(tmpBytes);
 
-        tmpBytes = request.getSerializedArguments();
+        tmpBytes = request.getArgs();
         buffer.putInt(tmpBytes.length);
         buffer.put(tmpBytes);
     }
@@ -53,7 +55,7 @@ public class RpcRequestSerializer implements Serializer<RpcRequest> {
     }
 
     @Override
-    public byte type() {
+    public byte getContentTypeId() {
         return Types.TYPE_RPC_REQUEST;
     }
 

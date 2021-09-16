@@ -34,6 +34,9 @@ public interface NameService {
      */
     URI lookupService(String serviceName) throws IOException;
 
+    /**
+     * 输出服务元信息
+     */
     void displayMetaData();
 
 }

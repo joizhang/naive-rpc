@@ -3,6 +3,7 @@ package com.joizhang.naiverpc.netty.serialize;
 import com.joizhang.naiverpc.serialize.ObjectInput;
 import com.joizhang.naiverpc.serialize.ObjectOutput;
 import com.joizhang.naiverpc.serialize.Serializer;
+import com.joizhang.naiverpc.spi.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

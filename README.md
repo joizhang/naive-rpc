@@ -1,5 +1,12 @@
 # naive-rpc
 
+## Core function
+- Register Center
+- Network Transport
+- Serialization
+- Dynamic Proxy
+- Load Balancer
+
 ## How to Run
 
 ```shell

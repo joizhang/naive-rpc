@@ -24,10 +24,10 @@ public class SerializeSupport {
 
     static {
         for (Serializer serializer : ServiceSupport.loadAll(Serializer.class)) {
-            registerType(serializer.type(), serializer.getSerializeClass(), serializer);
+            registerType(serializer.getContentTypeId(), serializer.getSerializeClass(), serializer);
             logger.info("Found serializer, class: {}, type: {}.",
                     serializer.getSerializeClass().getCanonicalName(),
-                    serializer.type());
+                    serializer.getContentTypeId());
         }
     }
 
@@ -73,7 +73,7 @@ public class SerializeSupport {
             throw new SerializeException(String.format("Unknown entry class type: %s", entry.getClass().toString()));
         }
         byte[] bytes = new byte[serializer.size(entry) + 1];
-        bytes[0] = serializer.type();
+        bytes[0] = serializer.getContentTypeId();
         serializer.serialize(entry, bytes, 1, bytes.length - 1);
         return bytes;
     }
