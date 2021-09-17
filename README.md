@@ -1,6 +1,6 @@
 # naive-rpc
 
-## Core function
+## Core feature
 - Register Center
 - Network Transport
 - Serialization
