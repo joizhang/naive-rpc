@@ -24,7 +24,7 @@ public class ResponseInvocation extends SimpleChannelInboundHandler<Command> {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Command response) {
         ResponseFuture future = inFlightRequests.remove(response.getHeader().getRequestId());
-        if(null != future) {
+        if (null != future) {
             future.getFuture().complete(response);
         } else {
             logger.warn("Drop response: {}", response);
@@ -36,7 +36,7 @@ public class ResponseInvocation extends SimpleChannelInboundHandler<Command> {
         logger.warn("Exception: ", cause);
         super.exceptionCaught(ctx, cause);
         Channel channel = ctx.channel();
-        if(channel.isActive())ctx.close();
+        if (channel.isActive()) ctx.close();
     }
 
 }

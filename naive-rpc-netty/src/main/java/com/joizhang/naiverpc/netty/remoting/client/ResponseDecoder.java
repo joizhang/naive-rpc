@@ -14,14 +14,14 @@ public class ResponseDecoder extends CommandDecoder {
     protected Header decodeHeader(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) {
         byte messageType = byteBuf.readByte();
         byte codecType = byteBuf.readByte();
-        int version = byteBuf.readInt();
+        byte version = byteBuf.readByte();
         int requestId = byteBuf.readInt();
         int code = byteBuf.readInt();
         int errorLength = byteBuf.readInt();
-        byte [] errorBytes = new byte[errorLength];
+        byte[] errorBytes = new byte[errorLength];
         byteBuf.readBytes(errorBytes);
         String error = new String(errorBytes, StandardCharsets.UTF_8);
-        return new ResponseHeader(messageType, codecType, version, requestId, code, error);
+        return new ResponseHeader(version, messageType, codecType, requestId, code, error);
     }
 
 }

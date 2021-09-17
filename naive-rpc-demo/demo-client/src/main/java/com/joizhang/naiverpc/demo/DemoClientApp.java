@@ -2,7 +2,6 @@ package com.joizhang.naiverpc.demo;
 
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.RpcAccessPoint;
-import com.joizhang.naiverpc.demo.api.dto.User;
 import com.joizhang.naiverpc.demo.api.service.HelloService;
 import com.joizhang.naiverpc.demo.api.service.UserService;
 import com.joizhang.naiverpc.spi.ServiceSupport;
@@ -36,7 +35,7 @@ public class DemoClientApp {
                 Executors.defaultThreadFactory(),
                 new ThreadPoolExecutor.DiscardPolicy());
 
-        try (RpcAccessPoint rpcAccessPoint = ServiceSupport.load(RpcAccessPoint.class)) {
+        try (RpcAccessPoint rpcAccessPoint = ServiceSupport.getService(RpcAccessPoint.class)) {
             NameService nameService = rpcAccessPoint.getNameService();
             HelloService helloService = DemoClientApp.lookupService(rpcAccessPoint, nameService, HelloService.class);
             UserService userService = DemoClientApp.lookupService(rpcAccessPoint, nameService, UserService.class);

@@ -1,12 +1,12 @@
 package com.joizhang.naiverpc.serialize;
 
-import com.joizhang.naiverpc.spi.Singleton;
+import com.joizhang.naiverpc.spi.SPI;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-@Singleton
+@SPI
 public interface Serializer {
 
     /**

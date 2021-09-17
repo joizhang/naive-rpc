@@ -1,16 +1,16 @@
 package com.joizhang.naiverpc.remoting.transport;
 
 import com.joizhang.naiverpc.spi.ServiceSupport;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class RequestHandlerRegistry {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandlerRegistry.class);
+    private static final ServiceSupport<RequestHandler> REQUEST_HANDLER_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RequestHandler.class);
 
     private final Map<Integer, RequestHandler> handlerMap = new HashMap<>();
 
@@ -24,10 +24,10 @@ public class RequestHandlerRegistry {
     }
 
     private RequestHandlerRegistry() {
-        Collection<RequestHandler> requestHandlers = ServiceSupport.loadAll(RequestHandler.class);
+        Collection<RequestHandler> requestHandlers = REQUEST_HANDLER_SERVICE_SUPPORT.getAllService();
         for (RequestHandler requestHandler : requestHandlers) {
             handlerMap.put(requestHandler.type(), requestHandler);
-            logger.info("Load request handler, type: {}, class: {}.",
+            log.info("Load request handler, type: {}, class: {}.",
                     requestHandler.type(), requestHandler.getClass().getCanonicalName());
         }
     }

@@ -11,7 +11,7 @@ public abstract class AbstractStub implements ServiceStub {
     protected Transport transport;
 
     protected Object invokeRemote(RpcRequest request) {
-        Header header = new Header(MessageType.TYPE_RPC, CodecTypeEnum.JAVA.getCode(), 1, RequestIdSupport.next());
+        Header header = new Header((byte) 1, MessageType.TYPE_RPC, CodecTypeEnum.JAVA.getCode(), RequestIdSupport.next());
         Command requestCommand = new Command(header, request);
         try {
             Command responseCommand = transport.send(requestCommand).get();

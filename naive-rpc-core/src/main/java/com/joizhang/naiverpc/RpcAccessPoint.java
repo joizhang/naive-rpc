@@ -1,14 +1,14 @@
 package com.joizhang.naiverpc;
 
 import com.joizhang.naiverpc.nameservice.NameService;
-import com.joizhang.naiverpc.spi.ServiceSupport;
+import com.joizhang.naiverpc.spi.SPI;
 
 import java.io.Closeable;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
-import java.util.Collection;
 
+@SPI
 public interface RpcAccessPoint extends Closeable {
 
     /**
@@ -17,6 +17,27 @@ public interface RpcAccessPoint extends Closeable {
      * @return 服务实例，用于程序停止的时候安全关闭服务。
      */
     Closeable startServer(String host, int port) throws Exception;
+
+    /**
+     * 获取注册中心的引用
+     *
+     * @param nameServiceUri 注册中心 URI
+     * @return 注册中心引用
+     */
+    NameService getNameService(URI nameServiceUri);
+
+    /**
+     * 获取注册中心的引用
+     *
+     * @return 注册中心引用
+     */
+    default NameService getNameService() {
+        URL path = RpcAccessPoint.class.getProtectionDomain().getCodeSource().getLocation();
+        File file = new File(path.getPath());
+        File parentFile = file.getParentFile();
+        File nameServiceData = new File(parentFile, "simple_rpc_name_service.data");
+        return getNameService(nameServiceData.toURI());
+    }
 
     /**
      * 服务端注册服务的实现实例
@@ -37,35 +58,5 @@ public interface RpcAccessPoint extends Closeable {
      * @return 远程服务引用
      */
     <T> T getRemoteService(URI uri, Class<T> serviceClass);
-
-    /**
-     * 获取注册中心的引用
-     *
-     * @return 注册中心引用
-     */
-    default NameService getNameService() {
-        URL path = RpcAccessPoint.class.getProtectionDomain().getCodeSource().getLocation();
-        File file = new File(path.getPath());
-        File parentFile = file.getParentFile();
-        File nameServiceData = new File(parentFile, "simple_rpc_name_service.data");
-        return getNameService(nameServiceData.toURI());
-    }
-
-    /**
-     * 获取注册中心的引用
-     *
-     * @param nameServiceUri 注册中心 URI
-     * @return 注册中心引用
-     */
-    default NameService getNameService(URI nameServiceUri) {
-        Collection<NameService> nameServices = ServiceSupport.loadAll(NameService.class);
-        for (NameService nameService : nameServices) {
-            if (nameService.supportedSchemes().contains(nameServiceUri.getScheme())) {
-                nameService.connect(nameServiceUri);
-                return nameService;
-            }
-        }
-        return null;
-    }
 
 }

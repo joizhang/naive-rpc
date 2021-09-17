@@ -11,16 +11,16 @@ public class ResponseHeader extends Header {
 
     private String error;
 
-    public ResponseHeader(byte messageType, byte codecType, int version, int requestId) {
-        this(messageType, codecType, version, requestId, ResponseCodeEnum.OK.getCode(), null);
+    public ResponseHeader(byte rpcVersion, byte messageType, byte codecType, int requestId) {
+        this(rpcVersion, messageType, codecType, requestId, ResponseCodeEnum.OK.getCode(), null);
     }
 
-    public ResponseHeader(byte messageType, byte codecType, int version, int requestId, Throwable throwable) {
-        this(messageType, codecType, version, requestId, ResponseCodeEnum.INTERNAL_SERVER_ERROR.getCode(), throwable.getMessage());
+    public ResponseHeader(byte rpcVersion, byte messageType, byte codecType, int requestId, Throwable throwable) {
+        this(rpcVersion, messageType, codecType, requestId, ResponseCodeEnum.INTERNAL_SERVER_ERROR.getCode(), throwable.getMessage());
     }
 
-    public ResponseHeader(byte messageType, byte codecType, int version, int requestId, int code, String error) {
-        super(messageType, codecType, version, requestId);
+    public ResponseHeader(byte rpcVersion, byte messageType, byte codecType, int requestId, int code, String error) {
+        super(rpcVersion, messageType, codecType, requestId);
         this.code = code;
         this.error = error;
     }

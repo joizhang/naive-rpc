@@ -11,8 +11,8 @@ public class RequestDecoder extends CommandDecoder {
     protected Header decodeHeader(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) {
         byte messageType = byteBuf.readByte();
         byte codecType = byteBuf.readByte();
-        int version = byteBuf.readInt();
+        byte version = byteBuf.readByte();
         int requestId = byteBuf.readInt();
-        return new Header(messageType, codecType, version, requestId);
+        return new Header(version, messageType, codecType, requestId);
     }
 }

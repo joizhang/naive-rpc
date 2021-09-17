@@ -6,7 +6,9 @@ import com.joizhang.naiverpc.demo.api.service.HelloService;
 import com.joizhang.naiverpc.demo.api.service.UserService;
 import com.joizhang.naiverpc.demo.service.HelloServiceImpl;
 import com.joizhang.naiverpc.demo.service.UserServiceImpl;
+import com.joizhang.naiverpc.netty.NettyRpcAccessPoint;
 import com.joizhang.naiverpc.spi.ServiceSupport;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,16 +18,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Objects;
 
+@Slf4j
 public class DemoServiceApp {
 
-    private static final Logger logger = LoggerFactory.getLogger(DemoServiceApp.class);
+    private static final ServiceSupport<RpcAccessPoint> RPC_ACCESS_POINT_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RpcAccessPoint.class);
 
     public static void main(String[] args) throws Exception {
         CommandLine parser = parseArgs(args);
         String host = parser.getOptionValue("host", "localhost");
         int port = Integer.parseInt(parser.getOptionValue("port", "9999"));
-        logger.info("创建并启动 RpcAccessPoint...");
-        try (RpcAccessPoint rpcAccessPoint = ServiceSupport.load(RpcAccessPoint.class);
+        log.info("创建并启动 RpcAccessPoint...");
+        try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName());
              Closeable ignored = rpcAccessPoint.startServer(host, port)) {
             NameService nameService = rpcAccessPoint.getNameService();
 
@@ -35,10 +38,10 @@ public class DemoServiceApp {
             DemoServiceApp.registerService(rpcAccessPoint, nameService, UserService.class, new UserServiceImpl());
             nameService.displayMetaData();
 
-            logger.info("开始提供服务，按任何键退出.");
+            log.info("开始提供服务，按任何键退出.");
             //noinspection ResultOfMethodCallIgnored
             System.in.read();
-            logger.info("Bye!");
+            log.info("Bye!");
         }
     }
 
