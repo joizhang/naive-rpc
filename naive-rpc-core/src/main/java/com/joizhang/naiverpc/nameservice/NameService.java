@@ -1,9 +1,12 @@
 package com.joizhang.naiverpc.nameservice;
 
+import com.joizhang.naiverpc.spi.SPI;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 
+@SPI
 public interface NameService {
 
     /**

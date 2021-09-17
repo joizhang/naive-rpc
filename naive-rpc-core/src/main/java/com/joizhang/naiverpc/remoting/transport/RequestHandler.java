@@ -2,7 +2,9 @@ package com.joizhang.naiverpc.remoting.transport;
 
 
 import com.joizhang.naiverpc.remoting.command.Command;
+import com.joizhang.naiverpc.spi.SPI;
 
+@SPI
 public interface RequestHandler {
 
     /**
