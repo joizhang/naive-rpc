@@ -4,15 +4,13 @@ import com.joizhang.naiverpc.serialize.ObjectInput;
 import com.joizhang.naiverpc.serialize.ObjectOutput;
 import com.joizhang.naiverpc.serialize.Serializer;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.joizhang.naiverpc.serialize.Constants.NATIVE_JAVA_SERIALIZATION_ID;
+import static com.joizhang.naiverpc.netty.serialize.SerializerType.NATIVE_JAVA_SERIALIZATION_ID;
 
 @Slf4j
 public class NativeJavaSerializer implements Serializer {

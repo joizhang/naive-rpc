@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.netty.serialize;
+package com.joizhang.naiverpc.serialize;
 
 public class SerializeException extends RuntimeException {
 

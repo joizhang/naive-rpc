@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.joizhang.naiverpc.serialize.Constants.JAVA_SERIALIZATION_ID;
+import static com.joizhang.naiverpc.netty.serialize.SerializerType.JAVA_SERIALIZATION_ID;
 
 @Slf4j
 public class JavaSerializer implements Serializer {

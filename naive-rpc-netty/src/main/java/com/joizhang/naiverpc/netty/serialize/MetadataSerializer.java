@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.joizhang.naiverpc.serialize.Constants.META_DATA_SERIALIZATION_ID;
+import static com.joizhang.naiverpc.netty.serialize.SerializerType.META_DATA_SERIALIZATION_ID;
 
 public class MetadataSerializer implements Serializer {
 

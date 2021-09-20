@@ -9,14 +9,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class JSONSerializer implements Serializer {
+
     @Override
     public byte getContentTypeId() {
-        return 0;
+        return SerializerType.JSON_SERIALIZATION_ID;
     }
 
     @Override
     public String getContentType() {
-        return null;
+        return "x-application/java";
     }
 
     @Override
@@ -28,4 +29,5 @@ public class JSONSerializer implements Serializer {
     public ObjectInput deserialize(InputStream inputStream) throws IOException {
         return null;
     }
+
 }
