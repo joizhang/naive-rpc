@@ -17,7 +17,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.joizhang.naiverpc.netty.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
+import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
 
 public class LocalFileNameServiceTest {
 

@@ -14,14 +14,14 @@ public class JdkStubFactory implements StubFactory {
     @SuppressWarnings("unchecked")
     public <T> T createStub(Transport transport, Class<T> serviceClass) {
         return (T) Proxy.newProxyInstance(serviceClass.getClassLoader(),
-                new Class<?>[]{serviceClass}, new ProxyStub<>(transport, serviceClass));
+                new Class<?>[]{serviceClass}, new ProxyServiceStub<>(transport, serviceClass));
     }
 
-    static class ProxyStub<T> extends AbstractStub implements InvocationHandler {
+    static class ProxyServiceStub<T> extends AbstractServiceStub implements InvocationHandler {
 
         private final Class<?> serviceClass;
 
-        public ProxyStub(Transport transport, Class<T> serviceClass) {
+        public ProxyServiceStub(Transport transport, Class<T> serviceClass) {
             this.transport = transport;
             this.serviceClass = serviceClass;
         }

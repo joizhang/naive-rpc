@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.remoting.command;
+package com.joizhang.naiverpc.netty.remoting.command;
 
 public interface MessageType {
 

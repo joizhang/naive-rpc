@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 
-import static com.joizhang.naiverpc.netty.spi.ServiceSupportConstant.*;
+import static com.joizhang.naiverpc.spi.ServiceSupportConstant.*;
 
 public class NettyRpcAccessPoint implements RpcAccessPoint {
 

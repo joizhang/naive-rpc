@@ -1,7 +1,7 @@
 package com.joizhang.naiverpc.netty.remoting.transport;
 
 import com.joizhang.naiverpc.remoting.command.Header;
-import com.joizhang.naiverpc.remoting.command.RpcConstants;
+import com.joizhang.naiverpc.netty.remoting.command.RpcConstants;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;

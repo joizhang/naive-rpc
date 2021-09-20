@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.netty.spi;
+package com.joizhang.naiverpc.spi;
 
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.proxy.StubFactory;
@@ -6,7 +6,6 @@ import com.joizhang.naiverpc.remoting.TransportClient;
 import com.joizhang.naiverpc.remoting.TransportServer;
 import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
 import com.joizhang.naiverpc.serialize.Serializer;
-import com.joizhang.naiverpc.spi.ServiceSupport;
 
 public interface ServiceSupportConstant {
 

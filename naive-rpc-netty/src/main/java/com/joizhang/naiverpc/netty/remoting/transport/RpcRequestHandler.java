@@ -1,7 +1,7 @@
 package com.joizhang.naiverpc.netty.remoting.transport;
 
 import com.joizhang.naiverpc.remoting.command.Command;
-import com.joizhang.naiverpc.remoting.command.MessageType;
+import com.joizhang.naiverpc.netty.remoting.command.MessageType;
 import com.joizhang.naiverpc.remoting.transport.RequestHandler;
 import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
 import com.joizhang.naiverpc.spi.Singleton;

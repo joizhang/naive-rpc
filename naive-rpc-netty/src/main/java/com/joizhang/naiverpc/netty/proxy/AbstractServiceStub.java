@@ -1,12 +1,14 @@
 package com.joizhang.naiverpc.netty.proxy;
 
+import com.joizhang.naiverpc.netty.remoting.command.CodecTypeEnum;
+import com.joizhang.naiverpc.netty.remoting.command.MessageType;
 import com.joizhang.naiverpc.proxy.ServiceStub;
 import com.joizhang.naiverpc.remoting.Transport;
 import com.joizhang.naiverpc.remoting.command.*;
 
 import java.util.concurrent.ExecutionException;
 
-public abstract class AbstractStub implements ServiceStub {
+public abstract class AbstractServiceStub implements ServiceStub {
 
     protected Transport transport;
 
