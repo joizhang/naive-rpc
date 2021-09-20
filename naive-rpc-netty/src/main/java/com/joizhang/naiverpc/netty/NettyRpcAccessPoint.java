@@ -3,13 +3,13 @@ package com.joizhang.naiverpc.netty;
 import com.joizhang.naiverpc.RpcAccessPoint;
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.remoting.server.NettyServer;
+import com.joizhang.naiverpc.netty.remoting.transport.RpcRequestHandler;
 import com.joizhang.naiverpc.proxy.StubFactory;
 import com.joizhang.naiverpc.remoting.Transport;
 import com.joizhang.naiverpc.remoting.TransportClient;
 import com.joizhang.naiverpc.remoting.TransportServer;
 import com.joizhang.naiverpc.remoting.transport.RequestHandlerRegistry;
 import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
-import com.joizhang.naiverpc.spi.ServiceSupport;
 
 import java.io.Closeable;
 import java.net.InetSocketAddress;
@@ -20,13 +20,9 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 
-public class NettyRpcAccessPoint implements RpcAccessPoint {
+import static com.joizhang.naiverpc.netty.spi.ServiceSupportConstant.*;
 
-    private static final ServiceSupport<TransportServer> SERVER_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(TransportServer.class);
-    private static final ServiceSupport<TransportClient> CLIENT_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(TransportClient.class);
-    private static final ServiceSupport<NameService> NAME_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(NameService.class);
-    private static final ServiceSupport<StubFactory> STUB_FACTORY_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(StubFactory.class);
-    private static final ServiceSupport<ServiceProviderRegistry> SERVICE_PROVIDER_REGISTRY_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(ServiceProviderRegistry.class);
+public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     private final Map<URI, Transport> clientMap = new ConcurrentHashMap<>();
 
@@ -81,7 +77,8 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     @Override
     public synchronized <T> URI addServiceProvider(T service, Class<T> serviceClass) {
-        final ServiceProviderRegistry serviceProviderRegistry = SERVICE_PROVIDER_REGISTRY_SERVICE_SUPPORT.getService(ServiceProviderRegistry.class.getCanonicalName());
+        final ServiceProviderRegistry serviceProviderRegistry =
+                SERVICE_PROVIDER_REGISTRY_SERVICE_SUPPORT.getService(RpcRequestHandler.class.getCanonicalName());
         serviceProviderRegistry.addServiceProvider(serviceClass, service);
         return this.uri;
     }

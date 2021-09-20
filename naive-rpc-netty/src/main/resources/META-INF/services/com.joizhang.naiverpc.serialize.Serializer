@@ -1,2 +1,3 @@
 com.joizhang.naiverpc.netty.serialize.NativeJavaSerializer
 com.joizhang.naiverpc.netty.serialize.JavaSerializer
+com.joizhang.naiverpc.netty.serialize.MetadataSerializer

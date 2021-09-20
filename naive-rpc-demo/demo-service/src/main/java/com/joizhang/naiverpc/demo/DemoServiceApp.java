@@ -1,17 +1,15 @@
 package com.joizhang.naiverpc.demo;
 
-import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.RpcAccessPoint;
 import com.joizhang.naiverpc.demo.api.service.HelloService;
 import com.joizhang.naiverpc.demo.api.service.UserService;
 import com.joizhang.naiverpc.demo.service.HelloServiceImpl;
 import com.joizhang.naiverpc.demo.service.UserServiceImpl;
+import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.NettyRpcAccessPoint;
 import com.joizhang.naiverpc.spi.ServiceSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -70,8 +68,8 @@ public class DemoServiceApp {
         return cmd;
     }
 
-    private static <T> void  registerService(RpcAccessPoint rpcAccessPoint, NameService nameService,
-                                             Class<T> serviceClass, T service) throws IOException {
+    private static <T> void registerService(RpcAccessPoint rpcAccessPoint, NameService nameService, Class<T> serviceClass, T service)
+            throws IOException, ClassNotFoundException {
         Objects.requireNonNull(nameService);
         String serviceName = serviceClass.getCanonicalName();
         URI uri = rpcAccessPoint.addServiceProvider(service, serviceClass);
