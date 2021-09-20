@@ -37,6 +37,7 @@ public class CommandEncoder extends MessageToByteEncoder<Command> {
         String codecName = CodecTypeEnum.getName(msg.getHeader().getCodecType());
         Serializer serializer = SERIALIZER_SERVICE_SUPPORT.getService(codecName);
         byte[] bytes = SerializeSupport.serialize(serializer, msg.getPayload());
+        byteBuf.writeInt(bytes.length);
         byteBuf.writeBytes(bytes);
     }
 

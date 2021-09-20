@@ -23,4 +23,6 @@ java -jar naive-rpc-demo/demo-client/target/demo-client-2021.07-jar-with-depende
 
 ## References
 
+https://github.com/apache/dubbo
+
 https://github.com/liyue2008/simple-rpc-framework

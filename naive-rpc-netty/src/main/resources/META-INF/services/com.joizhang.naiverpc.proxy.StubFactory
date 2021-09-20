@@ -1,1 +1,2 @@
 com.joizhang.naiverpc.netty.proxy.DynamicStubFactory
+com.joizhang.naiverpc.netty.proxy.JdkStubFactory

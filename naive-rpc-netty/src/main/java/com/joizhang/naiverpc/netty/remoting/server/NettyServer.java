@@ -24,8 +24,7 @@ public class NettyServer implements TransportServer {
     public void start(RequestHandlerRegistry requestHandlerRegistry, int port) throws Exception {
         this.port = port;
         this.requestHandlerRegistry = requestHandlerRegistry;
-        this.bossGroup = NettyEventLoopFactory.eventLoopGroup(
-                1, "NettyServerBoss");
+        this.bossGroup = NettyEventLoopFactory.eventLoopGroup(1, "NettyServerBoss");
         this.workerGroup = NettyEventLoopFactory.eventLoopGroup(
                 Constants.DEFAULT_IO_THREADS, "NettyServerWorker");
         this.bootstrap = newBootstrap();

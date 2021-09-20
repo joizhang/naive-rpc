@@ -8,13 +8,14 @@ public class Metadata extends HashMap<String, List<URI>> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Metadata:").append("\n");
+        StringBuilder sb = new StringBuilder("Metadata:").append("\n\n");
         for (Entry<String, List<URI>> entry : entrySet()) {
             sb.append("\t").append("Classname: ").append(entry.getKey()).append("\n");
-            sb.append("\t").append("URIs:").append("\n");
+            sb.append("\t").append("URIs: ").append("\t");
             for (URI uri : entry.getValue()) {
-                sb.append("\t\t").append(uri).append("\n");
+                sb.append("\t").append(uri);
             }
+            sb.append("\n");
         }
         return sb.toString();
     }

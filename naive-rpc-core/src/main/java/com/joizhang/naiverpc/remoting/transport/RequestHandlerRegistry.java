@@ -12,7 +12,7 @@ public class RequestHandlerRegistry {
 
     private static final ServiceSupport<RequestHandler> REQUEST_HANDLER_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RequestHandler.class);
 
-    private final Map<Integer, RequestHandler> handlerMap = new HashMap<>();
+    private final Map<Byte, RequestHandler> handlerMap = new HashMap<>();
 
     private static RequestHandlerRegistry instance = null;
 

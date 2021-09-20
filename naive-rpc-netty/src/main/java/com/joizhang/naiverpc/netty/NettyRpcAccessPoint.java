@@ -2,6 +2,8 @@ package com.joizhang.naiverpc.netty;
 
 import com.joizhang.naiverpc.RpcAccessPoint;
 import com.joizhang.naiverpc.nameservice.NameService;
+import com.joizhang.naiverpc.netty.proxy.JdkStubFactory;
+import com.joizhang.naiverpc.netty.remoting.client.NettyClient;
 import com.joizhang.naiverpc.netty.remoting.server.NettyServer;
 import com.joizhang.naiverpc.netty.remoting.transport.RpcRequestHandler;
 import com.joizhang.naiverpc.proxy.StubFactory;
@@ -61,13 +63,13 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
     @Override
     public <T> T getRemoteService(URI uri, Class<T> serviceClass) {
         Transport transport = this.clientMap.computeIfAbsent(uri, this::createTransport);
-        final StubFactory stubFactory = STUB_FACTORY_SERVICE_SUPPORT.getService(StubFactory.class.getCanonicalName());
+        StubFactory stubFactory = STUB_FACTORY_SERVICE_SUPPORT.getService(JdkStubFactory.class.getCanonicalName());
         return stubFactory.createStub(transport, serviceClass);
     }
 
     private Transport createTransport(URI uri) {
         try {
-            this.client = CLIENT_SERVICE_SUPPORT.getService(TransportClient.class.getCanonicalName());
+            this.client = CLIENT_SERVICE_SUPPORT.getService(NettyClient.class.getCanonicalName());
             InetSocketAddress address = new InetSocketAddress(uri.getHost(), uri.getPort());
             return this.client.createTransport(address, 3000L);
         } catch (InterruptedException | TimeoutException e) {
