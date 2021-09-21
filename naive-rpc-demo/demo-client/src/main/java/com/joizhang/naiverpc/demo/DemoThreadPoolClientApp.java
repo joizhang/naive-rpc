@@ -21,15 +21,6 @@ public class DemoThreadPoolClientApp {
 
     private static final ServiceSupport<RpcAccessPoint> RPC_ACCESS_POINT_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RpcAccessPoint.class);
 
-    private static <T> T lookupService(RpcAccessPoint rpcAccessPoint, NameService nameService, Class<T> serviceClass)
-            throws IOException, ClassNotFoundException {
-        Objects.requireNonNull(nameService);
-        String serviceName = serviceClass.getCanonicalName();
-        URI uri = nameService.lookupService(serviceName);
-        log.info("找到服务: {}，提供者: {}.", serviceName, uri);
-        return rpcAccessPoint.getRemoteService(uri, serviceClass);
-    }
-
     public static void main(String[] args) throws IOException {
         ExecutorService service = new ThreadPoolExecutor(
                 4,
