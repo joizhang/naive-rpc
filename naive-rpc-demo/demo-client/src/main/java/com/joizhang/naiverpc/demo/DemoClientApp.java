@@ -1,6 +1,7 @@
 package com.joizhang.naiverpc.demo;
 
 import com.joizhang.naiverpc.RpcAccessPoint;
+import com.joizhang.naiverpc.demo.api.dto.User;
 import com.joizhang.naiverpc.demo.api.service.HelloService;
 import com.joizhang.naiverpc.demo.api.service.UserService;
 import com.joizhang.naiverpc.nameservice.NameService;
@@ -22,17 +23,21 @@ public class DemoClientApp {
         Objects.requireNonNull(nameService);
         String serviceName = serviceClass.getCanonicalName();
         URI uri = nameService.lookupService(serviceName);
-        log.info("找到服务{}，提供者: {}.", serviceName, uri);
+        log.info("找到服务: {}，提供者: {}.", serviceName, uri);
         return rpcAccessPoint.getRemoteService(uri, serviceClass);
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
             NameService nameService = rpcAccessPoint.getNameService();
+
             HelloService helloService = DemoClientApp.lookupService(rpcAccessPoint, nameService, HelloService.class);
-            UserService userService = DemoClientApp.lookupService(rpcAccessPoint, nameService, UserService.class);
             String response = helloService.hello("joizhang");
             System.out.println(response);
+
+            UserService userService = DemoClientApp.lookupService(rpcAccessPoint, nameService, UserService.class);
+            User user = userService.incrementVersion(new User("joizhang", (byte) 1, (short) 30, 1));
+            System.out.println(user);
         }
     }
 

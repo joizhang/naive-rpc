@@ -32,7 +32,8 @@ public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistr
                 // 找到服务提供者，利用Java反射机制调用服务的对应方法
                 String methodName = rpcRequest.getMethodName();
                 Object[] args = rpcRequest.getArgs();
-                Method method = serviceProvider.getClass().getMethod(methodName, String.class);
+                Class<?>[] argsTypes = rpcRequest.getArgsTypes();
+                Method method = serviceProvider.getClass().getMethod(methodName, argsTypes);
                 Object result = method.invoke(serviceProvider, args);
                 rpcResponse = RpcResponse.builder()
                         .code(ResponseCodeEnum.OK.getCode())
