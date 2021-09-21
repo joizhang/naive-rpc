@@ -21,7 +21,7 @@ public class RequestInvocation extends SimpleChannelInboundHandler<Command> {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Command request) throws Exception {
         RequestHandler handler = requestHandlerRegistry.get(request.getHeader().getMessageType());
-        if (null != handler) {
+        if (handler != null) {
             Command response = handler.handle(request);
             if (null != response) {
                 channelHandlerContext.writeAndFlush(response).addListener((ChannelFutureListener) channelFuture -> {
@@ -34,15 +34,17 @@ public class RequestInvocation extends SimpleChannelInboundHandler<Command> {
                 logger.warn("Response is null!");
             }
         } else {
-            throw new Exception(String.format("No handler for request with type: %d!", request.getHeader().getMessageType()));
+            throw new Exception(String.format("No handler for request with type: %d", request.getHeader().getMessageType()));
         }
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.warn("Exception: ", cause);
+        logger.error("Exception: ", cause);
         super.exceptionCaught(ctx, cause);
         Channel channel = ctx.channel();
-        if (channel.isActive()) ctx.close();
+        if (channel.isActive()) {
+            ctx.close();
+        }
     }
 }

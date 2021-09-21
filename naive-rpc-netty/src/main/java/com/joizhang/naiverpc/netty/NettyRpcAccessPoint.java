@@ -10,6 +10,7 @@ import com.joizhang.naiverpc.proxy.StubFactory;
 import com.joizhang.naiverpc.remoting.Transport;
 import com.joizhang.naiverpc.remoting.TransportClient;
 import com.joizhang.naiverpc.remoting.TransportServer;
+import com.joizhang.naiverpc.remoting.transport.RequestHandler;
 import com.joizhang.naiverpc.remoting.transport.RequestHandlerRegistry;
 import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
 
@@ -79,9 +80,8 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     @Override
     public synchronized <T> URI addServiceProvider(T service, Class<T> serviceClass) {
-        final ServiceProviderRegistry serviceProviderRegistry =
-                SERVICE_PROVIDER_REGISTRY_SERVICE_SUPPORT.getService(RpcRequestHandler.class.getCanonicalName());
-        serviceProviderRegistry.addServiceProvider(serviceClass, service);
+        ServiceProviderRegistry registry = REQUEST_HANDLER_SERVICE_SUPPORT.getService(RpcRequestHandler.class.getCanonicalName());
+        registry.addServiceProvider(serviceClass, service);
         return this.uri;
     }
 

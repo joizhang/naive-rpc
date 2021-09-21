@@ -7,6 +7,7 @@ import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,10 +39,12 @@ public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistr
                         .body(result).build();
             } else {
                 // 如果没找到，返回NO_PROVIDER错误响应。
-                log.error("No service provider of {}#{}!", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
+                String error = MessageFormat.format("No service provider of {}#{}",
+                        rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
+                log.error(error);
                 rpcResponse = RpcResponse.builder()
                         .code(ResponseCodeEnum.NOT_FOUND.getCode())
-                        .error("No provider!").build();
+                        .error(error).build();
             }
         } catch (Throwable t) {
             // 发生异常，返回UNKNOWN_ERROR错误响应。
@@ -61,7 +64,7 @@ public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistr
 
     @Override
     public byte type() {
-        return MessageType.TYPE_RPC;
+        return MessageType.REQUEST_TYPE;
     }
 
     @Override

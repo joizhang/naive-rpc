@@ -1,16 +1,15 @@
 package com.joizhang.naiverpc.remoting.transport;
 
-import com.joizhang.naiverpc.spi.ServiceSupport;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.joizhang.naiverpc.spi.ServiceSupportConstant.REQUEST_HANDLER_SERVICE_SUPPORT;
+
 @Slf4j
 public class RequestHandlerRegistry {
-
-    private static final ServiceSupport<RequestHandler> REQUEST_HANDLER_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RequestHandler.class);
 
     private final Map<Byte, RequestHandler> handlerMap = new HashMap<>();
 

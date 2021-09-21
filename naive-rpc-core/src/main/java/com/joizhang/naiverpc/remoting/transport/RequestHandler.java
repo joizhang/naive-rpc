@@ -7,7 +7,7 @@ import com.joizhang.naiverpc.spi.SPI;
 import java.io.IOException;
 
 @SPI
-public interface RequestHandler {
+public interface RequestHandler extends ServiceProviderRegistry {
 
     /**
      * 处理请求
