@@ -24,7 +24,7 @@ public abstract class AbstractServiceStub implements ServiceStub {
             Command responseCommand = transport.send(requestCommand).get();
             RpcResponse rpcResponse = (RpcResponse) responseCommand.getPayload();
             if (rpcResponse.getCode() == ResponseCodeEnum.OK.getCode()) {
-                return responseCommand.getPayload();
+                return rpcResponse.getBody();
             } else {
                 throw new Exception(rpcResponse.getError());
             }
