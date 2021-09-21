@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.ServiceLoader;
 import java.util.stream.StreamSupport;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ServiceSupportTest {
 
@@ -31,9 +31,8 @@ public class ServiceSupportTest {
 
     @Test
     public void testServiceLoader() {
-//        StreamSupport.stream(ServiceLoader.load(Serializer.class).spliterator(), false)
-//                .map(ServiceSupport::singletonFilter)
-//                .forEach(System.out::println);
+        StreamSupport.stream(ServiceLoader.load(Serializer.class).spliterator(), false)
+                .forEach(System.out::println);
     }
 
 }
