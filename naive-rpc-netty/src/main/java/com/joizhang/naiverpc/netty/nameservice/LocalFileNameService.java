@@ -23,9 +23,9 @@ import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVIC
 @Slf4j
 public class LocalFileNameService implements NameService {
 
-    private static final Collection<String> schemes = Collections.singleton("file");
+    private static final Collection<String> SCHEMES = Collections.singleton("file");
 
-    private static final Serializer metadataSerializer = SERIALIZER_SERVICE_SUPPORT.getService(MetadataSerializer.class.getCanonicalName());
+    private static final Serializer METADATA_SERIALIZER = SERIALIZER_SERVICE_SUPPORT.getService(MetadataSerializer.class.getCanonicalName());
 
     private File file = null;
 
@@ -33,12 +33,12 @@ public class LocalFileNameService implements NameService {
 
     @Override
     public Collection<String> supportedSchemes() {
-        return schemes;
+        return SCHEMES;
     }
 
     @Override
     public void connect(URI nameServiceUri) {
-        if (schemes.contains(nameServiceUri.getScheme())) {
+        if (SCHEMES.contains(nameServiceUri.getScheme())) {
             file = new File(nameServiceUri);
         } else {
             throw new RuntimeException("Unsupported scheme!");
@@ -63,7 +63,7 @@ public class LocalFileNameService implements NameService {
                     while (buffer.hasRemaining()) {
                         fileChannel.read(buffer);
                     }
-                    metadata = SerializeSupport.deserialize(metadataSerializer, bytes, Metadata.class);
+                    metadata = SerializeSupport.deserialize(METADATA_SERIALIZER, bytes, Metadata.class);
                 } else {
                     metadata = new Metadata();
                 }
@@ -73,7 +73,7 @@ public class LocalFileNameService implements NameService {
                     uris.add(uri);
                 }
 
-                bytes = SerializeSupport.serialize(metadataSerializer, metadata);
+                bytes = SerializeSupport.serialize(METADATA_SERIALIZER, metadata);
                 fileChannel.truncate(bytes.length);
                 fileChannel.position(0L);
                 fileChannel.write(ByteBuffer.wrap(bytes));
@@ -98,7 +98,7 @@ public class LocalFileNameService implements NameService {
                 }
                 if (bytes.length > 0) {
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                    ObjectInput deserialize = metadataSerializer.deserialize(inputStream);
+                    ObjectInput deserialize = METADATA_SERIALIZER.deserialize(inputStream);
                     metadata = deserialize.readObject(Metadata.class);
                 } else {
                     metadata = new Metadata();

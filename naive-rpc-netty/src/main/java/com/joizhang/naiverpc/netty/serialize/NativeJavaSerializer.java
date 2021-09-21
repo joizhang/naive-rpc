@@ -15,7 +15,7 @@ import static com.joizhang.naiverpc.netty.serialize.SerializerType.NATIVE_JAVA_S
 @Slf4j
 public class NativeJavaSerializer implements Serializer {
 
-    private final static AtomicBoolean warn = new AtomicBoolean(false);
+    private final static AtomicBoolean WARN = new AtomicBoolean(false);
 
     @Override
     public byte getContentTypeId() {
@@ -29,7 +29,7 @@ public class NativeJavaSerializer implements Serializer {
 
     @Override
     public ObjectOutput serialize(OutputStream outputStream) throws IOException {
-        if (warn.compareAndSet(false, true)) {
+        if (WARN.compareAndSet(false, true)) {
             log.warn("Java serialization is unsafe.");
         }
         return new NativeJavaObjectOutput(outputStream);
@@ -37,7 +37,7 @@ public class NativeJavaSerializer implements Serializer {
 
     @Override
     public ObjectInput deserialize(InputStream inputStream) throws IOException {
-        if (warn.compareAndSet(false, true)) {
+        if (WARN.compareAndSet(false, true)) {
             log.warn("Java serialization is unsafe.");
         }
         return new NativeJavaObjectInput(inputStream);

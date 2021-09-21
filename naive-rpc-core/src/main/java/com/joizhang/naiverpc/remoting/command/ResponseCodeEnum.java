@@ -11,13 +11,14 @@ public enum ResponseCodeEnum {
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
     SERVICE_UNAVAILABLE(503, "Service Unavailable");
 
-    private static final Map<Integer, ResponseCodeEnum> codes = new HashMap<>();
+    private static final Map<Integer, ResponseCodeEnum> CODES = new HashMap<>();
+
     private final int code;
     private final String message;
 
     static {
         for (ResponseCodeEnum responseCode : ResponseCodeEnum.values()) {
-            codes.put(responseCode.code, responseCode);
+            CODES.put(responseCode.code, responseCode);
         }
     }
 
@@ -27,18 +28,15 @@ public enum ResponseCodeEnum {
     }
 
     public static ResponseCodeEnum valueOf(int code) {
-        return codes.get(code);
+        return CODES.get(code);
     }
 
     public int getCode() {
         return code;
     }
 
-    public String getMessage(Object... args) {
-        if (args.length < 1) {
-            return message;
-        }
-        return String.format(message, args);
+    public String getMessage() {
+        return message;
     }
 
 }
