@@ -9,12 +9,7 @@ public class RequestDecoder extends CommandDecoder {
 
     @Override
     protected Header decodeHeader(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) {
-        byte rpcVersion = byteBuf.readByte();
-        byte messageType = byteBuf.readByte();
-        byte codecType = byteBuf.readByte();
-        byte padding = byteBuf.readByte();
-        int requestId = byteBuf.readInt();
-        return new Header(rpcVersion, messageType, codecType, requestId);
+        return super.decodeHeader(channelHandlerContext, byteBuf);
     }
 
 }

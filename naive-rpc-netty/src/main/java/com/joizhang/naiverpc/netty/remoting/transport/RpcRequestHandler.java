@@ -1,20 +1,14 @@
 package com.joizhang.naiverpc.netty.remoting.transport;
 
-import com.joizhang.naiverpc.netty.remoting.command.CodecTypeEnum;
 import com.joizhang.naiverpc.netty.remoting.command.MessageType;
-import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
 import com.joizhang.naiverpc.remoting.command.*;
 import com.joizhang.naiverpc.remoting.transport.RequestHandler;
 import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
-import com.joizhang.naiverpc.serialize.Serializer;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
 
 @Slf4j
 public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistry {
@@ -25,15 +19,11 @@ public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistr
     private final Map<String, Object> serviceProviders = new HashMap<>();
 
     @Override
-    public Command handle(Command requestCommand) throws IOException, ClassNotFoundException {
-        Header header = requestCommand.getHeader();
+    public Command handle(Command requestCommand) {
+        Header requestHeader = requestCommand.getHeader();
         // 从payload中反序列化RpcRequest
-        String codecName = CodecTypeEnum.getName(header.getCodecType());
-        Serializer serializer = SERIALIZER_SERVICE_SUPPORT.getService(codecName);
-        byte[] requestPayload = (byte[]) requestCommand.getPayload();
-        RpcRequest rpcRequest = SerializeSupport.deserialize(serializer, requestPayload, RpcRequest.class);
-        ResponseHeader responseHeader;
-        Object resultPayload;
+        RpcRequest rpcRequest = (RpcRequest) requestCommand.getPayload();
+        RpcResponse rpcResponse;
         try {
             // 查找所有已注册的服务提供方，寻找rpcRequest中需要的服务
             Object serviceProvider = serviceProviders.get(rpcRequest.getInterfaceName());
@@ -42,26 +32,31 @@ public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistr
                 String methodName = rpcRequest.getMethodName();
                 Object[] args = rpcRequest.getArgs();
                 Method method = serviceProvider.getClass().getMethod(methodName, String.class);
-                resultPayload = method.invoke(serviceProvider, args);
-                responseHeader = new ResponseHeader(header.getRpcVersion(), type(),
-                        header.getCodecType(), header.getRequestId());
+                Object result = method.invoke(serviceProvider, args);
+                rpcResponse = RpcResponse.builder()
+                        .code(ResponseCodeEnum.OK.getCode())
+                        .body(result).build();
             } else {
                 // 如果没找到，返回NO_PROVIDER错误响应。
                 log.error("No service provider of {}#{}!", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
-                resultPayload = new byte[0];
-                responseHeader = new ResponseHeader(header.getRpcVersion(), type(),
-                        header.getCodecType(), header.getRequestId(),
-                        ResponseCodeEnum.NOT_FOUND.getCode(), "No provider!");
+                rpcResponse = RpcResponse.builder()
+                        .code(ResponseCodeEnum.NOT_FOUND.getCode())
+                        .error("No provider!").build();
             }
         } catch (Throwable t) {
             // 发生异常，返回UNKNOWN_ERROR错误响应。
             log.error("Exception: ", t);
-            resultPayload = new byte[0];
-            responseHeader = new ResponseHeader(header.getRpcVersion(), type(),
-                    header.getCodecType(),  header.getRequestId(),
-                    ResponseCodeEnum.INTERNAL_SERVER_ERROR.getCode(), t.getMessage());
+            rpcResponse = RpcResponse.builder()
+                    .code(ResponseCodeEnum.INTERNAL_SERVER_ERROR.getCode())
+                    .error(t.getMessage()).build();
         }
-        return new Command(responseHeader, resultPayload);
+        Header responseHeader = Header.builder()
+                .rpcVersion(requestHeader.getRpcVersion())
+                .messageType(MessageType.RESPONSE_TYPE)
+                .codecType(requestHeader.getCodecType())
+                .requestId(requestHeader.getRequestId())
+                .build();
+        return new Command(responseHeader, rpcResponse);
     }
 
     @Override

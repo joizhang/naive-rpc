@@ -19,11 +19,13 @@ import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVIC
  * +--------------------+--------------------+--------------------+--------------------+
  * |                                   4B magic number                                 |
  * +--------------------+--------------------+--------------------+--------------------+
+ * |                                   4B full length                                  |
+ * +--------------------+--------------------+--------------------+--------------------+
  * | 1B rpc version     | 1B message type    | 1B codec type      | 1B padding         |
  * +--------------------+--------------------+--------------------+--------------------+
  * |                                   4B requestId                                    |
  * +--------------------+--------------------+--------------------+--------------------+
- * |                                   4B data length                                  |
+ * |                                      payload                                      |
  * +--------------------+--------------------+--------------------+--------------------+
  * </pre>
  */
@@ -32,13 +34,25 @@ public class CommandEncoder extends MessageToByteEncoder<Command> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Command msg, ByteBuf byteBuf)
             throws Exception {
+        int fullLength = RpcConstants.HEAD_LENGTH;
         byteBuf.writeBytes(RpcConstants.MAGIC_NUMBER);
+        // leave a place to write the value of full length
+        byteBuf.writerIndex(byteBuf.writerIndex() + 4);
+        // write header
         encodeHeader(channelHandlerContext, msg.getHeader(), byteBuf);
+
+        // write object
         String codecName = CodecTypeEnum.getName(msg.getHeader().getCodecType());
         Serializer serializer = SERIALIZER_SERVICE_SUPPORT.getService(codecName);
         byte[] bytes = SerializeSupport.serialize(serializer, msg.getPayload());
-        byteBuf.writeInt(bytes.length);
+        fullLength += bytes.length;
         byteBuf.writeBytes(bytes);
+
+        // write full length
+        int writeIndex = byteBuf.writerIndex();
+        byteBuf.writerIndex(writeIndex - fullLength + RpcConstants.MAGIC_NUMBER.length);
+        byteBuf.writeInt(fullLength);
+        byteBuf.writerIndex(writeIndex);
     }
 
     protected void encodeHeader(ChannelHandlerContext channelHandlerContext, Header header, ByteBuf byteBuf)

@@ -32,7 +32,7 @@ public class RequestHandlerRegistry {
         }
     }
 
-    public RequestHandler get(int type) {
+    public RequestHandler get(byte type) {
         return handlerMap.get(type);
     }
 

@@ -25,8 +25,7 @@ public class NettyServer implements TransportServer {
         this.port = port;
         this.requestHandlerRegistry = requestHandlerRegistry;
         this.bossGroup = NettyEventLoopFactory.eventLoopGroup(1, "NettyServerBoss");
-        this.workerGroup = NettyEventLoopFactory.eventLoopGroup(
-                Constants.DEFAULT_IO_THREADS, "NettyServerWorker");
+        this.workerGroup = NettyEventLoopFactory.eventLoopGroup(Constants.DEFAULT_IO_THREADS, "NettyServerWorker");
         this.bootstrap = newBootstrap();
         this.channel = doBind();
     }
