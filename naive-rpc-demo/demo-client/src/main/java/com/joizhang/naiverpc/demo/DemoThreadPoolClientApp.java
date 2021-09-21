@@ -1,6 +1,7 @@
 package com.joizhang.naiverpc.demo;
 
 import com.joizhang.naiverpc.RpcAccessPoint;
+import com.joizhang.naiverpc.demo.api.dto.User;
 import com.joizhang.naiverpc.demo.api.service.HelloService;
 import com.joizhang.naiverpc.demo.api.service.UserService;
 import com.joizhang.naiverpc.nameservice.NameService;
@@ -25,7 +26,7 @@ public class DemoThreadPoolClientApp {
         Objects.requireNonNull(nameService);
         String serviceName = serviceClass.getCanonicalName();
         URI uri = nameService.lookupService(serviceName);
-        log.info("找到服务{}，提供者: {}.", serviceName, uri);
+        log.info("找到服务: {}，提供者: {}.", serviceName, uri);
         return rpcAccessPoint.getRemoteService(uri, serviceClass);
     }
 
@@ -55,21 +56,21 @@ public class DemoThreadPoolClientApp {
             }
             latch1.await();
 
-//            CountDownLatch latch2 = new CountDownLatch(loopTime);
-//            for (int i = 0; i < loopTime; i++) {
-//                final int seq = i;
-//                service.execute(()-> {
-//                    User user = new User();
-//                    user.setUsername("joizhang");
-//                    user.setAge((short) 28);
-//                    user.setGender((byte) 1);
-//                    user.setVersion(seq);
-//                    User response = userService.incrementVersion(user);
-//                    logger.info("收到响应: {}.", response);
-//                    latch2.countDown();
-//                });
-//            }
-//            latch2.await();
+            CountDownLatch latch2 = new CountDownLatch(loopTime);
+            for (int i = 0; i < loopTime; i++) {
+                final int seq = i;
+                service.execute(()-> {
+                    User user = new User();
+                    user.setUsername("joizhang");
+                    user.setAge((short) 28);
+                    user.setGender((byte) 1);
+                    user.setVersion(seq);
+                    User response = userService.incrementVersion(user);
+                    log.info("收到响应: {}.", response);
+                    latch2.countDown();
+                });
+            }
+            latch2.await();
 
             service.shutdown();
         } catch (InterruptedException | ClassNotFoundException e) {
