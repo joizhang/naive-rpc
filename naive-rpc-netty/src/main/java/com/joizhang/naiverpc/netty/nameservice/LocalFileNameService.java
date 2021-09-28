@@ -86,7 +86,7 @@ public class LocalFileNameService implements NameService {
 
     @Override
     public URI lookupService(String serviceName) throws IOException, ClassNotFoundException {
-        Metadata metadata;
+        Metadata metadata1;
         try (RandomAccessFile raf = new RandomAccessFile(file, "rw");
              FileChannel fileChannel = raf.getChannel()) {
             FileLock lock = fileChannel.lock();
@@ -97,18 +97,16 @@ public class LocalFileNameService implements NameService {
                     fileChannel.read(buffer);
                 }
                 if (bytes.length > 0) {
-                    ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                    ObjectInput deserialize = METADATA_SERIALIZER.deserialize(inputStream);
-                    metadata = deserialize.readObject(Metadata.class);
+                    metadata1 = SerializeSupport.deserialize(METADATA_SERIALIZER, bytes, Metadata.class);
                 } else {
-                    metadata = new Metadata();
+                    metadata1 = new Metadata();
                 }
             } finally {
                 lock.release();
             }
         }
 
-        List<URI> uris = metadata.get(serviceName);
+        List<URI> uris = metadata1.get(serviceName);
         if (null == uris || uris.isEmpty()) {
             return null;
         } else {
