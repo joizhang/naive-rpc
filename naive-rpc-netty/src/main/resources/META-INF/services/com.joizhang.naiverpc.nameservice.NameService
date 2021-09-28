@@ -1,1 +1,2 @@
 com.joizhang.naiverpc.netty.nameservice.LocalFileNameService
+com.joizhang.naiverpc.netty.nameservice.ZookeeperNameService
