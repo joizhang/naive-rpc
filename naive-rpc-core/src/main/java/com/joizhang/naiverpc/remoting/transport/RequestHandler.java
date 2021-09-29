@@ -19,6 +19,7 @@ public interface RequestHandler extends ServiceProviderRegistry {
 
     /**
      * 支持的请求类型
+     * @return 请求类型
      */
     byte type();
 
