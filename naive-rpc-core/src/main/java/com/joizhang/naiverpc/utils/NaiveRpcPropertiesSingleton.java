@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -26,12 +28,16 @@ public class NaiveRpcPropertiesSingleton {
         if (url != null) {
             rpcConfigPath = url.getPath() + APPLICATION_PROPERTIES;
         }
-        try (FileInputStream fileInputStream = new FileInputStream(rpcConfigPath);
-             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {
+        if (Files.exists(Paths.get(rpcConfigPath))) {
+            try (FileInputStream fileInputStream = new FileInputStream(rpcConfigPath);
+                 InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {
+                properties = new Properties();
+                properties.load(inputStreamReader);
+            } catch (IOException e) {
+                log.error("Exception occurred when read properties file [{}]", APPLICATION_PROPERTIES);
+            }
+        } else {
             properties = new Properties();
-            properties.load(inputStreamReader);
-        } catch (IOException e) {
-            log.error("Exception occurred when read properties file [{}]", APPLICATION_PROPERTIES);
         }
     }
 
@@ -53,6 +59,14 @@ public class NaiveRpcPropertiesSingleton {
 
     public String getStringValue(String key) {
         return properties.getProperty(key);
+    }
+
+    public String getStringValueOrDefault(String key, String defaultValue) {
+        String value = getStringValue(key);
+        if (value == null || value.isEmpty()) {
+            return defaultValue;
+        }
+        return value;
     }
 
 }
