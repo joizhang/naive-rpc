@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.remoting;
+package com.joizhang.naiverpc.remoting.client;
 
 import com.joizhang.naiverpc.spi.SPI;
 

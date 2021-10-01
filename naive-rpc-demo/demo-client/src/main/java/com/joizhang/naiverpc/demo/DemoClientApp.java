@@ -19,7 +19,7 @@ public class DemoClientApp {
     private static final ServiceSupport<RpcAccessPoint> RPC_ACCESS_POINT_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RpcAccessPoint.class);
 
     static <T> T lookupService(RpcAccessPoint rpcAccessPoint, NameService nameService, Class<T> serviceClass)
-            throws IOException, ClassNotFoundException {
+            throws Exception {
         Objects.requireNonNull(nameService);
         String serviceName = serviceClass.getCanonicalName();
         URI uri = nameService.lookupService(serviceName);
@@ -27,7 +27,7 @@ public class DemoClientApp {
         return rpcAccessPoint.getRemoteService(uri, serviceClass);
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws Exception {
         try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
             NameService nameService = rpcAccessPoint.getNameService();
 

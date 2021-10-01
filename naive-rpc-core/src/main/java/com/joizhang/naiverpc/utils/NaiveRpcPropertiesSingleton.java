@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -15,7 +16,7 @@ import java.util.Properties;
 @Slf4j
 public class NaiveRpcPropertiesSingleton {
 
-    private static final String APPLICATION_PROPERTIES = "application.properties";
+    protected static final String APPLICATION_PROPERTIES = "application.properties";
 
     private static volatile NaiveRpcPropertiesSingleton instance;
 
@@ -23,21 +24,14 @@ public class NaiveRpcPropertiesSingleton {
 
     private NaiveRpcPropertiesSingleton() {
         // Read application.properties
-        URL url = Thread.currentThread().getContextClassLoader().getResource("");
-        String rpcConfigPath = "";
-        if (url != null) {
-            rpcConfigPath = url.getPath() + APPLICATION_PROPERTIES;
-        }
-        if (Files.exists(Paths.get(rpcConfigPath))) {
-            try (FileInputStream fileInputStream = new FileInputStream(rpcConfigPath);
-                 InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {
-                properties = new Properties();
-                properties.load(inputStreamReader);
-            } catch (IOException e) {
-                log.error("Exception occurred when read properties file [{}]", APPLICATION_PROPERTIES);
-            }
-        } else {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        try (InputStream inputStream = classLoader.getResourceAsStream(APPLICATION_PROPERTIES)) {
             properties = new Properties();
+            if (!Objects.isNull(inputStream)) {
+                properties.load(inputStream);
+            }
+        } catch (IOException e) {
+            log.error("Exception occurred when read properties file [{}]", APPLICATION_PROPERTIES);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.joizhang.naiverpc.netty.nameservice;
 
+import com.joizhang.naiverpc.RpcAccessPoint;
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.serialize.MetadataSerializer;
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.net.URI;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
@@ -27,7 +29,11 @@ public class LocalFileNameService implements NameService {
 
     private static final Serializer METADATA_SERIALIZER = SERIALIZER_SERVICE_SUPPORT.getService(MetadataSerializer.class.getCanonicalName());
 
-    private File file = null;
+    public static final String SERVICE_DATA = "simple_rpc_name_service.data";
+
+    private URI uri;
+
+    private File file;
 
     private static Metadata metadata = null;
 
@@ -38,16 +44,20 @@ public class LocalFileNameService implements NameService {
 
     @Override
     public void connect(URI nameServiceUri) {
+        this.uri = nameServiceUri;
         if (SCHEMES.contains(nameServiceUri.getScheme())) {
-            file = new File(nameServiceUri);
+            URL path = RpcAccessPoint.class.getProtectionDomain().getCodeSource().getLocation();
+            File classpath = new File(path.getPath());
+            File parentFile = classpath.getParentFile();
+            file = new File(parentFile, SERVICE_DATA);
         } else {
             throw new RuntimeException("Unsupported scheme!");
         }
     }
 
     @Override
-    public void registerService(String serviceName, URI uri) throws IOException, ClassNotFoundException {
-        log.info("Register service: {}, uri: {}.", serviceName, uri);
+    public void registerService(String serviceName) throws IOException, ClassNotFoundException {
+        log.info("Register service: {}, uri: {}.", serviceName, this.uri);
         byte[] bytes;
         try (RandomAccessFile raf = new RandomAccessFile(file, "rw");
              FileChannel fileChannel = raf.getChannel()) {

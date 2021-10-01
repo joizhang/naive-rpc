@@ -1,7 +1,7 @@
 package com.joizhang.naiverpc.netty.proxy;
 
 import com.joizhang.naiverpc.proxy.StubFactory;
-import com.joizhang.naiverpc.remoting.Transport;
+import com.joizhang.naiverpc.remoting.client.Transport;
 import com.joizhang.naiverpc.remoting.command.RpcRequest;
 
 import java.lang.reflect.InvocationHandler;

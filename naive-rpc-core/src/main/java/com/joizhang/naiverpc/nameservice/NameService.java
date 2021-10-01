@@ -25,9 +25,8 @@ public interface NameService {
      * 注册服务
      *
      * @param serviceName 服务名称
-     * @param uri         服务地址
      */
-    void registerService(String serviceName, URI uri) throws Exception;
+    void registerService(String serviceName) throws Exception;
 
     /**
      * 查询服务地址

@@ -4,7 +4,7 @@ import com.joizhang.naiverpc.netty.remoting.command.CodecTypeEnum;
 import com.joizhang.naiverpc.netty.remoting.command.MessageType;
 import com.joizhang.naiverpc.netty.remoting.command.RpcConstants;
 import com.joizhang.naiverpc.proxy.ServiceStub;
-import com.joizhang.naiverpc.remoting.Transport;
+import com.joizhang.naiverpc.remoting.client.Transport;
 import com.joizhang.naiverpc.remoting.command.*;
 
 import java.util.concurrent.ExecutionException;

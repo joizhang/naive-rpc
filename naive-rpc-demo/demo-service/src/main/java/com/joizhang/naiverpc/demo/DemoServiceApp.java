@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 
 import java.io.Closeable;
-import java.io.IOException;
-import java.net.URI;
 import java.util.Objects;
 
 @Slf4j
@@ -47,11 +45,11 @@ public class DemoServiceApp {
     }
 
     private static <T> void registerService(RpcAccessPoint rpcAccessPoint, NameService nameService, Class<T> serviceClass, T service)
-            throws IOException, ClassNotFoundException {
+            throws Exception {
         Objects.requireNonNull(nameService);
         String serviceName = serviceClass.getCanonicalName();
-        URI uri = rpcAccessPoint.addServiceProvider(service, serviceClass);
-        nameService.registerService(serviceName, uri);
+        rpcAccessPoint.addServiceProvider(service, serviceClass);
+        nameService.registerService(serviceName);
     }
 
     public static void main(String[] args) throws Exception {
@@ -60,7 +58,7 @@ public class DemoServiceApp {
         int port = Integer.parseInt(parser.getOptionValue("port", "9999"));
         log.info("创建并启动 RpcAccessPoint...");
         try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName());
-             Closeable ignored = rpcAccessPoint.startServer(host, port)) {
+             Closeable ignored = rpcAccessPoint.startServer(port)) {
             NameService nameService = rpcAccessPoint.getNameService();
 
             //register HelloService

@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.remoting;
+package com.joizhang.naiverpc.remoting.server;
 
 import com.joizhang.naiverpc.remoting.transport.RequestHandlerRegistry;
 import com.joizhang.naiverpc.spi.SPI;

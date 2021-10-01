@@ -3,7 +3,7 @@ package com.joizhang.naiverpc.netty.proxy;
 import com.itranswarp.compiler.JavaStringCompiler;
 import com.joizhang.naiverpc.proxy.ServiceStub;
 import com.joizhang.naiverpc.proxy.StubFactory;
-import com.joizhang.naiverpc.remoting.Transport;
+import com.joizhang.naiverpc.remoting.client.Transport;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

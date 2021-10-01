@@ -21,7 +21,7 @@ public class DemoThreadPoolClientApp {
 
     private static final ServiceSupport<RpcAccessPoint> RPC_ACCESS_POINT_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RpcAccessPoint.class);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         ExecutorService service = new ThreadPoolExecutor(
                 4,
                 4,

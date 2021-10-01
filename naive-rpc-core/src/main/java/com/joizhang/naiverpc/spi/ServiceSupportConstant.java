@@ -3,8 +3,8 @@ package com.joizhang.naiverpc.spi;
 import com.joizhang.naiverpc.loadbalance.LoadBalance;
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.proxy.StubFactory;
-import com.joizhang.naiverpc.remoting.TransportClient;
-import com.joizhang.naiverpc.remoting.TransportServer;
+import com.joizhang.naiverpc.remoting.client.TransportClient;
+import com.joizhang.naiverpc.remoting.server.TransportServer;
 import com.joizhang.naiverpc.remoting.transport.RequestHandler;
 import com.joizhang.naiverpc.serialize.Serializer;
 

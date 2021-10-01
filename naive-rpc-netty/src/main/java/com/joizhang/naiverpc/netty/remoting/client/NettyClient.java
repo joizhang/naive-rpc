@@ -1,8 +1,8 @@
 package com.joizhang.naiverpc.netty.remoting.client;
 
 import com.joizhang.naiverpc.netty.remoting.NettyEventLoopFactory;
-import com.joizhang.naiverpc.remoting.Transport;
-import com.joizhang.naiverpc.remoting.TransportClient;
+import com.joizhang.naiverpc.remoting.client.Transport;
+import com.joizhang.naiverpc.remoting.client.TransportClient;
 import com.joizhang.naiverpc.remoting.transport.InFlightRequests;
 import com.joizhang.naiverpc.utils.Constants;
 import io.netty.bootstrap.Bootstrap;

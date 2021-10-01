@@ -7,16 +7,17 @@ import com.joizhang.naiverpc.netty.remoting.client.NettyClient;
 import com.joizhang.naiverpc.netty.remoting.server.NettyServer;
 import com.joizhang.naiverpc.netty.remoting.transport.RpcRequestHandler;
 import com.joizhang.naiverpc.proxy.StubFactory;
-import com.joizhang.naiverpc.remoting.Transport;
-import com.joizhang.naiverpc.remoting.TransportClient;
-import com.joizhang.naiverpc.remoting.TransportServer;
-import com.joizhang.naiverpc.remoting.transport.RequestHandler;
+import com.joizhang.naiverpc.remoting.client.Transport;
+import com.joizhang.naiverpc.remoting.client.TransportClient;
+import com.joizhang.naiverpc.remoting.server.TransportServer;
 import com.joizhang.naiverpc.remoting.transport.RequestHandlerRegistry;
 import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
+import com.joizhang.naiverpc.utils.NaiveRpcPropertiesSingleton;
 
 import java.io.Closeable;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -27,18 +28,19 @@ import static com.joizhang.naiverpc.spi.ServiceSupportConstant.*;
 
 public class NettyRpcAccessPoint implements RpcAccessPoint {
 
-    private final Map<URI, Transport> clientMap = new ConcurrentHashMap<>();
+    public static final NaiveRpcPropertiesSingleton PROPERTIES_SINGLETON = NaiveRpcPropertiesSingleton.getInstance();
 
-    private URI uri;
+    public static final String REGISTER_ADDRESS = "naive.register.address";
+
+    private final Map<URI, Transport> clientMap = new ConcurrentHashMap<>();
 
     private TransportServer server = null;
 
     private TransportClient client = null;
 
     @Override
-    public synchronized Closeable startServer(String host, int port) throws Exception {
+    public synchronized Closeable startServer(int port) throws Exception {
         if (Objects.isNull(server)) {
-            this.uri = URI.create("rpc://" + host + ":" + port);
             this.server = SERVER_SERVICE_SUPPORT.getService(NettyServer.class.getCanonicalName());
             this.server.start(RequestHandlerRegistry.getInstance(), port);
         }
@@ -47,6 +49,23 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
                 this.server.stop();
             }
         };
+    }
+
+    @Override
+    public NameService getNameService() {
+        URI uri;
+        String registerAddress = PROPERTIES_SINGLETON.getStringValue(REGISTER_ADDRESS);
+        if (Objects.isNull(registerAddress)) {
+            uri = URI.create("file://localhost:9999");
+
+        } else {
+            try {
+                uri = new URI(registerAddress);
+            } catch (URISyntaxException e) {
+                throw new IllegalArgumentException("Illegal uri syntax of naive.register.address in application.properties.");
+            }
+        }
+        return getNameService(uri);
     }
 
     @Override
@@ -79,10 +98,9 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
     }
 
     @Override
-    public synchronized <T> URI addServiceProvider(T service, Class<T> serviceClass) {
+    public synchronized <T> void addServiceProvider(T service, Class<T> serviceClass) {
         ServiceProviderRegistry registry = REQUEST_HANDLER_SERVICE_SUPPORT.getService(RpcRequestHandler.class.getCanonicalName());
         registry.addServiceProvider(serviceClass, service);
-        return this.uri;
     }
 
     @Override
