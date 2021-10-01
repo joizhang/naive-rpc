@@ -1,5 +1,6 @@
 package com.joizhang.naiverpc.spi;
 
+import com.joizhang.naiverpc.loadbalance.LoadBalance;
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.proxy.StubFactory;
 import com.joizhang.naiverpc.remoting.TransportClient;
@@ -15,5 +16,6 @@ public interface ServiceSupportConstant {
     ServiceSupport<StubFactory> STUB_FACTORY_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(StubFactory.class);
     ServiceSupport<Serializer> SERIALIZER_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(Serializer.class);
     ServiceSupport<RequestHandler> REQUEST_HANDLER_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RequestHandler.class);
+    ServiceSupport<LoadBalance> LOAD_BALANCE_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(LoadBalance.class);
 
 }

@@ -27,7 +27,7 @@ public interface NameService {
      * @param serviceName 服务名称
      * @param uri         服务地址
      */
-    void registerService(String serviceName, URI uri) throws IOException, ClassNotFoundException;
+    void registerService(String serviceName, URI uri) throws Exception;
 
     /**
      * 查询服务地址
@@ -35,7 +35,7 @@ public interface NameService {
      * @param serviceName 服务名称
      * @return 服务地址
      */
-    URI lookupService(String serviceName) throws IOException, ClassNotFoundException;
+    URI lookupService(String serviceName) throws Exception;
 
     /**
      * 输出服务元信息
