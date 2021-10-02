@@ -1,2 +1,2 @@
-com.joizhang.naiverpc.loadbalance.RoundRobinLoadBalance
-com.joizhang.naiverpc.loadbalance.RandomLoadBalance
+com.joizhang.naiverpc.netty.loadbalance.RoundRobinLoadBalance
+com.joizhang.naiverpc.netty.loadbalance.RandomLoadBalance

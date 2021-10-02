@@ -10,6 +10,7 @@ import com.joizhang.naiverpc.spi.ServiceSupport;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Objects;
 
@@ -22,14 +23,14 @@ public class DemoClientApp {
             throws Exception {
         Objects.requireNonNull(nameService);
         String serviceName = serviceClass.getCanonicalName();
-        URI uri = nameService.lookupService(serviceName);
-        log.info("找到服务: {}，提供者: {}.", serviceName, uri);
-        return rpcAccessPoint.getRemoteService(uri, serviceClass);
+        InetSocketAddress socketAddress = nameService.lookupService(serviceName);
+        log.info("找到服务: {}，提供者: {}.", serviceName, socketAddress);
+        return rpcAccessPoint.getRemoteService(socketAddress, serviceClass);
     }
 
     public static void main(String[] args) throws Exception {
         try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
-            NameService nameService = rpcAccessPoint.getNameService();
+            NameService nameService = rpcAccessPoint.getNameService(DemoClientApp.class);
 
             HelloService helloService = DemoClientApp.lookupService(rpcAccessPoint, nameService, HelloService.class);
             String response = helloService.hello("joizhang");

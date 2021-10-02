@@ -6,6 +6,8 @@ import com.joizhang.naiverpc.netty.proxy.JdkStubFactory;
 import com.joizhang.naiverpc.netty.remoting.client.NettyClient;
 import com.joizhang.naiverpc.netty.remoting.server.NettyServer;
 import com.joizhang.naiverpc.netty.remoting.transport.RpcRequestHandler;
+import com.joizhang.naiverpc.netty.utils.NetUtils;
+import com.joizhang.naiverpc.netty.utils.StringUtils;
 import com.joizhang.naiverpc.proxy.StubFactory;
 import com.joizhang.naiverpc.remoting.client.Transport;
 import com.joizhang.naiverpc.remoting.client.TransportClient;
@@ -14,10 +16,11 @@ import com.joizhang.naiverpc.remoting.transport.RequestHandlerRegistry;
 import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
 import com.joizhang.naiverpc.utils.NaiveRpcPropertiesSingleton;
 
-import java.io.Closeable;
+import java.io.File;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -32,44 +35,46 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     public static final String REGISTER_ADDRESS = "naive.register.address";
 
-    private final Map<URI, Transport> clientMap = new ConcurrentHashMap<>();
+    public static final String SERVICE_DATA = "simple_rpc_name_service.data";
+
+    private final Map<InetSocketAddress, Transport> clientMap = new ConcurrentHashMap<>();
 
     private TransportServer server = null;
 
     private TransportClient client = null;
 
     @Override
-    public synchronized Closeable startServer(int port) throws Exception {
+    public synchronized InetSocketAddress startServer() throws Exception {
+        String hostToBind = InetAddress.getLocalHost().getHostAddress();
+        int port = NetUtils.getRandomPort();
+        String registerAddress = PROPERTIES_SINGLETON.getStringValue(REGISTER_ADDRESS);
+        if (StringUtils.isEmpty(registerAddress)) {
+            port = NetUtils.getAvailablePort(9999);
+        }
         if (Objects.isNull(server)) {
             this.server = SERVER_SERVICE_SUPPORT.getService(NettyServer.class.getCanonicalName());
             this.server.start(RequestHandlerRegistry.getInstance(), port);
         }
-        return () -> {
-            if (this.server != null) {
-                this.server.stop();
-            }
-        };
+        return new InetSocketAddress(hostToBind, port);
     }
 
     @Override
-    public NameService getNameService() {
-        URI uri;
+    public <T> NameService getNameService(Class<T> primarySource) {
+        URI nameServiceUri;
         String registerAddress = PROPERTIES_SINGLETON.getStringValue(REGISTER_ADDRESS);
-        if (Objects.isNull(registerAddress)) {
-            uri = URI.create("file://localhost:9999");
-
+        if (StringUtils.isEmpty(registerAddress)) {
+            // 未指定注册中心，默认为本地注册
+            URL path = primarySource.getProtectionDomain().getCodeSource().getLocation();
+            File classpath = new File(path.getPath());
+            File parentFile = classpath.getParentFile();
+            nameServiceUri = new File(parentFile, SERVICE_DATA).toURI();
         } else {
-            try {
-                uri = new URI(registerAddress);
-            } catch (URISyntaxException e) {
-                throw new IllegalArgumentException("Illegal uri syntax of naive.register.address in application.properties.");
-            }
+            nameServiceUri = URI.create(registerAddress);
         }
-        return getNameService(uri);
+        return getNameService(nameServiceUri);
     }
 
-    @Override
-    public NameService getNameService(URI nameServiceUri) {
+    private NameService getNameService(URI nameServiceUri) {
         Collection<NameService> nameServices = NAME_SERVICE_SUPPORT.getAllService();
         for (NameService nameService : nameServices) {
             if (nameService.supportedSchemes().contains(nameServiceUri.getScheme())) {
@@ -81,26 +86,25 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
     }
 
     @Override
-    public <T> T getRemoteService(URI uri, Class<T> serviceClass) {
-        Transport transport = this.clientMap.computeIfAbsent(uri, this::createTransport);
+    public synchronized <T> void addServiceProvider(T service, Class<T> serviceClass) {
+        ServiceProviderRegistry registry = REQUEST_HANDLER_SERVICE_SUPPORT.getService(RpcRequestHandler.class.getCanonicalName());
+        registry.addServiceProvider(serviceClass, service);
+    }
+
+    @Override
+    public <T> T getRemoteService(InetSocketAddress socketAddress, Class<T> serviceClass) {
+        Transport transport = this.clientMap.computeIfAbsent(socketAddress, this::createTransport);
         StubFactory stubFactory = STUB_FACTORY_SERVICE_SUPPORT.getService(JdkStubFactory.class.getCanonicalName());
         return stubFactory.createStub(transport, serviceClass);
     }
 
-    private Transport createTransport(URI uri) {
+    private Transport createTransport(InetSocketAddress socketAddress) {
         try {
             this.client = CLIENT_SERVICE_SUPPORT.getService(NettyClient.class.getCanonicalName());
-            InetSocketAddress address = new InetSocketAddress(uri.getHost(), uri.getPort());
-            return this.client.createTransport(address, 3000L);
+            return this.client.createTransport(socketAddress, 3000L);
         } catch (InterruptedException | TimeoutException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public synchronized <T> void addServiceProvider(T service, Class<T> serviceClass) {
-        ServiceProviderRegistry registry = REQUEST_HANDLER_SERVICE_SUPPORT.getService(RpcRequestHandler.class.getCanonicalName());
-        registry.addServiceProvider(serviceClass, service);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.joizhang.naiverpc.netty.nameservice;
 
 import com.joizhang.naiverpc.loadbalance.LoadBalance;
-import com.joizhang.naiverpc.loadbalance.RoundRobinLoadBalance;
+import com.joizhang.naiverpc.netty.loadbalance.RoundRobinLoadBalance;
 import com.joizhang.naiverpc.nameservice.NameService;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -10,6 +10,7 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,8 +38,6 @@ public class ZookeeperNameService implements NameService {
 
     private static CuratorFramework zkClient;
 
-    private URI uri;
-
     @Override
     public Collection<String> supportedSchemes() {
         return SCHEMES;
@@ -46,7 +45,6 @@ public class ZookeeperNameService implements NameService {
 
     @Override
     public void connect(URI nameServiceUri) {
-        this.uri = nameServiceUri;
         if (!SCHEMES.contains(nameServiceUri.getScheme())) {
             throw new RuntimeException("Unsupported scheme!");
         }
@@ -71,8 +69,8 @@ public class ZookeeperNameService implements NameService {
     }
 
     @Override
-    public void registerService(String serviceName) throws Exception {
-        String servicePath = ROOT_PATH + '/' + serviceName + '/' + this.uri.getAuthority();
+    public void registerService(InetSocketAddress socketAddress, String serviceName) throws Exception {
+        String servicePath = ROOT_PATH + '/' + serviceName + '/' + socketAddress.toString();
         Stat stat = zkClient.checkExists().forPath(servicePath);
         if (Objects.isNull(stat)) {
             zkClient.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(servicePath);
@@ -80,11 +78,14 @@ public class ZookeeperNameService implements NameService {
     }
 
     @Override
-    public URI lookupService(String serviceName) throws Exception {
+    public InetSocketAddress lookupService(String serviceName) throws Exception {
         String servicePath = ROOT_PATH + '/' + serviceName;
         List<String> serviceUrlList = zkClient.getChildren().forPath(servicePath);
         String targetServiceUrl = LOAD_BALANCE.select(serviceUrlList);
-        return new URI(targetServiceUrl);
+        String[] socketAddressArray = targetServiceUrl.split(":");
+        String host = socketAddressArray[0];
+        int port = Integer.parseInt(socketAddressArray[1]);
+        return new InetSocketAddress(host, port);
     }
 
     @Override

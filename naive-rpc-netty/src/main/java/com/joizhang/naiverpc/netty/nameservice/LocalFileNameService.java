@@ -1,16 +1,16 @@
 package com.joizhang.naiverpc.netty.nameservice;
 
-import com.joizhang.naiverpc.RpcAccessPoint;
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.serialize.MetadataSerializer;
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
-import com.joizhang.naiverpc.serialize.ObjectInput;
 import com.joizhang.naiverpc.serialize.Serializer;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.net.InetSocketAddress;
 import java.net.URI;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
@@ -29,10 +29,6 @@ public class LocalFileNameService implements NameService {
 
     private static final Serializer METADATA_SERIALIZER = SERIALIZER_SERVICE_SUPPORT.getService(MetadataSerializer.class.getCanonicalName());
 
-    public static final String SERVICE_DATA = "simple_rpc_name_service.data";
-
-    private URI uri;
-
     private File file;
 
     private static Metadata metadata = null;
@@ -44,20 +40,17 @@ public class LocalFileNameService implements NameService {
 
     @Override
     public void connect(URI nameServiceUri) {
-        this.uri = nameServiceUri;
         if (SCHEMES.contains(nameServiceUri.getScheme())) {
-            URL path = RpcAccessPoint.class.getProtectionDomain().getCodeSource().getLocation();
-            File classpath = new File(path.getPath());
-            File parentFile = classpath.getParentFile();
-            file = new File(parentFile, SERVICE_DATA);
+            file = new File(nameServiceUri);
         } else {
             throw new RuntimeException("Unsupported scheme!");
         }
     }
 
     @Override
-    public void registerService(String serviceName) throws IOException, ClassNotFoundException {
-        log.info("Register service: {}, uri: {}.", serviceName, this.uri);
+    public void registerService(InetSocketAddress socketAddress, String serviceName)
+            throws IOException, ClassNotFoundException {
+        log.info("Register service: {}, uri: {}.", serviceName, socketAddress);
         byte[] bytes;
         try (RandomAccessFile raf = new RandomAccessFile(file, "rw");
              FileChannel fileChannel = raf.getChannel()) {
@@ -78,9 +71,9 @@ public class LocalFileNameService implements NameService {
                     metadata = new Metadata();
                 }
 
-                List<URI> uris = metadata.computeIfAbsent(serviceName, k -> new ArrayList<>());
-                if (!uris.contains(uri)) {
-                    uris.add(uri);
+                List<InetSocketAddress> socketAddresses = metadata.computeIfAbsent(serviceName, k -> new ArrayList<>());
+                if (!socketAddresses.contains(socketAddress)) {
+                    socketAddresses.add(socketAddress);
                 }
 
                 bytes = SerializeSupport.serialize(METADATA_SERIALIZER, metadata);
@@ -95,7 +88,7 @@ public class LocalFileNameService implements NameService {
     }
 
     @Override
-    public URI lookupService(String serviceName) throws IOException, ClassNotFoundException {
+    public InetSocketAddress lookupService(String serviceName) throws IOException, ClassNotFoundException {
         Metadata metadata1;
         try (RandomAccessFile raf = new RandomAccessFile(file, "rw");
              FileChannel fileChannel = raf.getChannel()) {
@@ -116,11 +109,11 @@ public class LocalFileNameService implements NameService {
             }
         }
 
-        List<URI> uris = metadata1.get(serviceName);
-        if (null == uris || uris.isEmpty()) {
+        List<InetSocketAddress> socketAddresses = metadata1.get(serviceName);
+        if (null == socketAddresses || socketAddresses.isEmpty()) {
             return null;
         } else {
-            return uris.get(ThreadLocalRandom.current().nextInt(uris.size()));
+            return socketAddresses.get(ThreadLocalRandom.current().nextInt(socketAddresses.size()));
         }
     }
 

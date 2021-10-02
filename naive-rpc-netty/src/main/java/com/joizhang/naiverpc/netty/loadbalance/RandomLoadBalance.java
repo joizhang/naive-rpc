@@ -1,4 +1,6 @@
-package com.joizhang.naiverpc.loadbalance;
+package com.joizhang.naiverpc.netty.loadbalance;
+
+import com.joizhang.naiverpc.loadbalance.AbstractLoadBalance;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;

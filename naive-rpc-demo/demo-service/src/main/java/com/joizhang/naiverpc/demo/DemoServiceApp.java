@@ -11,7 +11,7 @@ import com.joizhang.naiverpc.spi.ServiceSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 
-import java.io.Closeable;
+import java.net.InetSocketAddress;
 import java.util.Objects;
 
 @Slf4j
@@ -44,27 +44,25 @@ public class DemoServiceApp {
         return cmd;
     }
 
-    private static <T> void registerService(RpcAccessPoint rpcAccessPoint, NameService nameService, Class<T> serviceClass, T service)
+    private static <T> void registerService(RpcAccessPoint rpcAccessPoint, NameService nameService,
+                                            InetSocketAddress socketAddress, Class<T> serviceClass, T service)
             throws Exception {
         Objects.requireNonNull(nameService);
         String serviceName = serviceClass.getCanonicalName();
         rpcAccessPoint.addServiceProvider(service, serviceClass);
-        nameService.registerService(serviceName);
+        nameService.registerService(socketAddress, serviceName);
     }
 
     public static void main(String[] args) throws Exception {
-        CommandLine parser = parseArgs(args);
-        String host = parser.getOptionValue("host", "localhost");
-        int port = Integer.parseInt(parser.getOptionValue("port", "9999"));
         log.info("创建并启动 RpcAccessPoint...");
-        try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName());
-             Closeable ignored = rpcAccessPoint.startServer(port)) {
-            NameService nameService = rpcAccessPoint.getNameService();
+        try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
+            InetSocketAddress socketAddress = rpcAccessPoint.startServer();
+            NameService nameService = rpcAccessPoint.getNameService(DemoServiceApp.class);
 
             //register HelloService
-            DemoServiceApp.registerService(rpcAccessPoint, nameService, HelloService.class, new HelloServiceImpl());
+            DemoServiceApp.registerService(rpcAccessPoint, nameService, socketAddress, HelloService.class, new HelloServiceImpl());
             //register UserService
-            DemoServiceApp.registerService(rpcAccessPoint, nameService, UserService.class, new UserServiceImpl());
+            DemoServiceApp.registerService(rpcAccessPoint, nameService, socketAddress, UserService.class, new UserServiceImpl());
             nameService.displayMetaData();
 
             log.info("开始提供服务，按任何键退出.");

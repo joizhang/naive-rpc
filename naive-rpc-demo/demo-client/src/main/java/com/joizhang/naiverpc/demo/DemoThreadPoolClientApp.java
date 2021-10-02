@@ -31,7 +31,7 @@ public class DemoThreadPoolClientApp {
                 new ThreadPoolExecutor.DiscardPolicy());
 
         try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
-            NameService nameService = rpcAccessPoint.getNameService();
+            NameService nameService = rpcAccessPoint.getNameService(DemoThreadPoolClientApp.class);
             HelloService helloService = DemoClientApp.lookupService(rpcAccessPoint, nameService, HelloService.class);
             UserService userService = DemoClientApp.lookupService(rpcAccessPoint, nameService, UserService.class);
 

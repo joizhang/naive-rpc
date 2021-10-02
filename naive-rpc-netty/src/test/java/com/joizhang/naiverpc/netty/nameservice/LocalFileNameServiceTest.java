@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -35,7 +36,7 @@ public class LocalFileNameServiceTest {
         try (FileChannel fileChannel = randomAccessFile.getChannel()) {
             Metadata metadata = new Metadata();
             metadata.put(this.getClass().getCanonicalName(),
-                    new ArrayList<>(Collections.singletonList(new URI("rpc://localhost:9000"))));
+                    new ArrayList<>(Collections.singletonList(new InetSocketAddress("localhost", 9999))));
             byte[] bytes = SerializeSupport.serialize(metadataSerializer, metadata);
             Assert.assertNotNull(bytes);
 
@@ -43,8 +44,6 @@ public class LocalFileNameServiceTest {
             fileChannel.position(0L);
             fileChannel.write(ByteBuffer.wrap(bytes));
             fileChannel.force(true);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 
