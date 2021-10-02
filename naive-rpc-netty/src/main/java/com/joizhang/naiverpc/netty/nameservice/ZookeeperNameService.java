@@ -70,7 +70,7 @@ public class ZookeeperNameService implements NameService {
 
     @Override
     public void registerService(InetSocketAddress socketAddress, String serviceName) throws Exception {
-        String servicePath = ROOT_PATH + '/' + serviceName + '/' + socketAddress.toString();
+        String servicePath = ROOT_PATH + '/' + serviceName + socketAddress.toString();
         Stat stat = zkClient.checkExists().forPath(servicePath);
         if (Objects.isNull(stat)) {
             zkClient.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(servicePath);
