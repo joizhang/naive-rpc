@@ -122,4 +122,8 @@ public class LocalFileNameService implements NameService {
         log.info(file.getPath());
         log.info(metadata.toString());
     }
+
+    @Override
+    public void close() {
+    }
 }

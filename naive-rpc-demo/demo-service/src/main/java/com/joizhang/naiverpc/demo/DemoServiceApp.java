@@ -55,9 +55,9 @@ public class DemoServiceApp {
 
     public static void main(String[] args) throws Exception {
         log.info("创建并启动 RpcAccessPoint...");
-        try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
+        try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName());
+             NameService nameService = rpcAccessPoint.getNameService(DemoServiceApp.class)) {
             InetSocketAddress socketAddress = rpcAccessPoint.startServer();
-            NameService nameService = rpcAccessPoint.getNameService(DemoServiceApp.class);
 
             //register HelloService
             DemoServiceApp.registerService(rpcAccessPoint, nameService, socketAddress, HelloService.class, new HelloServiceImpl());

@@ -2,12 +2,13 @@ package com.joizhang.naiverpc.nameservice;
 
 import com.joizhang.naiverpc.spi.SPI;
 
+import java.io.Closeable;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Collection;
 
 @SPI
-public interface NameService {
+public interface NameService extends Closeable {
 
     /**
      * 所有支持的协议

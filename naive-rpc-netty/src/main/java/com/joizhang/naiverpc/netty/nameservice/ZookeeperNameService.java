@@ -10,6 +10,7 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Collection;
@@ -25,8 +26,6 @@ public class ZookeeperNameService implements NameService {
     public static final LoadBalance LOAD_BALANCE = LOAD_BALANCE_SERVICE_SUPPORT.getService(RoundRobinLoadBalance.class.getCanonicalName());
 
     private static final Collection<String> SCHEMES = Collections.singleton("zookeeper");
-
-    private static final String DEFAULT_ZK_ADDRESS = "127.0.0.1:2181";
 
     public static final String ROOT_PATH = "/naive";
 
@@ -73,7 +72,7 @@ public class ZookeeperNameService implements NameService {
         String servicePath = ROOT_PATH + '/' + serviceName + socketAddress.toString();
         Stat stat = zkClient.checkExists().forPath(servicePath);
         if (Objects.isNull(stat)) {
-            zkClient.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(servicePath);
+            zkClient.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(servicePath);
         }
     }
 
@@ -93,4 +92,8 @@ public class ZookeeperNameService implements NameService {
 
     }
 
+    @Override
+    public void close() {
+        zkClient.close();
+    }
 }
