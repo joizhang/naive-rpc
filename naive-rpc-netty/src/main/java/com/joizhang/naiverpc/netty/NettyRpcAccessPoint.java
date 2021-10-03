@@ -9,7 +9,6 @@ import com.joizhang.naiverpc.netty.remoting.transport.RpcRequestHandler;
 import com.joizhang.naiverpc.netty.utils.NetUtils;
 import com.joizhang.naiverpc.netty.utils.StringUtils;
 import com.joizhang.naiverpc.proxy.StubFactory;
-import com.joizhang.naiverpc.remoting.client.Transport;
 import com.joizhang.naiverpc.remoting.client.TransportClient;
 import com.joizhang.naiverpc.remoting.server.TransportServer;
 import com.joizhang.naiverpc.remoting.transport.RequestHandlerRegistry;
@@ -22,10 +21,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeoutException;
 
 import static com.joizhang.naiverpc.spi.ServiceSupportConstant.*;
 
@@ -36,8 +32,6 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
     public static final String REGISTER_ADDRESS = "naive.register.address";
 
     public static final String SERVICE_DATA = "simple_rpc_name_service.data";
-
-    private final Map<InetSocketAddress, Transport> clientMap = new ConcurrentHashMap<>();
 
     private TransportServer server = null;
 
@@ -92,20 +86,12 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
     }
 
     @Override
-    public <T> T getRemoteService(InetSocketAddress socketAddress, Class<T> serviceClass) {
-        Transport transport = this.clientMap.computeIfAbsent(socketAddress, this::createTransport);
+    public <T> T getRemoteService(NameService nameService, Class<T> serviceClass) {
+        this.client = CLIENT_SERVICE_SUPPORT.getService(NettyClient.class.getCanonicalName());
         StubFactory stubFactory = STUB_FACTORY_SERVICE_SUPPORT.getService(JdkStubFactory.class.getCanonicalName());
-        return stubFactory.createStub(transport, serviceClass);
+        return stubFactory.createStub(nameService, this.client, serviceClass);
     }
 
-    private Transport createTransport(InetSocketAddress socketAddress) {
-        try {
-            this.client = CLIENT_SERVICE_SUPPORT.getService(NettyClient.class.getCanonicalName());
-            return this.client.createTransport(socketAddress, 3000L);
-        } catch (InterruptedException | TimeoutException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void close() {

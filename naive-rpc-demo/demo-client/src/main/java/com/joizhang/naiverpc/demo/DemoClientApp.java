@@ -25,7 +25,7 @@ public class DemoClientApp {
         String serviceName = serviceClass.getCanonicalName();
         InetSocketAddress socketAddress = nameService.lookupService(serviceName);
         log.info("找到服务: {}，提供者: {}.", serviceName, socketAddress);
-        return rpcAccessPoint.getRemoteService(socketAddress, serviceClass);
+        return rpcAccessPoint.getRemoteService(nameService, serviceClass);
     }
 
     public static void main(String[] args) throws Exception {

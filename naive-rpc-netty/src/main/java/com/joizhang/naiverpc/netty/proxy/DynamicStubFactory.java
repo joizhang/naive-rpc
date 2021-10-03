@@ -1,9 +1,10 @@
 package com.joizhang.naiverpc.netty.proxy;
 
 import com.itranswarp.compiler.JavaStringCompiler;
+import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.proxy.ServiceStub;
 import com.joizhang.naiverpc.proxy.StubFactory;
-import com.joizhang.naiverpc.remoting.client.Transport;
+import com.joizhang.naiverpc.remoting.client.TransportClient;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -35,7 +36,7 @@ public class DynamicStubFactory implements StubFactory {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T createStub(Transport transport, Class<T> serviceClass) {
+    public <T> T createStub(NameService nameService, TransportClient client, Class<T> serviceClass) {
         try {
             // 填充模板
             String stubSimpleName = serviceClass.getSimpleName() + "Stub";
@@ -56,7 +57,7 @@ public class DynamicStubFactory implements StubFactory {
 
             // 把Transport赋值给桩
             ServiceStub stubInstance = (ServiceStub) clazz.getDeclaredConstructor().newInstance();
-            stubInstance.setTransport(transport);
+            stubInstance.setTransportClient(client);
             // 返回这个桩
             return (T) stubInstance;
         } catch (Throwable t) {

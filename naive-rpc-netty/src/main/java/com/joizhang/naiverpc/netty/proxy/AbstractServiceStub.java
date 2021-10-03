@@ -5,15 +5,22 @@ import com.joizhang.naiverpc.netty.remoting.command.MessageType;
 import com.joizhang.naiverpc.netty.remoting.command.RpcConstants;
 import com.joizhang.naiverpc.proxy.ServiceStub;
 import com.joizhang.naiverpc.remoting.client.Transport;
+import com.joizhang.naiverpc.remoting.client.TransportClient;
 import com.joizhang.naiverpc.remoting.command.*;
 
+import java.net.InetSocketAddress;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 public abstract class AbstractServiceStub implements ServiceStub {
 
-    protected Transport transport;
+    protected final Map<InetSocketAddress, Transport> clientMap = new ConcurrentHashMap<>();
 
-    protected Object invokeRemote(RpcRequest request) {
+    private TransportClient client;
+
+    protected Object invokeRemote(Transport transport, RpcRequest request) {
         Header requestHeader = Header.builder()
                 .rpcVersion(RpcConstants.RPC_VERSION)
                 .messageType(MessageType.REQUEST_TYPE)
@@ -35,9 +42,17 @@ public abstract class AbstractServiceStub implements ServiceStub {
         }
     }
 
+    protected Transport createTransport(InetSocketAddress socketAddress) {
+        try {
+            return client.createTransport(socketAddress, 3000L);
+        } catch (InterruptedException | TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
-    public void setTransport(Transport transport) {
-        this.transport = transport;
+    public void setTransportClient(TransportClient client) {
+        this.client = client;
     }
 
 }

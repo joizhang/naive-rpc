@@ -1,9 +1,9 @@
 package com.joizhang.naiverpc.proxy;
 
-import com.joizhang.naiverpc.remoting.client.Transport;
+import com.joizhang.naiverpc.remoting.client.TransportClient;
 
 public interface ServiceStub {
 
-    void setTransport(Transport transport);
+    void setTransportClient(TransportClient client);
 
 }
