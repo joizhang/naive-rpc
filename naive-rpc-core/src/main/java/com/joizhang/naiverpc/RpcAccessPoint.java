@@ -36,7 +36,7 @@ public interface RpcAccessPoint extends Closeable {
      * 客户端获取远程服务的引用
      *
      * @param <T>          服务接口的类型
-     * @param nameService          远程服务地址
+     * @param nameService  远程服务地址
      * @param serviceClass 服务的接口类的Class
      * @return 远程服务引用
      */

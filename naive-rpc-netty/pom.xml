@@ -39,7 +39,6 @@
             <version>${curator-version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.joizhang</groupId>
             <artifactId>naive-rpc-core</artifactId>
@@ -56,5 +55,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
