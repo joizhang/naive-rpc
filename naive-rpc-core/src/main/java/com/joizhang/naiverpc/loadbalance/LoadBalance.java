@@ -11,11 +11,11 @@ import java.util.List;
 public interface LoadBalance {
 
     /**
-     * select one address in list.
+     * select one remote address in list.
      *
-     * @param serviceAddresses addresses
+     * @param remoteServiceAddresses addresses
      * @return selected address
      */
-    String select(List<String> serviceAddresses);
+    String select(List<String> remoteServiceAddresses);
 
 }
