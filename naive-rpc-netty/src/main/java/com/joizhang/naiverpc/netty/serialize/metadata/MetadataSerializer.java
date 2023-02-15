@@ -1,5 +1,6 @@
-package com.joizhang.naiverpc.netty.serialize;
+package com.joizhang.naiverpc.netty.serialize.metadata;
 
+import com.joizhang.naiverpc.netty.serialize.java.JavaSerializer;
 import com.joizhang.naiverpc.serialize.ObjectInput;
 import com.joizhang.naiverpc.serialize.ObjectOutput;
 import com.joizhang.naiverpc.serialize.Serializer;
