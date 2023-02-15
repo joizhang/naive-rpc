@@ -1,6 +1,6 @@
 package com.joizhang.naiverpc.netty.utils;
 
-public class ArrayUtils {
+public final class ArrayUtils {
 
     private ArrayUtils() {
     }
