@@ -3,15 +3,12 @@ package com.joizhang.naiverpc.netty.nameservice;
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
 import com.joizhang.naiverpc.netty.serialize.metadata.MetadataSerializer;
 import com.joizhang.naiverpc.serialize.Serializer;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -20,13 +17,6 @@ import java.util.ArrayList;
 import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
 
 public class LocalFileNameServiceTest {
-
-    @ToString
-    @AllArgsConstructor
-    static class User implements Serializable {
-        private String username;
-        private int age;
-    }
 
     private static final Serializer metadataSerializer =
             SERIALIZER_SERVICE_SUPPORT.getService(MetadataSerializer.class.getCanonicalName());
