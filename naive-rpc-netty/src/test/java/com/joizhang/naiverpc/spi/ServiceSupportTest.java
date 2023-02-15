@@ -1,7 +1,7 @@
 package com.joizhang.naiverpc.spi;
 
-import com.joizhang.naiverpc.netty.serialize.JavaSerializer;
-import com.joizhang.naiverpc.netty.serialize.NativeJavaSerializer;
+import com.joizhang.naiverpc.netty.serialize.java.JavaSerializer;
+import com.joizhang.naiverpc.netty.serialize.nativejava.NativeJavaSerializer;
 import com.joizhang.naiverpc.serialize.Serializer;
 import org.junit.Test;
 

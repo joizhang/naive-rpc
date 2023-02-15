@@ -1,8 +1,8 @@
 package com.joizhang.naiverpc.netty.remoting.command;
 
-import com.joizhang.naiverpc.netty.serialize.JavaSerializer;
-import com.joizhang.naiverpc.netty.serialize.MetadataSerializer;
-import com.joizhang.naiverpc.netty.serialize.NativeJavaSerializer;
+import com.joizhang.naiverpc.netty.serialize.java.JavaSerializer;
+import com.joizhang.naiverpc.netty.serialize.metadata.MetadataSerializer;
+import com.joizhang.naiverpc.netty.serialize.nativejava.NativeJavaSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

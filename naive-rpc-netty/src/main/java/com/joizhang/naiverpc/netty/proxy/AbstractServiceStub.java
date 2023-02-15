@@ -24,7 +24,7 @@ public abstract class AbstractServiceStub implements ServiceStub {
         Header requestHeader = Header.builder()
                 .rpcVersion(RpcConstants.RPC_VERSION)
                 .messageType(MessageType.REQUEST_TYPE)
-                .codecType(CodecTypeEnum.JAVA.getCode())
+                .codecType(CodecTypeEnum.JAVA.getCode()) // TODO get codec from properties file
                 .requestId(RequestIdSupport.next()).build();
         Command requestCommand = new Command(requestHeader, request);
         try {
