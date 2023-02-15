@@ -4,6 +4,9 @@ import com.joizhang.naiverpc.spi.SPI;
 
 import java.util.List;
 
+/**
+ * 负载均衡
+ */
 @SPI
 public interface LoadBalance {
 

@@ -7,6 +7,9 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Collection;
 
+/**
+ * 注册中心
+ */
 @SPI
 public interface NameService extends Closeable {
 

@@ -8,6 +8,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.StreamSupport;
 
+/**
+ * Loading rpc extensions
+ * @param <T>
+ */
 public class ServiceSupport<T> {
 
     private static final ConcurrentMap<Class<?>, ServiceSupport<?>> SERVICE_LOADERS = new ConcurrentHashMap<>(16);
@@ -73,7 +77,8 @@ public class ServiceSupport<T> {
 
     @SuppressWarnings("unchecked")
     public void cacheAll() {
-        StreamSupport.stream(ServiceLoader.load(type).spliterator(), false)
+        StreamSupport
+                .stream(ServiceLoader.load(type).spliterator(), false)
                 .forEach((instance) -> cachedInstances.putIfAbsent(instance.getClass().getCanonicalName(), (T) instance));
     }
 
