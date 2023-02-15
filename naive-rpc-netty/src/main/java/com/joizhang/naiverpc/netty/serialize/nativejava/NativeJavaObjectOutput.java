@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.netty.serialize;
+package com.joizhang.naiverpc.netty.serialize.nativejava;
 
 import com.joizhang.naiverpc.serialize.ObjectOutput;
 

@@ -1,4 +1,6 @@
-package com.joizhang.naiverpc.netty.serialize;
+package com.joizhang.naiverpc.netty.serialize.java;
+
+import com.joizhang.naiverpc.netty.serialize.nativejava.NativeJavaObjectInput;
 
 import java.io.IOException;
 import java.io.InputStream;

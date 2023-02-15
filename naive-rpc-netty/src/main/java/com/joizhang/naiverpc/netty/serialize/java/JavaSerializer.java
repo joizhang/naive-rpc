@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.netty.serialize;
+package com.joizhang.naiverpc.netty.serialize.java;
 
 import com.joizhang.naiverpc.serialize.ObjectInput;
 import com.joizhang.naiverpc.serialize.ObjectOutput;
@@ -10,21 +10,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.joizhang.naiverpc.netty.serialize.SerializerType.NATIVE_JAVA_SERIALIZATION_ID;
+import static com.joizhang.naiverpc.netty.serialize.SerializerType.JAVA_SERIALIZATION_ID;
 
 @Slf4j
-public class NativeJavaSerializer implements Serializer {
+public class JavaSerializer implements Serializer {
 
     private final static AtomicBoolean WARN = new AtomicBoolean(false);
 
     @Override
     public byte getContentTypeId() {
-        return NATIVE_JAVA_SERIALIZATION_ID;
+        return JAVA_SERIALIZATION_ID;
     }
 
     @Override
     public String getContentType() {
-        return "x-application/nativejava";
+        return "x-application/java";
     }
 
     @Override
@@ -32,7 +32,7 @@ public class NativeJavaSerializer implements Serializer {
         if (WARN.compareAndSet(false, true)) {
             log.warn("Java serialization is unsafe.");
         }
-        return new NativeJavaObjectOutput(outputStream);
+        return new JavaObjectOutput(outputStream);
     }
 
     @Override
@@ -40,6 +40,6 @@ public class NativeJavaSerializer implements Serializer {
         if (WARN.compareAndSet(false, true)) {
             log.warn("Java serialization is unsafe.");
         }
-        return new NativeJavaObjectInput(inputStream);
+        return new JavaObjectInput(inputStream);
     }
 }

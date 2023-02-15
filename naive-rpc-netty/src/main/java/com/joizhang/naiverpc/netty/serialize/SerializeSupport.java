@@ -14,8 +14,8 @@ public class SerializeSupport {
 
     public static <T> byte[] serialize(Serializer serializer, T t) throws IOException {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-            ObjectOutput serialize = serializer.serialize(byteArrayOutputStream);
-            serialize.writeObject(t);
+            ObjectOutput objectOutput = serializer.serialize(byteArrayOutputStream);
+            objectOutput.writeObject(t);
             return byteArrayOutputStream.toByteArray();
         }
     }
@@ -23,8 +23,8 @@ public class SerializeSupport {
     public static <T> T deserialize(Serializer serializer, byte[] bytes, Class<T> clazz)
             throws IOException, ClassNotFoundException {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes)) {
-            ObjectInput deserialize = serializer.deserialize(inputStream);
-            return deserialize.readObject(clazz);
+            ObjectInput objectInput = serializer.deserialize(inputStream);
+            return objectInput.readObject(clazz);
         }
     }
 
