@@ -10,8 +10,4 @@ public interface SerializerType {
 
     byte GSON_SERIALIZATION_ID = 4;
 
-    byte HESSIAN2_SERIALIZATION_ID = 5;
-
-    byte KRYO_SERIALIZATION_ID = 6;
-
 }
