@@ -4,6 +4,9 @@ import com.joizhang.naiverpc.remoting.command.Command;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * 传输对象
+ */
 public interface Transport {
 
     /**
