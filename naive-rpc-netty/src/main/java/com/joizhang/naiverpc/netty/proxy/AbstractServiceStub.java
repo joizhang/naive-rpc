@@ -20,7 +20,8 @@ public abstract class AbstractServiceStub implements ServiceStub {
 
     private TransportClient client;
 
-    protected Object invokeRemote(Transport transport, RpcRequest request) {
+    @Override
+    public Object invokeRemote(Transport transport, RpcRequest request) {
         Header requestHeader = Header.builder()
                 .rpcVersion(RpcConstants.RPC_VERSION)
                 .messageType(MessageType.REQUEST_TYPE)
@@ -42,7 +43,8 @@ public abstract class AbstractServiceStub implements ServiceStub {
         }
     }
 
-    protected Transport createTransport(InetSocketAddress socketAddress) {
+    @Override
+    public Transport createTransport(InetSocketAddress socketAddress) {
         try {
             return client.createTransport(socketAddress, 3000L);
         } catch (InterruptedException | TimeoutException e) {

@@ -5,16 +5,16 @@ import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.proxy.StubFactory;
 import com.joizhang.naiverpc.remoting.client.TransportClient;
 import com.joizhang.naiverpc.remoting.server.TransportServer;
-import com.joizhang.naiverpc.remoting.transport.RequestHandler;
+import com.joizhang.naiverpc.remoting.server.RequestHandler;
 import com.joizhang.naiverpc.serialize.Serializer;
 
 public interface ServiceSupportConstant {
 
-    ServiceSupport<TransportServer> SERVER_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(TransportServer.class);
+    ServiceSupport<NameService> NAME_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(NameService.class);
 
     ServiceSupport<TransportClient> CLIENT_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(TransportClient.class);
 
-    ServiceSupport<NameService> NAME_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(NameService.class);
+    ServiceSupport<TransportServer> SERVER_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(TransportServer.class);
 
     ServiceSupport<StubFactory> STUB_FACTORY_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(StubFactory.class);
 

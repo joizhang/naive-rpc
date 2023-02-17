@@ -5,6 +5,7 @@ import com.joizhang.naiverpc.proxy.StubFactory;
 import com.joizhang.naiverpc.remoting.client.Transport;
 import com.joizhang.naiverpc.remoting.client.TransportClient;
 import com.joizhang.naiverpc.remoting.command.RpcRequest;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -18,7 +19,7 @@ public class JdkStubFactory implements StubFactory {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T createStub(NameService nameService, Class<T> serviceClass, TransportClient client) {
+    public <T> T createStub(NameService nameService, @NotNull Class<T> serviceClass, TransportClient client) {
         return (T) Proxy.newProxyInstance(
                 serviceClass.getClassLoader(),
                 new Class<?>[]{serviceClass},
@@ -39,7 +40,7 @@ public class JdkStubFactory implements StubFactory {
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
+        public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Exception {
             InetSocketAddress socketAddress = nameService.lookupService(serviceClass.getCanonicalName());
             Transport transport = clientMap.computeIfAbsent(socketAddress, this::createTransport);
             RpcRequest rpcRequest = RpcRequest.builder()

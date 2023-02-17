@@ -1,7 +1,7 @@
 package com.joizhang.naiverpc.netty.remoting.server;
 
 import com.joizhang.naiverpc.remoting.command.Command;
-import com.joizhang.naiverpc.remoting.transport.RequestHandler;
+import com.joizhang.naiverpc.remoting.server.RequestHandler;
 import com.joizhang.naiverpc.remoting.transport.RequestHandlerRegistry;
 import io.netty.channel.*;
 import org.slf4j.Logger;

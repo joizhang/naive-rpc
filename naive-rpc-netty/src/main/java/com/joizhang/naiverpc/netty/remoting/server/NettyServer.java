@@ -21,7 +21,7 @@ public class NettyServer implements TransportServer {
     private Channel channel;
 
     @Override
-    public void start(RequestHandlerRegistry requestHandlerRegistry, int port) throws Exception {
+    public void start(RequestHandlerRegistry requestHandlerRegistry, int port) {
         this.port = port;
         this.requestHandlerRegistry = requestHandlerRegistry;
         this.bossGroup = NettyEventLoopFactory.eventLoopGroup(1, "NettyServerBoss");
@@ -29,7 +29,6 @@ public class NettyServer implements TransportServer {
         this.bootstrap = newBootstrap();
         this.channel = doBind();
     }
-
 
     private ServerBootstrap newBootstrap() {
         ServerBootstrap serverBootstrap = new ServerBootstrap();

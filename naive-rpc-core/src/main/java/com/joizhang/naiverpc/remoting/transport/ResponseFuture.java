@@ -1,9 +1,11 @@
 package com.joizhang.naiverpc.remoting.transport;
 
 import com.joizhang.naiverpc.remoting.command.Command;
+import lombok.Getter;
 
 import java.util.concurrent.CompletableFuture;
 
+@Getter
 public class ResponseFuture {
 
     private final int requestId;
@@ -16,18 +18,6 @@ public class ResponseFuture {
         this.requestId = requestId;
         this.future = future;
         this.timestamp = System.nanoTime();
-    }
-
-    public int getRequestId() {
-        return requestId;
-    }
-
-    public CompletableFuture<Command> getFuture() {
-        return future;
-    }
-
-    long getTimestamp() {
-        return timestamp;
     }
 
 }

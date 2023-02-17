@@ -3,17 +3,25 @@ package com.joizhang.naiverpc.remoting.command;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 响应码
+ */
 public enum ResponseCodeEnum {
 
     CONTINUE(100, "Continue"),
+
     OK(200, "OK"),
+
     NOT_FOUND(404, "Not Found"),
+
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
+
     SERVICE_UNAVAILABLE(503, "Service Unavailable");
 
     private static final Map<Integer, ResponseCodeEnum> CODES = new HashMap<>();
 
     private final int code;
+
     private final String message;
 
     static {

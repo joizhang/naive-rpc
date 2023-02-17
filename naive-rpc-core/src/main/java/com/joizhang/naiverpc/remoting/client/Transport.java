@@ -1,11 +1,12 @@
 package com.joizhang.naiverpc.remoting.client;
 
 import com.joizhang.naiverpc.remoting.command.Command;
+import com.joizhang.naiverpc.remoting.server.RequestHandler;
 
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 传输对象
+ * RPC请求传输类，该类发送的请求由 {@link RequestHandler} 处理
  */
 public interface Transport {
 

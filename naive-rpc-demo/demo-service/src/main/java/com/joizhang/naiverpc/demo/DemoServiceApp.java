@@ -49,7 +49,7 @@ public class DemoServiceApp {
             throws Exception {
         Objects.requireNonNull(nameService);
         String serviceName = serviceClass.getCanonicalName();
-        rpcAccessPoint.addServiceProvider(service, serviceClass);
+        rpcAccessPoint.addServiceProvider(serviceClass, service);
         nameService.registerService(socketAddress, serviceName);
     }
 

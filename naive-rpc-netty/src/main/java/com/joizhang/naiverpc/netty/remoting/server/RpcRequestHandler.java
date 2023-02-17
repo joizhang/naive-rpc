@@ -1,18 +1,21 @@
-package com.joizhang.naiverpc.netty.remoting.transport;
+package com.joizhang.naiverpc.netty.remoting.server;
 
 import com.joizhang.naiverpc.netty.remoting.command.MessageType;
 import com.joizhang.naiverpc.remoting.command.*;
-import com.joizhang.naiverpc.remoting.transport.RequestHandler;
-import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
+import com.joizhang.naiverpc.remoting.server.RequestHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * RPC请求处理类
+ */
 @Slf4j
-public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistry {
+public class RpcRequestHandler implements RequestHandler {
 
     /**
      * {service name : service provider}
@@ -20,7 +23,12 @@ public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistr
     private final Map<String, Object> serviceProviders = new HashMap<>();
 
     @Override
-    public Command handle(Command requestCommand) {
+    public byte type() {
+        return MessageType.REQUEST_TYPE;
+    }
+
+    @Override
+    public Command handle(@NotNull Command requestCommand) {
         Header requestHeader = requestCommand.getHeader();
         // 从payload中反序列化RpcRequest
         RpcRequest rpcRequest = (RpcRequest) requestCommand.getPayload();
@@ -64,14 +72,9 @@ public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistr
     }
 
     @Override
-    public byte type() {
-        return MessageType.REQUEST_TYPE;
-    }
-
-    @Override
-    public synchronized <T> void addServiceProvider(Class<? extends T> serviceClass, T serviceProvider) {
+    public synchronized <T> void addServiceProvider(@NotNull Class<? extends T> serviceClass, T serviceProvider) {
         serviceProviders.put(serviceClass.getCanonicalName(), serviceProvider);
-        log.info("Add service: {}, provider: {}.",
+        log.debug("Add service: {}, provider: {}.",
                 serviceClass.getCanonicalName(), serviceProvider.getClass().getCanonicalName());
     }
 }

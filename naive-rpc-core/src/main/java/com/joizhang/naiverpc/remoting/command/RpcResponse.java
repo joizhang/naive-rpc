@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import java.io.Serializable;
 
+/**
+ * RPC响应类
+ */
 @Getter
 @Builder
 public class RpcResponse implements Serializable {

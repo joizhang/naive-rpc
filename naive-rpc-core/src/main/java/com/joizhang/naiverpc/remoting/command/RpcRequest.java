@@ -3,9 +3,11 @@ package com.joizhang.naiverpc.remoting.command;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.io.Externalizable;
 import java.io.Serializable;
 
+/**
+ * RPC 请求类
+ */
 @Getter
 @Builder
 public class RpcRequest implements Serializable {
