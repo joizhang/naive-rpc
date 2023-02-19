@@ -4,6 +4,9 @@ import java.io.Closeable;
 import java.util.Map;
 import java.util.concurrent.*;
 
+/**
+ * 在途请求
+ */
 public class InFlightRequests implements Closeable {
 
     private final static long TIMEOUT_SEC = 10L;
@@ -42,7 +45,7 @@ public class InFlightRequests implements Closeable {
 
     public ResponseFuture remove(int requestId) {
         ResponseFuture future = futureMap.remove(requestId);
-        if (null != future) {
+        if (future != null) {
             semaphore.release();
         }
         return future;
