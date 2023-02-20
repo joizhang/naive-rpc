@@ -12,6 +12,7 @@
         <module>naive-rpc-core</module>
         <module>naive-rpc-netty</module>
         <module>naive-rpc-demo</module>
+        <module>naive-rpc-spring-boot</module>
     </modules>
 
     <name>naive-rpc</name>
