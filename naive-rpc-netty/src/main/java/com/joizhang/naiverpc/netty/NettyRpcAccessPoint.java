@@ -29,7 +29,7 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     public static final NaiveRpcPropertiesSingleton PROPERTIES_SINGLETON = NaiveRpcPropertiesSingleton.getInstance();
 
-    public static final String REGISTER_ADDRESS = "naive.register.address";
+    public static final String REGISTER_ADDRESS = "naiverpc.register.address";
 
     public static final String SERVICE_DATA = "simple_rpc_name_service.data";
 

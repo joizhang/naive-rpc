@@ -9,7 +9,7 @@ public class NaiveRpcPropertiesSingletonTest {
     @Test
     public void testPathGet() {
         NaiveRpcPropertiesSingleton instance = NaiveRpcPropertiesSingleton.getInstance();
-        String applicationName = instance.getStringValue("naive.application.name");
+        String applicationName = instance.getStringValue("naiverpc.application.name");
         assertEquals("naive-rpc-netty", applicationName);
     }
 
