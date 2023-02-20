@@ -20,11 +20,12 @@ public abstract class AbstractServiceStub implements ServiceStub {
 
     private TransportClient client;
 
-    protected Object invokeRemote(Transport transport, RpcRequest request) {
+    @Override
+    public Object invokeRemote(Transport transport, RpcRequest request) {
         Header requestHeader = Header.builder()
                 .rpcVersion(RpcConstants.RPC_VERSION)
                 .messageType(MessageType.REQUEST_TYPE)
-                .codecType(CodecTypeEnum.JAVA.getCode())
+                .codecType(CodecTypeEnum.JAVA.getCode()) // TODO get codec from properties file
                 .requestId(RequestIdSupport.next()).build();
         Command requestCommand = new Command(requestHeader, request);
         try {
@@ -42,7 +43,8 @@ public abstract class AbstractServiceStub implements ServiceStub {
         }
     }
 
-    protected Transport createTransport(InetSocketAddress socketAddress) {
+    @Override
+    public Transport createTransport(InetSocketAddress socketAddress) {
         try {
             return client.createTransport(socketAddress, 3000L);
         } catch (InterruptedException | TimeoutException e) {

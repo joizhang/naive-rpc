@@ -1,42 +1,40 @@
 package com.joizhang.naiverpc.netty.nameservice;
 
-import com.joizhang.naiverpc.netty.serialize.MetadataSerializer;
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
+import com.joizhang.naiverpc.netty.serialize.metadata.MetadataSerializer;
 import com.joizhang.naiverpc.serialize.Serializer;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
 
 public class LocalFileNameServiceTest {
 
-    private static final Serializer metadataSerializer = SERIALIZER_SERVICE_SUPPORT.getService(MetadataSerializer.class.getCanonicalName());
+    private static final Serializer metadataSerializer =
+            SERIALIZER_SERVICE_SUPPORT.getService(MetadataSerializer.class.getCanonicalName());
 
     RandomAccessFile randomAccessFile;
 
     @Before
     public void beforeClass() throws Exception {
-        randomAccessFile = new RandomAccessFile("E:\\test.data", "rw");
+        randomAccessFile = new RandomAccessFile("test.data", "rw");
     }
 
     @Test
     public void testWriteObject() throws IOException {
         try (FileChannel fileChannel = randomAccessFile.getChannel()) {
             Metadata metadata = new Metadata();
-            metadata.put(this.getClass().getCanonicalName(),
-                    new ArrayList<>(Collections.singletonList(new InetSocketAddress("localhost", 9999))));
+            ArrayList<InetSocketAddress> addresses = new ArrayList<>();
+            addresses.add(new InetSocketAddress("localhost", 9999));
+            metadata.put(this.getClass().getCanonicalName(), addresses);
             byte[] bytes = SerializeSupport.serialize(metadataSerializer, metadata);
             Assert.assertNotNull(bytes);
 
@@ -63,13 +61,6 @@ public class LocalFileNameServiceTest {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    @ToString
-    @AllArgsConstructor
-    static class User implements Serializable {
-        private String username;
-        private int age;
     }
 
 }

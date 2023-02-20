@@ -1,5 +1,7 @@
 package com.joizhang.naiverpc.spi;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -8,6 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.StreamSupport;
 
+/**
+ * Loading rpc extensions
+ *
+ * @param <T>
+ */
 public class ServiceSupport<T> {
 
     private static final ConcurrentMap<Class<?>, ServiceSupport<?>> SERVICE_LOADERS = new ConcurrentHashMap<>(16);
@@ -20,10 +27,16 @@ public class ServiceSupport<T> {
         this.type = type;
     }
 
-    private static <T> boolean withExtensionAnnotation(Class<T> type) {
+    private static <T> boolean withExtensionAnnotation(@NotNull Class<T> type) {
         return type.isAnnotationPresent(SPI.class);
     }
 
+    /**
+     * 获得扩展服务加载器
+     *
+     * @param type 扩展服务的类型
+     * @return 扩展服务加载器
+     */
     @SuppressWarnings("unchecked")
     public static <T> ServiceSupport<T> getServiceSupport(Class<T> type) {
         if (type == null) {
@@ -45,6 +58,12 @@ public class ServiceSupport<T> {
         return loader;
     }
 
+    /**
+     * 通过扩展服务类加载器加载扩展服务实例
+     *
+     * @param name 需要加载的扩展服务
+     * @return 扩展服务
+     */
     public T getService(String name) {
         if (Objects.isNull(name)) {
             throw new IllegalArgumentException("Service name == null");
@@ -73,7 +92,8 @@ public class ServiceSupport<T> {
 
     @SuppressWarnings("unchecked")
     public void cacheAll() {
-        StreamSupport.stream(ServiceLoader.load(type).spliterator(), false)
+        StreamSupport
+                .stream(ServiceLoader.load(type).spliterator(), false)
                 .forEach((instance) -> cachedInstances.putIfAbsent(instance.getClass().getCanonicalName(), (T) instance));
     }
 

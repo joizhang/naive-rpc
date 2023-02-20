@@ -36,7 +36,7 @@ public class DynamicStubFactory implements StubFactory {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T createStub(NameService nameService, TransportClient client, Class<T> serviceClass) {
+    public <T> T createStub(NameService nameService, Class<T> serviceClass, TransportClient client) {
         try {
             // 填充模板
             String stubSimpleName = serviceClass.getSimpleName() + "Stub";

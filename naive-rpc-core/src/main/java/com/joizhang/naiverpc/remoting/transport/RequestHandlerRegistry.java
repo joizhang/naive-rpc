@@ -1,5 +1,6 @@
 package com.joizhang.naiverpc.remoting.transport;
 
+import com.joizhang.naiverpc.remoting.server.RequestHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
@@ -8,6 +9,9 @@ import java.util.Map;
 
 import static com.joizhang.naiverpc.spi.ServiceSupportConstant.REQUEST_HANDLER_SERVICE_SUPPORT;
 
+/**
+ * 请求处理器的注册类
+ */
 @Slf4j
 public class RequestHandlerRegistry {
 

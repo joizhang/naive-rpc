@@ -5,15 +5,18 @@ import com.joizhang.naiverpc.netty.utils.AtomicPositiveInteger;
 
 import java.util.List;
 
+/**
+ * Round Robin load balance.
+ */
 public class RoundRobinLoadBalance extends AbstractLoadBalance {
 
     private static final AtomicPositiveInteger ROUND = new AtomicPositiveInteger();
 
     @Override
-    protected String doSelect(List<String> serviceAddresses) {
-        int length = serviceAddresses.size();
+    protected String doSelect(List<String> remoteServiceAddresses) {
+        int length = remoteServiceAddresses.size();
         int round = ROUND.getAndIncrement();
-        return serviceAddresses.get(round % length);
+        return remoteServiceAddresses.get(round % length);
     }
 
 }

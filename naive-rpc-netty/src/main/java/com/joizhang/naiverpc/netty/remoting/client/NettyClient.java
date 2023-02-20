@@ -84,7 +84,6 @@ public class NettyClient implements TransportClient {
         };
     }
 
-
     @Override
     public void close() {
         for (Channel channel : channels) {
@@ -97,4 +96,5 @@ public class NettyClient implements TransportClient {
         }
         inFlightRequests.close();
     }
+
 }

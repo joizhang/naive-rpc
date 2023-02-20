@@ -26,11 +26,11 @@ public interface RpcAccessPoint extends Closeable {
     /**
      * 服务端注册服务的实现实例
      *
-     * @param service      实现实例
-     * @param serviceClass 服务的接口类的Class
      * @param <T>          服务接口的类型
+     * @param serviceClass 服务的接口类的Class
+     * @param service      实现实例
      */
-    <T> void addServiceProvider(T service, Class<T> serviceClass);
+    <T> void addServiceProvider(Class<T> serviceClass, T service);
 
     /**
      * 客户端获取远程服务的引用

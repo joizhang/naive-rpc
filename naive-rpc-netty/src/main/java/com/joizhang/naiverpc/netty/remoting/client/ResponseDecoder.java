@@ -5,6 +5,9 @@ import com.joizhang.naiverpc.remoting.command.Header;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
+/**
+ * 客户端响应编码器
+ */
 public class ResponseDecoder extends CommandDecoder {
 
     @Override

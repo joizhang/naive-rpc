@@ -24,8 +24,7 @@ public class CommandDecoder extends LengthFieldBasedFrameDecoder {
         /*
          lengthFieldOffset: magic number is 4B, so value is 4
          lengthFieldLength: full length is 4B, so value is 4
-         lengthAdjustment: full length include all data and read 8 bytes before,
-                           so the left length is (fullLength-8). so values is -8
+         lengthAdjustment: full length include all data and read 8 bytes before, so the left length is (fullLength-8). so values is -8
          initialBytesToStrip: we will check magic code and version manually, so do not strip any bytes. so values is 0
          */
         this(RpcConstants.MAX_FRAME_LENGTH, 4, 4, -8, 0);

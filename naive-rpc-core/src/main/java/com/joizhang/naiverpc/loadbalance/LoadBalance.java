@@ -4,15 +4,18 @@ import com.joizhang.naiverpc.spi.SPI;
 
 import java.util.List;
 
+/**
+ * 负载均衡
+ */
 @SPI
 public interface LoadBalance {
 
     /**
-     * select one address in list.
+     * select one remote address in list.
      *
-     * @param serviceAddresses addresses
+     * @param remoteServiceAddresses addresses
      * @return selected address
      */
-    String select(List<String> serviceAddresses);
+    String select(List<String> remoteServiceAddresses);
 
 }

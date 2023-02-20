@@ -24,7 +24,7 @@ public interface ObjectOutput extends DataOutput {
      * The binding of RPC protocol and biz serialization protocol is not a good practice. Encoding of RPC protocol
      * should be highly independent and portable, easy to cross platforms and languages, for example, like the http headers,
      * restricting the content of headers / attachments to Ascii strings and uses ISO_8859_1 to encode them.
-     * https://tools.ietf.org/html/rfc7540#section-8.1.2
+     * <a href="https://tools.ietf.org/html/rfc7540#section-8.1.2">HTTP Header Fields</a>
      */
     default void writeThrowable(Object obj) throws IOException {
         writeObject(obj);

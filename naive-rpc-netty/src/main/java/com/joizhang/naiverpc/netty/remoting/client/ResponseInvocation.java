@@ -7,13 +7,14 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
+@Slf4j
 @ChannelHandler.Sharable
 public class ResponseInvocation extends SimpleChannelInboundHandler<Command> {
-
-    private static final Logger logger = LoggerFactory.getLogger(ResponseInvocation.class);
 
     private final InFlightRequests inFlightRequests;
 
@@ -22,18 +23,18 @@ public class ResponseInvocation extends SimpleChannelInboundHandler<Command> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Command response) {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, @NotNull Command response) {
         ResponseFuture future = inFlightRequests.remove(response.getHeader().getRequestId());
-        if (null != future) {
+        if (!Objects.isNull(future)) {
             future.getFuture().complete(response);
         } else {
-            logger.warn("Drop response: {}", response);
+            log.warn("Drop response: {}", response);
         }
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.warn("Exception: ", cause);
+        log.error("Exception: ", cause);
         super.exceptionCaught(ctx, cause);
         Channel channel = ctx.channel();
         if (channel.isActive()) {

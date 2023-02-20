@@ -5,16 +5,16 @@ import java.util.List;
 public abstract class AbstractLoadBalance implements LoadBalance {
 
     @Override
-    public String select(List<String> serviceAddresses) {
-        if (serviceAddresses == null || serviceAddresses.isEmpty()) {
+    public String select(List<String> remoteServiceAddresses) {
+        if (remoteServiceAddresses == null || remoteServiceAddresses.isEmpty()) {
             return null;
         }
-        if (serviceAddresses.size() == 1) {
-            return serviceAddresses.get(0);
+        if (remoteServiceAddresses.size() == 1) {
+            return remoteServiceAddresses.get(0);
         }
-        return doSelect(serviceAddresses);
+        return doSelect(remoteServiceAddresses);
     }
 
-    protected abstract String doSelect(List<String> serviceAddresses);
+    protected abstract String doSelect(List<String> remoteServiceAddresses);
 
 }

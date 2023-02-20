@@ -36,3 +36,4 @@ target/
 logs/
 *.hprof
 .DS_Store
+*.data

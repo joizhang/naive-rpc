@@ -5,7 +5,7 @@ import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.proxy.JdkStubFactory;
 import com.joizhang.naiverpc.netty.remoting.client.NettyClient;
 import com.joizhang.naiverpc.netty.remoting.server.NettyServer;
-import com.joizhang.naiverpc.netty.remoting.transport.RpcRequestHandler;
+import com.joizhang.naiverpc.netty.remoting.server.RpcRequestHandler;
 import com.joizhang.naiverpc.netty.utils.NetUtils;
 import com.joizhang.naiverpc.netty.utils.StringUtils;
 import com.joizhang.naiverpc.proxy.StubFactory;
@@ -29,7 +29,7 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     public static final NaiveRpcPropertiesSingleton PROPERTIES_SINGLETON = NaiveRpcPropertiesSingleton.getInstance();
 
-    public static final String REGISTER_ADDRESS = "naive.register.address";
+    public static final String REGISTER_ADDRESS = "naiverpc.register.address";
 
     public static final String SERVICE_DATA = "simple_rpc_name_service.data";
 
@@ -80,18 +80,19 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
     }
 
     @Override
-    public synchronized <T> void addServiceProvider(T service, Class<T> serviceClass) {
-        ServiceProviderRegistry registry = REQUEST_HANDLER_SERVICE_SUPPORT.getService(RpcRequestHandler.class.getCanonicalName());
+    public synchronized <T> void addServiceProvider(Class<T> serviceClass, T service) {
+        ServiceProviderRegistry registry = REQUEST_HANDLER_SERVICE_SUPPORT.getService(
+                RpcRequestHandler.class.getCanonicalName());
         registry.addServiceProvider(serviceClass, service);
     }
 
     @Override
     public <T> T getRemoteService(NameService nameService, Class<T> serviceClass) {
         this.client = CLIENT_SERVICE_SUPPORT.getService(NettyClient.class.getCanonicalName());
-        StubFactory stubFactory = STUB_FACTORY_SERVICE_SUPPORT.getService(JdkStubFactory.class.getCanonicalName());
-        return stubFactory.createStub(nameService, this.client, serviceClass);
+        StubFactory stubFactory = STUB_FACTORY_SERVICE_SUPPORT.getService(
+                JdkStubFactory.class.getCanonicalName());
+        return stubFactory.createStub(nameService, serviceClass, this.client);
     }
-
 
     @Override
     public void close() {
@@ -102,5 +103,4 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
             this.client.close();
         }
     }
-
 }

@@ -9,8 +9,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Command {
 
+    /**
+     * 请求头
+     */
     protected Header header;
 
+    /**
+     * 请求体
+     */
     private Object payload;
 
 }

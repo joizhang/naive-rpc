@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 @Slf4j
-public class NetUtils {
+public final class NetUtils {
 
     // returned port range is [30000, 39999]
     private static final int RND_PORT_START = 30000;

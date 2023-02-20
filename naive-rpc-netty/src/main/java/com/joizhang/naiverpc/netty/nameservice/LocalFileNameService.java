@@ -1,7 +1,7 @@
 package com.joizhang.naiverpc.netty.nameservice;
 
 import com.joizhang.naiverpc.nameservice.NameService;
-import com.joizhang.naiverpc.netty.serialize.MetadataSerializer;
+import com.joizhang.naiverpc.netty.serialize.metadata.MetadataSerializer;
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
 import com.joizhang.naiverpc.serialize.Serializer;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,8 @@ public class LocalFileNameService implements NameService {
 
     private static final Collection<String> SCHEMES = Collections.singleton("file");
 
-    private static final Serializer METADATA_SERIALIZER = SERIALIZER_SERVICE_SUPPORT.getService(MetadataSerializer.class.getCanonicalName());
+    private static final Serializer METADATA_SERIALIZER =
+            SERIALIZER_SERVICE_SUPPORT.getService(MetadataSerializer.class.getCanonicalName());
 
     private File file;
 
@@ -71,7 +72,8 @@ public class LocalFileNameService implements NameService {
                     metadata = new Metadata();
                 }
 
-                List<InetSocketAddress> socketAddresses = metadata.computeIfAbsent(serviceName, k -> new ArrayList<>());
+                List<InetSocketAddress> socketAddresses = metadata.computeIfAbsent(
+                        serviceName, k -> new ArrayList<>());
                 if (!socketAddresses.contains(socketAddress)) {
                     socketAddresses.add(socketAddress);
                 }
