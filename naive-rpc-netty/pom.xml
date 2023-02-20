@@ -68,7 +68,7 @@
         <dependency>
             <groupId>com.joizhang</groupId>
             <artifactId>naive-rpc-core</artifactId>
-            <version>2021.07</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
