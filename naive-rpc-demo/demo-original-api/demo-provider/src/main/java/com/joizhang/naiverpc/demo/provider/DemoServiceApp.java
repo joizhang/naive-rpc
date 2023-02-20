@@ -9,6 +9,7 @@ import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.NettyRpcAccessPoint;
 import com.joizhang.naiverpc.spi.ServiceSupport;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.cli.*;
 
 import java.net.InetSocketAddress;
 import java.util.Objects;
@@ -17,6 +18,31 @@ import java.util.Objects;
 public class DemoServiceApp {
 
     private static final ServiceSupport<RpcAccessPoint> RPC_ACCESS_POINT_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RpcAccessPoint.class);
+
+    private static CommandLine parseArgs(String[] args) {
+        Options options = new Options();
+        Option host = new Option("h", "host", true, "host");
+        host.setRequired(false);
+        host.setType(String.class);
+        options.addOption(host);
+
+        Option port = new Option("p", "port", true, "port");
+        port.setRequired(false);
+        host.setType(Integer.class);
+        options.addOption(port);
+
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd = null;
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            formatter.printHelp("utility-name", options);
+            System.exit(1);
+        }
+        return cmd;
+    }
 
     private static <T> void registerService(RpcAccessPoint rpcAccessPoint, NameService nameService,
                                             InetSocketAddress socketAddress, Class<T> serviceClass, T service)
