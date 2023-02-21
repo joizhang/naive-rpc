@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.netty.utils;
+package com.joizhang.naiverpc.utils;
 
 import java.util.LinkedHashMap;
 import java.util.concurrent.locks.Lock;

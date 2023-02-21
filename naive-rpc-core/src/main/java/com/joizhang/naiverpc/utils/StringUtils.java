@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.netty.utils;
+package com.joizhang.naiverpc.utils;
 
 import lombok.extern.slf4j.Slf4j;
 

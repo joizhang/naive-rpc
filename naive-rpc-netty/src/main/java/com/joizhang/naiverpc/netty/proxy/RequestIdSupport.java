@@ -1,6 +1,6 @@
 package com.joizhang.naiverpc.netty.proxy;
 
-import com.joizhang.naiverpc.netty.utils.AtomicPositiveInteger;
+import com.joizhang.naiverpc.utils.AtomicPositiveInteger;
 
 public class RequestIdSupport {
 
