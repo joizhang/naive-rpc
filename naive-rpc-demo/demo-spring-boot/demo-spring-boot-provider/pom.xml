@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.joizhang</groupId>
+        <artifactId>demo-spring-boot</artifactId>
+        <version>2021.07</version>
+    </parent>
+
+    <artifactId>demo-spring-boot-provider</artifactId>
+    <packaging>jar</packaging>
+
+    <name>demo-spring-boot-provider</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-log4j12.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.joizhang</groupId>
+            <artifactId>naive-rpc-spring-boot-starter</artifactId>
+            <version>2021.07</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.joizhang</groupId>
+            <artifactId>demo-spring-boot-interface</artifactId>
+            <version>2021.07</version>
+        </dependency>
+    </dependencies>
+
+    <build></build>
+</project>

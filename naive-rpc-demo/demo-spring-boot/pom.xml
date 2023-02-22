@@ -1,24 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>naive-rpc-demo</artifactId>
-    <packaging>pom</packaging>
-    <version>2021.07</version>
-    <modules>
-        <module>demo-spring-boot</module>
-        <module>demo-original-api</module>
-    </modules>
-
-    <name>naive-rpc-demo</name>
-
     <parent>
         <groupId>com.joizhang</groupId>
-        <artifactId>naive-rpc</artifactId>
+        <artifactId>naive-rpc-demo</artifactId>
         <version>2021.07</version>
     </parent>
+
+    <artifactId>demo-spring-boot</artifactId>
+    <packaging>pom</packaging>
+
+    <name>demo-spring-boot</name>
+    <modules>
+        <module>demo-spring-boot-interface</module>
+        <module>demo-spring-boot-provider</module>
+        <module>demo-spring-boot-consumer</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,7 +23,4 @@
 
     <dependencies>
     </dependencies>
-
-    <build>
-    </build>
 </project>

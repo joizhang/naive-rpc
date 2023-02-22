@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.demo.api.service;
+package com.joizhang.naiverpc.springboot.demo;
 
 public interface HelloService {
 
