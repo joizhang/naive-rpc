@@ -20,13 +20,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.joizhang</groupId>
             <artifactId>naive-rpc-spring-boot-autoconfigure</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.joizhang</groupId>
+            <artifactId>naive-rpc-netty</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.joizhang</groupId>
+            <artifactId>naive-rpc-spring</artifactId>
         </dependency>
     </dependencies>
 </project>
