@@ -1,6 +1,6 @@
 package com.joizhang.naiverpc.spring.beans.factory.annotation;
 
-import com.joizhang.naiverpc.annotation.NaiveRpcService;
+import com.joizhang.naiverpc.spring.annotation.NaiveRpcService;
 import com.joizhang.naiverpc.spring.context.annotation.NaiveRpcClassPathBeanDefinitionScanner;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

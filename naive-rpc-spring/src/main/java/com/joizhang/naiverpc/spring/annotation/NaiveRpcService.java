@@ -1,4 +1,4 @@
-package com.joizhang.naiverpc.annotation;
+package com.joizhang.naiverpc.spring.annotation;
 
 import java.lang.annotation.*;
 

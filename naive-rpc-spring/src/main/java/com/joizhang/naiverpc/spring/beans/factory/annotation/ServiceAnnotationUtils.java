@@ -1,6 +1,6 @@
 package com.joizhang.naiverpc.spring.beans.factory.annotation;
 
-import com.joizhang.naiverpc.annotation.NaiveRpcService;
+import com.joizhang.naiverpc.spring.annotation.NaiveRpcService;
 import com.joizhang.naiverpc.utils.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
