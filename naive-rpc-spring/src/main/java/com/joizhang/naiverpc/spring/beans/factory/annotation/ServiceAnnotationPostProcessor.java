@@ -150,7 +150,7 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
 
                 for (BeanDefinitionHolder beanDefinitionHolder : beanDefinitionHolders) {
                     // 处理扫描后的Bean，将bean注册到register中
-                    processScannedBeanDefinition(beanDefinitionHolder);
+                    // processScannedBeanDefinition(beanDefinitionHolder);
                     servicePackagesHolder.addScannedClass(
                             beanDefinitionHolder.getBeanDefinition().getBeanClassName());
                 }
@@ -197,13 +197,14 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
         return beanDefinitionHolders;
     }
 
+    @SuppressWarnings("unused")
     private void processScannedBeanDefinition(BeanDefinitionHolder beanDefinitionHolder) {
         Class<?> beanClass = resolveClass(beanDefinitionHolder);
         Annotation service = findServiceAnnotation(beanClass);
         // The attributes of @NaiveRpcService annotation
         Map<String, Object> serviceAnnotationAttributes = AnnotationUtils.getAnnotationAttributes(service);
         String serviceInterface = ServiceAnnotationUtils.resolveInterfaceName(serviceAnnotationAttributes, beanClass);
-        String annotatedServiceBeanName = beanDefinitionHolder.getBeanName();
+        // String annotatedServiceBeanName = beanDefinitionHolder.getBeanName();
         // ServiceBean Bean name
         String beanName = generateServiceBeanName(serviceAnnotationAttributes, serviceInterface);
         //  AbstractBeanDefinition serviceBeanDefinition = buildServiceBeanDefinition(serviceAnnotationAttributes, serviceInterface, annotatedServiceBeanName);
@@ -237,6 +238,7 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
      * @param serviceInterface            the class of interface annotated {@link NaiveRpcService}
      * @return bean name
      */
+    @SuppressWarnings("unused")
     private String generateServiceBeanName(Map<String, Object> serviceAnnotationAttributes, String serviceInterface) {
         ServiceBeanNameBuilder builder = ServiceBeanNameBuilder.create(serviceInterface, environment);
         return builder.build();
@@ -276,8 +278,8 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
             Map<String, Object> annotationAttributes = getServiceAnnotationAttributes(beanDefinition);
             if (annotationAttributes != null) {
                 // process @NaiveRpcService at java-config @bean method
-                processAnnotatedBeanDefinition(
-                        beanName, (AnnotatedBeanDefinition) beanDefinition, annotationAttributes);
+                processAnnotatedBeanDefinition(beanName,
+                        (AnnotatedBeanDefinition) beanDefinition, annotationAttributes);
             }
         }
 
