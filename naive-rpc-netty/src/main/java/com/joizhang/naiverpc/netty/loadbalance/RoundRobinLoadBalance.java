@@ -1,7 +1,7 @@
 package com.joizhang.naiverpc.netty.loadbalance;
 
 import com.joizhang.naiverpc.loadbalance.AbstractLoadBalance;
-import com.joizhang.naiverpc.netty.utils.AtomicPositiveInteger;
+import com.joizhang.naiverpc.utils.AtomicPositiveInteger;
 
 import java.util.List;
 

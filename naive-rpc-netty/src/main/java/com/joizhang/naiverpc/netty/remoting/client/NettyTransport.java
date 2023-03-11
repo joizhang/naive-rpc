@@ -21,11 +21,13 @@ public class NettyTransport implements Transport {
 
     @Override
     public CompletableFuture<Command> send(Command request) {
+        // 请求ID
+        int requestId = request.getHeader().getRequestId();
         // 构建返回值
         CompletableFuture<Command> completableFuture = new CompletableFuture<>();
         try {
             // 将在途请求放到inFlightRequests中
-            inFlightRequests.put(new ResponseFuture(request.getHeader().getRequestId(), completableFuture));
+            inFlightRequests.put(new ResponseFuture(requestId, completableFuture));
             // 发送命令
             channel.writeAndFlush(request).addListener((ChannelFutureListener) channelFuture -> {
                 // 处理发送失败的情况
@@ -36,7 +38,7 @@ public class NettyTransport implements Transport {
             });
         } catch (Throwable t) {
             // 处理发送异常
-            inFlightRequests.remove(request.getHeader().getRequestId());
+            inFlightRequests.remove(requestId);
             completableFuture.completeExceptionally(t);
         }
         return completableFuture;

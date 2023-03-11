@@ -1,5 +1,6 @@
 package com.joizhang.naiverpc.netty.utils;
 
+import com.joizhang.naiverpc.utils.NetUtils;
 import org.junit.Test;
 
 import java.net.InetSocketAddress;

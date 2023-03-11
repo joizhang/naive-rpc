@@ -8,9 +8,8 @@
     <packaging>pom</packaging>
     <version>2021.07</version>
     <modules>
-        <module>demo-api</module>
-        <module>demo-client</module>
-        <module>demo-service</module>
+        <module>demo-spring-boot</module>
+        <module>demo-original-api</module>
     </modules>
 
     <name>naive-rpc-demo</name>
