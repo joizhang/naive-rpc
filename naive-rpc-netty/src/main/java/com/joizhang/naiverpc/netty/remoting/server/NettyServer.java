@@ -24,8 +24,10 @@ public class NettyServer implements TransportServer {
     public void start(RequestHandlerRegistry requestHandlerRegistry, int port) {
         this.port = port;
         this.requestHandlerRegistry = requestHandlerRegistry;
-        this.bossGroup = NettyEventLoopFactory.eventLoopGroup(1, "NettyServerBoss");
-        this.workerGroup = NettyEventLoopFactory.eventLoopGroup(Constants.DEFAULT_IO_THREADS, "NettyServerWorker");
+        this.bossGroup = NettyEventLoopFactory.eventLoopGroup(1,
+                "NettyServerBoss");
+        this.workerGroup = NettyEventLoopFactory.eventLoopGroup(Constants.DEFAULT_IO_THREADS,
+                "NettyServerWorker");
         this.bootstrap = newBootstrap();
         this.channel = doBind();
     }
@@ -43,13 +45,18 @@ public class NettyServer implements TransportServer {
     }
 
     private ChannelHandler newChannelHandlerPipeline() {
-        return new ChannelInitializer<Channel>() {
+        return new ChannelInitializer<>() {
             @Override
             protected void initChannel(Channel channel) {
                 channel.pipeline()
+                        // 请求解码器
                         .addLast("decoder", new RequestDecoder())
+                        // 响应编码器
                         .addLast("encoder", new ResponseEncoder())
-                        .addLast("server-idle-handler", new IdleStateHandler(0, 20, 0, TimeUnit.SECONDS))
+                        // 空闲状态检测
+                        .addLast("server-idle-handler", new IdleStateHandler(
+                                0, 20, 0, TimeUnit.SECONDS))
+                        // 请求处理
                         .addLast("handler", new RequestInvocation(requestHandlerRegistry));
             }
         };

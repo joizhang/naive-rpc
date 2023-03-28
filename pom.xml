@@ -26,7 +26,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
         <lombok.version>1.18.26</lombok.version>
-        <jetbrains.annotations.version>23.1.0</jetbrains.annotations.version>
+        <jetbrains.annotations.version>24.0.1</jetbrains.annotations.version>
         <junit.version>4.13.2</junit.version>
     </properties>
 
