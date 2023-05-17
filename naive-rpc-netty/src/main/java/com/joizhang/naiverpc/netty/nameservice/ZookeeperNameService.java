@@ -3,6 +3,7 @@ package com.joizhang.naiverpc.netty.nameservice;
 import com.joizhang.naiverpc.loadbalance.LoadBalance;
 import com.joizhang.naiverpc.netty.loadbalance.RoundRobinLoadBalance;
 import com.joizhang.naiverpc.nameservice.NameService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -21,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.joizhang.naiverpc.spi.ServiceSupportConstant.LOAD_BALANCE_SERVICE_SUPPORT;
 
+@Slf4j
 public class ZookeeperNameService implements NameService {
 
     public static final LoadBalance LOAD_BALANCE = LOAD_BALANCE_SERVICE_SUPPORT.getService(RoundRobinLoadBalance.class.getCanonicalName());
@@ -63,7 +65,7 @@ public class ZookeeperNameService implements NameService {
                 throw new RuntimeException("Time out waiting to connect to ZK!");
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
