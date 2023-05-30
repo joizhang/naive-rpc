@@ -3,9 +3,8 @@ package com.joizhang.naiverpc.netty.nameservice;
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
 import com.joizhang.naiverpc.netty.serialize.metadata.MetadataSerializer;
 import com.joizhang.naiverpc.serialize.Serializer;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -15,16 +14,17 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class LocalFileNameServiceTest {
 
     private static final Serializer metadataSerializer =
             SERIALIZER_SERVICE_SUPPORT.getService(MetadataSerializer.class.getCanonicalName());
 
-    RandomAccessFile randomAccessFile;
+    static RandomAccessFile randomAccessFile;
 
-    @Before
-    public void beforeClass() throws Exception {
+    @BeforeAll
+    public static void beforeClass() throws Exception {
         randomAccessFile = new RandomAccessFile("test.data", "rw");
     }
 
@@ -36,7 +36,7 @@ public class LocalFileNameServiceTest {
             addresses.add(new InetSocketAddress("localhost", 9999));
             metadata.put(this.getClass().getCanonicalName(), addresses);
             byte[] bytes = SerializeSupport.serialize(metadataSerializer, metadata);
-            Assert.assertNotNull(bytes);
+            assertNotNull(bytes);
 
             fileChannel.truncate(bytes.length);
             fileChannel.position(0L);

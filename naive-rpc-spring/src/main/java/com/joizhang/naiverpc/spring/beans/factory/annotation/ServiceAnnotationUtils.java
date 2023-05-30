@@ -2,6 +2,7 @@ package com.joizhang.naiverpc.spring.beans.factory.annotation;
 
 import com.joizhang.naiverpc.spring.annotation.NaiveRpcService;
 import com.joizhang.naiverpc.utils.StringUtils;
+import lombok.experimental.UtilityClass;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
@@ -11,10 +12,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@UtilityClass
 public final class ServiceAnnotationUtils {
-
-    private ServiceAnnotationUtils() {
-    }
 
     /**
      * Resolve the service interface name from @Service annotation attributes.

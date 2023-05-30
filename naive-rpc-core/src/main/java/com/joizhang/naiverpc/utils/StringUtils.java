@@ -1,17 +1,16 @@
 package com.joizhang.naiverpc.utils;
 
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@UtilityClass
 @Slf4j
 public final class StringUtils {
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
-
-    private StringUtils() {
-    }
 
     public static boolean isEmpty(String str) {
         return str == null || str.isEmpty();

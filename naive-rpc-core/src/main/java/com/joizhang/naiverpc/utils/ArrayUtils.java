@@ -1,9 +1,9 @@
 package com.joizhang.naiverpc.utils;
 
-public final class ArrayUtils {
+import lombok.experimental.UtilityClass;
 
-    private ArrayUtils() {
-    }
+@UtilityClass
+public final class ArrayUtils {
 
     /**
      * <p>Checks if the array is null or empty. <p/>

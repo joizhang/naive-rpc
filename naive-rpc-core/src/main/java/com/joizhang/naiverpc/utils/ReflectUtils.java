@@ -1,11 +1,11 @@
 package com.joizhang.naiverpc.utils;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.Date;
 
+@UtilityClass
 public final class ReflectUtils {
-
-    private ReflectUtils() {
-    }
 
     public static boolean isPrimitives(Class<?> cls) {
         while (cls.isArray()) {

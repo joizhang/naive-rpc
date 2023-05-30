@@ -1,11 +1,11 @@
 package com.joizhang.naiverpc.netty.utils;
 
 import com.joizhang.naiverpc.utils.NetUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.InetSocketAddress;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NetUtilsTest {
 

@@ -3,13 +3,13 @@ package com.joizhang.naiverpc.spi;
 import com.joizhang.naiverpc.netty.serialize.java.JavaSerializer;
 import com.joizhang.naiverpc.netty.serialize.nativejava.NativeJavaSerializer;
 import com.joizhang.naiverpc.serialize.Serializer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
 import java.util.stream.StreamSupport;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ServiceSupportTest {
 
@@ -27,7 +27,7 @@ public class ServiceSupportTest {
     public void getAllService() {
         ServiceSupport<Serializer> serviceSupport = ServiceSupport.getServiceSupport(Serializer.class);
         Collection<Serializer> serializers = serviceSupport.getAllService();
-        assertEquals(3, serializers.size());
+        assertEquals(4, serializers.size());
     }
 
     @Test

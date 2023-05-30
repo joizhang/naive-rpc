@@ -13,7 +13,7 @@ import com.joizhang.naiverpc.remoting.client.TransportClient;
 import com.joizhang.naiverpc.remoting.server.TransportServer;
 import com.joizhang.naiverpc.remoting.transport.RequestHandlerRegistry;
 import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
-import com.joizhang.naiverpc.utils.NaiveRpcPropertiesSingleton;
+import com.joizhang.naiverpc.config.NaiveRpcPropertiesSingleton;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -33,9 +33,9 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
 
     public static final String SERVICE_DATA = "simple_rpc_name_service.data";
 
-    private TransportServer server = null;
+    private TransportServer server;
 
-    private TransportClient client = null;
+    private TransportClient client;
 
     @Override
     public synchronized InetSocketAddress startServer() throws Exception {

@@ -3,12 +3,13 @@ package com.joizhang.naiverpc.netty.serialize.gson;
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
 import com.joizhang.naiverpc.netty.serialize.User;
 import com.joizhang.naiverpc.serialize.Serializer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 public class GsonSerializerTest {
 

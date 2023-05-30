@@ -1,7 +1,6 @@
 package com.joizhang.naiverpc.utils;
 
-import com.joizhang.naiverpc.utils.CollectionUtils;
-import com.joizhang.naiverpc.utils.LRUCache;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -11,6 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+@UtilityClass
 @Slf4j
 public final class NetUtils {
 
