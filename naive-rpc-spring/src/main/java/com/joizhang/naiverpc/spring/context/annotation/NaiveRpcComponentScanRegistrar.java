@@ -1,6 +1,8 @@
 package com.joizhang.naiverpc.spring.context.annotation;
 
+import com.joizhang.naiverpc.spring.annotation.NaiveRpcService;
 import com.joizhang.naiverpc.spring.beans.factory.annotation.ServiceAnnotationPostProcessor;
+import com.joizhang.naiverpc.spring.context.NaiveRpcSpringInitializer;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -12,28 +14,37 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
+/**
+ * NAIVE-RPC {@link NaiveRpcService}注解后置处理器{@link ServiceAnnotationPostProcessor}注册
+ */
 public class NaiveRpcComponentScanRegistrar implements ImportBeanDefinitionRegistrar {
+
     @Override
     public void registerBeanDefinitions(@NotNull AnnotationMetadata importingClassMetadata,
                                         @NotNull BeanDefinitionRegistry registry) {
+        NaiveRpcSpringInitializer.initialize(registry);
         Set<String> packagesToScan = getPackagesToScan(importingClassMetadata);
         registerServiceAnnotationPostProcessor(packagesToScan, registry);
     }
 
     private Set<String> getPackagesToScan(AnnotationMetadata metadata) {
         // get from @NaiveRpcComponentScan
-        Set<String> packagesToScan = getPackagesToScan0(metadata, NaiveRpcComponentScan.class,
-                "basePackages", "basePackageClasses"
+        Set<String> packagesToScan = getPackagesToScan0(
+                metadata,
+                NaiveRpcComponentScan.class,
+                "basePackages",
+                "basePackageClasses"
         );
         // get from @EnableDubbo, compatible with spring 3.x
         if (packagesToScan.isEmpty()) {
-            packagesToScan = getPackagesToScan0(metadata, EnableNaiveRpc.class,
-                    "scanBasePackages", "scanBasePackageClasses");
+            packagesToScan = getPackagesToScan0(
+                    metadata,
+                    EnableNaiveRpc.class,
+                    "scanBasePackages",
+                    "scanBasePackageClasses"
+            );
         }
         if (packagesToScan.isEmpty()) {
             return Collections.singleton(ClassUtils.getPackageName(metadata.getClassName()));
@@ -41,10 +52,12 @@ public class NaiveRpcComponentScanRegistrar implements ImportBeanDefinitionRegis
         return packagesToScan;
     }
 
-    private Set<String> getPackagesToScan0(AnnotationMetadata metadata, Class<?> annotationClass,
-                                           String basePackagesName, String basePackageClassesName) {
-        AnnotationAttributes attributes = AnnotationAttributes.fromMap(
-                metadata.getAnnotationAttributes(annotationClass.getName()));
+    private Set<String> getPackagesToScan0(AnnotationMetadata metadata,
+                                           Class<?> annotationClass,
+                                           String basePackagesName,
+                                           String basePackageClassesName) {
+        Map<String, Object> annotationAttributes = metadata.getAnnotationAttributes(annotationClass.getName());
+        AnnotationAttributes attributes = AnnotationAttributes.fromMap(annotationAttributes);
         if (attributes == null) {
             return Collections.emptySet();
         }
