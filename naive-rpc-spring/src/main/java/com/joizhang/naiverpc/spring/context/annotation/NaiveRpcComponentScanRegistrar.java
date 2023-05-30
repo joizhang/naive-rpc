@@ -24,7 +24,7 @@ public class NaiveRpcComponentScanRegistrar implements ImportBeanDefinitionRegis
     @Override
     public void registerBeanDefinitions(@NotNull AnnotationMetadata importingClassMetadata,
                                         @NotNull BeanDefinitionRegistry registry) {
-        NaiveRpcSpringInitializer.initialize(registry);
+//        NaiveRpcSpringInitializer.initialize(registry);
         Set<String> packagesToScan = getPackagesToScan(importingClassMetadata);
         registerServiceAnnotationPostProcessor(packagesToScan, registry);
     }

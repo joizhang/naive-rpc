@@ -12,6 +12,9 @@ import org.springframework.context.support.GenericApplicationContext;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 注入{@link NaiveRpcSpringInitContext}, {@link ServicePackagesHolder}, {@link ReferenceAnnotationBeanPostProcessor}
+ */
 @Slf4j
 public class NaiveRpcSpringInitializer {
 
@@ -58,7 +61,8 @@ public class NaiveRpcSpringInitializer {
     }
 
     private static void registerCommonBeans(BeanDefinitionRegistry registry) {
-        registerInfrastructureBean(registry, ServicePackagesHolder.BEAN_NAME, ServicePackagesHolder.class);
+        registerInfrastructureBean(registry,
+                ServicePackagesHolder.BEAN_NAME, ServicePackagesHolder.class);
 
         // Register @NaiveRpcReference Annotation Bean Processor as an infrastructure Bean
         registerInfrastructureBean(registry,
@@ -76,9 +80,7 @@ public class NaiveRpcSpringInitializer {
     private static boolean registerInfrastructureBean(BeanDefinitionRegistry beanDefinitionRegistry,
                                                       String beanName,
                                                       Class<?> beanType) {
-
         boolean registered = false;
-
         if (!beanDefinitionRegistry.containsBeanDefinition(beanName)) {
             RootBeanDefinition beanDefinition = new RootBeanDefinition(beanType);
             beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -90,7 +92,6 @@ public class NaiveRpcSpringInitializer {
                         + "with name [" + beanName + "] has been registered.");
             }
         }
-
         return registered;
     }
 }
