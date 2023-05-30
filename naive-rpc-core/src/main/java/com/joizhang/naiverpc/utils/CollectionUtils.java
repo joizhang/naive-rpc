@@ -1,12 +1,12 @@
 package com.joizhang.naiverpc.utils;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.Collection;
 import java.util.List;
 
+@UtilityClass
 public final class CollectionUtils {
-
-    private CollectionUtils() {
-    }
 
     /**
      * Return {@code true} if the supplied Collection is {@code null} or empty.
