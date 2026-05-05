@@ -98,7 +98,7 @@ public class CommandDecoder extends LengthFieldBasedFrameDecoder {
         byte rpcVersion = byteBuf.readByte();
         byte messageType = byteBuf.readByte();
         byte codecType = byteBuf.readByte();
-        byte padding = byteBuf.readByte();
+        byteBuf.readByte(); // skip padding byte
         int requestId = byteBuf.readInt();
         return Header.builder()
                 .rpcVersion(rpcVersion)

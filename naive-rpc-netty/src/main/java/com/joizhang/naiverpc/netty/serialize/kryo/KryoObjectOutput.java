@@ -3,7 +3,6 @@ package com.joizhang.naiverpc.netty.serialize.kryo;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 import com.joizhang.naiverpc.netty.serialize.kryo.utils.KryoUtils;
-import com.joizhang.naiverpc.serialize.Cleanable;
 import com.joizhang.naiverpc.serialize.ObjectOutput;
 
 import java.io.Closeable;

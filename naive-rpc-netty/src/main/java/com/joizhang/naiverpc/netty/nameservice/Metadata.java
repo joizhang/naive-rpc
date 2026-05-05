@@ -1,7 +1,6 @@
 package com.joizhang.naiverpc.netty.nameservice;
 
 import java.net.InetSocketAddress;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 
