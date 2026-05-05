@@ -19,6 +19,7 @@ public class DemoServiceApp {
 
     private static final ServiceSupport<RpcAccessPoint> RPC_ACCESS_POINT_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RpcAccessPoint.class);
 
+    @SuppressWarnings("unused")
     private static CommandLine parseArgs(String[] args) {
         Options options = new Options();
         Option host = new Option("h", "host", true, "host");
