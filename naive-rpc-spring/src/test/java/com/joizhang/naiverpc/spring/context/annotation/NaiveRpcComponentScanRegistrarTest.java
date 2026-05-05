@@ -12,12 +12,13 @@ public class NaiveRpcComponentScanRegistrarTest {
 
     @Test
     public void testNaiveRpcComponentScanRegistrar() {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(ProviderConfiguration.class);
-        context.refresh();
-        HelloService helloService = context.getBean(HelloService.class);
-        String value = helloService.sayHello("Joi");
-        assertEquals("Hello, Joi", value);
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(ProviderConfiguration.class);
+            context.refresh();
+            HelloService helloService = context.getBean(HelloService.class);
+            String value = helloService.sayHello("Joi");
+            assertEquals("Hello, Joi", value);
+        }
     }
 
 }

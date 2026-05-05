@@ -42,7 +42,8 @@ public class NaiveRpcSpringInitializer {
             GenericApplicationContext genericApplicationContext = (GenericApplicationContext) registry;
             beanFactory = genericApplicationContext.getBeanFactory();
         } else {
-            throw new IllegalStateException("Can not find Spring BeanFactory from registry: " + registry.getClass().getName());
+            throw new IllegalStateException("Can not find Spring BeanFactory from registry: " +
+                    registry.getClass().getName());
         }
         return beanFactory;
     }
@@ -61,12 +62,12 @@ public class NaiveRpcSpringInitializer {
     }
 
     private static void registerCommonBeans(BeanDefinitionRegistry registry) {
-        registerInfrastructureBean(registry,
-                ServicePackagesHolder.BEAN_NAME, ServicePackagesHolder.class);
+        registerInfrastructureBean(
+                registry, ServicePackagesHolder.BEAN_NAME, ServicePackagesHolder.class);
 
         // Register @NaiveRpcReference Annotation Bean Processor as an infrastructure Bean
-        registerInfrastructureBean(registry,
-                ReferenceAnnotationBeanPostProcessor.BEAN_NAME, ReferenceAnnotationBeanPostProcessor.class);
+        registerInfrastructureBean(
+                registry, ReferenceAnnotationBeanPostProcessor.BEAN_NAME, ReferenceAnnotationBeanPostProcessor.class);
     }
 
     /**

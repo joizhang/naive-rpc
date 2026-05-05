@@ -2,7 +2,6 @@ package com.joizhang.naiverpc.spring.context.annotation;
 
 import com.joizhang.naiverpc.spring.annotation.NaiveRpcService;
 import com.joizhang.naiverpc.spring.beans.factory.annotation.ServiceAnnotationPostProcessor;
-import com.joizhang.naiverpc.spring.context.NaiveRpcSpringInitializer;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
