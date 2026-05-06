@@ -4,7 +4,7 @@ import com.joizhang.naiverpc.remoting.server.RequestHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import static com.joizhang.naiverpc.spi.ServiceSupportConstant.REQUEST_HANDLER_SERVICE_SUPPORT;
@@ -15,24 +15,25 @@ import static com.joizhang.naiverpc.spi.ServiceSupportConstant.REQUEST_HANDLER_S
 @Slf4j
 public class RequestHandlerRegistry {
 
-    private final Map<Byte, RequestHandler> handlerMap = new HashMap<>();
-
-    private static RequestHandlerRegistry instance = null;
-
-    public static RequestHandlerRegistry getInstance() {
-        if (null == instance) {
-            instance = new RequestHandlerRegistry();
-        }
-        return instance;
-    }
+    private final Map<Byte, RequestHandler> handlerMap;
 
     private RequestHandlerRegistry() {
         Collection<RequestHandler> requestHandlers = REQUEST_HANDLER_SERVICE_SUPPORT.getAllService();
+        Map<Byte, RequestHandler> map = new java.util.HashMap<>();
         for (RequestHandler requestHandler : requestHandlers) {
-            handlerMap.put(requestHandler.type(), requestHandler);
+            map.put(requestHandler.type(), requestHandler);
             log.debug("Load request handler, type: {}, class: {}.",
                     requestHandler.type(), requestHandler.getClass().getCanonicalName());
         }
+        this.handlerMap = Collections.unmodifiableMap(map);
+    }
+
+    private static class Holder {
+        private static final RequestHandlerRegistry INSTANCE = new RequestHandlerRegistry();
+    }
+
+    public static RequestHandlerRegistry getInstance() {
+        return Holder.INSTANCE;
     }
 
     public RequestHandler get(byte type) {

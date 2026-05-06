@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * RPC请求处理类
@@ -20,7 +20,7 @@ public class RpcRequestHandler implements RequestHandler {
     /**
      * {service name : service provider}
      */
-    private final Map<String, Object> serviceProviders = new HashMap<>();
+    private final Map<String, Object> serviceProviders = new ConcurrentHashMap<>();
 
     @Override
     public byte type() {
@@ -72,7 +72,7 @@ public class RpcRequestHandler implements RequestHandler {
     }
 
     @Override
-    public synchronized <T> void addServiceProvider(@NotNull Class<? extends T> serviceClass, T serviceProvider) {
+    public <T> void addServiceProvider(@NotNull Class<? extends T> serviceClass, T serviceProvider) {
         serviceProviders.put(serviceClass.getCanonicalName(), serviceProvider);
         log.debug("Add service: {}, provider: {}.",
                 serviceClass.getCanonicalName(), serviceProvider.getClass().getCanonicalName());

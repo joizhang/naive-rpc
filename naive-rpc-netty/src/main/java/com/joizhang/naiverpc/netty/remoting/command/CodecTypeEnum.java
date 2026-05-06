@@ -1,6 +1,8 @@
 package com.joizhang.naiverpc.netty.remoting.command;
 
+import com.joizhang.naiverpc.netty.serialize.gson.GsonSerializer;
 import com.joizhang.naiverpc.netty.serialize.java.JavaSerializer;
+import com.joizhang.naiverpc.netty.serialize.kryo.KryoSerializer;
 import com.joizhang.naiverpc.netty.serialize.metadata.MetadataSerializer;
 import com.joizhang.naiverpc.netty.serialize.nativejava.NativeJavaSerializer;
 import lombok.AllArgsConstructor;
@@ -15,7 +17,11 @@ public enum CodecTypeEnum {
 
     JAVA((byte) 0x02, JavaSerializer.class.getCanonicalName()),
 
-    META((byte) 0x03, MetadataSerializer.class.getCanonicalName());
+    META((byte) 0x03, MetadataSerializer.class.getCanonicalName()),
+
+    GSON((byte) 0x04, GsonSerializer.class.getCanonicalName()),
+
+    KRYO((byte) 0x05, KryoSerializer.class.getCanonicalName());
 
     private final byte code;
 
