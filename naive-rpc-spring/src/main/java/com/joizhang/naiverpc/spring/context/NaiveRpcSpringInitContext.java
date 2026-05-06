@@ -21,5 +21,4 @@ public class NaiveRpcSpringInitContext {
     public void markAsBound() {
         bound = true;
     }
-
 }

@@ -1,8 +1,7 @@
 package com.joizhang.naiverpc.utils;
 
-import lombok.experimental.UtilityClass;
-
 import java.util.Date;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class ReflectUtils {
@@ -15,12 +14,11 @@ public final class ReflectUtils {
     }
 
     public static boolean isPrimitive(Class<?> cls) {
-        return cls.isPrimitive() ||
-                cls == String.class ||
-                cls == Boolean.class ||
-                cls == Character.class ||
-                Number.class.isAssignableFrom(cls) ||
-                Date.class.isAssignableFrom(cls);
+        return cls.isPrimitive()
+                || cls == String.class
+                || cls == Boolean.class
+                || cls == Character.class
+                || Number.class.isAssignableFrom(cls)
+                || Date.class.isAssignableFrom(cls);
     }
-
 }

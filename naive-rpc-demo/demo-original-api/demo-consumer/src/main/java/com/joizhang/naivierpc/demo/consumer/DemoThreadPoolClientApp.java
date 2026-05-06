@@ -7,24 +7,26 @@ import com.joizhang.naiverpc.demo.service.UserService;
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.NettyRpcAccessPoint;
 import com.joizhang.naiverpc.spi.ServiceSupport;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.concurrent.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DemoThreadPoolClientApp {
 
-    private static final ServiceSupport<RpcAccessPoint> RPC_ACCESS_POINT_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RpcAccessPoint.class);
+    private static final ServiceSupport<RpcAccessPoint> RPC_ACCESS_POINT_SERVICE_SUPPORT =
+            ServiceSupport.getServiceSupport(RpcAccessPoint.class);
 
     public static void main(String[] args) throws Exception {
         try (ExecutorService service = new ThreadPoolExecutor(
-                4,
-                4,
-                0, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<>(200),
-                Executors.defaultThreadFactory(),
-                new ThreadPoolExecutor.DiscardPolicy());
-             RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
+                        4,
+                        4,
+                        0,
+                        TimeUnit.SECONDS,
+                        new ArrayBlockingQueue<>(200),
+                        Executors.defaultThreadFactory(),
+                        new ThreadPoolExecutor.DiscardPolicy());
+                RpcAccessPoint rpcAccessPoint =
+                        RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
             NameService nameService = rpcAccessPoint.getNameService(DemoThreadPoolClientApp.class);
             HelloService helloService = DemoClientApp.lookupService(rpcAccessPoint, nameService, HelloService.class);
             UserService userService = DemoClientApp.lookupService(rpcAccessPoint, nameService, UserService.class);
@@ -60,5 +62,4 @@ public class DemoThreadPoolClientApp {
             e.printStackTrace();
         }
     }
-
 }

@@ -1,7 +1,5 @@
 package com.joizhang.naiverpc.spi;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -9,6 +7,7 @@ import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.StreamSupport;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Loading rpc extensions
@@ -46,8 +45,8 @@ public class ServiceSupport<T> {
             throw new IllegalArgumentException("Service type (" + type + ") is not an interface!");
         }
         if (!withExtensionAnnotation(type)) {
-            throw new IllegalArgumentException("Service type (" + type + ") is not an extension, " +
-                    "because it is NOT annotated with @" + SPI.class.getSimpleName() + "!");
+            throw new IllegalArgumentException("Service type (" + type + ") is not an extension, "
+                    + "because it is NOT annotated with @" + SPI.class.getSimpleName() + "!");
         }
 
         ServiceSupport<T> loader = (ServiceSupport<T>) SERVICE_LOADERS.get(type);
@@ -92,9 +91,8 @@ public class ServiceSupport<T> {
 
     @SuppressWarnings("unchecked")
     public void cacheAll() {
-        StreamSupport
-                .stream(ServiceLoader.load(type).spliterator(), false)
-                .forEach((instance) -> cachedInstances.putIfAbsent(instance.getClass().getCanonicalName(), (T) instance));
+        StreamSupport.stream(ServiceLoader.load(type).spliterator(), false)
+                .forEach((instance) ->
+                        cachedInstances.putIfAbsent(instance.getClass().getCanonicalName(), (T) instance));
     }
-
 }

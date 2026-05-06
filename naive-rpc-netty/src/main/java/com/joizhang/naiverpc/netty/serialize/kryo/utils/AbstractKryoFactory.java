@@ -3,7 +3,6 @@ package com.joizhang.naiverpc.netty.serialize.kryo.utils;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.SerializerFactory;
 import com.esotericsoftware.kryo.serializers.JavaSerializer;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -54,7 +53,7 @@ public abstract class AbstractKryoFactory {
         kryo.setRegistrationRequired(registrationRequired);
 
         // References are required for object-graph
-//        kryo.setReferences(true);
+        //        kryo.setReferences(true);
         kryo.addDefaultSerializer(Throwable.class, new JavaSerializer());
 
         // Use CompatibleSerializer for back- and upward-compatibility
@@ -131,5 +130,4 @@ public abstract class AbstractKryoFactory {
     public abstract void returnKryo(Kryo kryo);
 
     public abstract Kryo getKryo();
-
 }

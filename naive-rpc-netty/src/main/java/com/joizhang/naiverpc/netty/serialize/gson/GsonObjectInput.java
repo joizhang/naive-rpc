@@ -2,7 +2,6 @@ package com.joizhang.naiverpc.netty.serialize.gson;
 
 import com.google.gson.Gson;
 import com.joizhang.naiverpc.serialize.ObjectInput;
-
 import java.io.*;
 import java.lang.reflect.Type;
 
@@ -94,5 +93,4 @@ public class GsonObjectInput implements ObjectInput {
         }
         return line;
     }
-
 }

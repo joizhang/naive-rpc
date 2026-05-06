@@ -1,9 +1,8 @@
 package com.joizhang.naiverpc.utils;
 
-import lombok.experimental.UtilityClass;
-
 import java.util.Collection;
 import java.util.List;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class CollectionUtils {
@@ -38,5 +37,4 @@ public final class CollectionUtils {
             return values.iterator().next();
         }
     }
-
 }

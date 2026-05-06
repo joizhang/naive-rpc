@@ -1,7 +1,6 @@
 package com.joizhang.naiverpc.netty.loadbalance;
 
 import com.joizhang.naiverpc.loadbalance.AbstractLoadBalance;
-
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -15,5 +14,4 @@ public class RandomLoadBalance extends AbstractLoadBalance {
         int length = remoteServiceAddresses.size();
         return remoteServiceAddresses.get(ThreadLocalRandom.current().nextInt(length));
     }
-
 }

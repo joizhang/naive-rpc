@@ -1,7 +1,6 @@
 package com.joizhang.naiverpc.nameservice;
 
 import com.joizhang.naiverpc.spi.SPI;
-
 import java.io.Closeable;
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -44,5 +43,4 @@ public interface NameService extends Closeable {
      * 输出服务元信息
      */
     void displayMetaData();
-
 }

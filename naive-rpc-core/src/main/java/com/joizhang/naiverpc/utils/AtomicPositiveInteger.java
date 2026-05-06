@@ -12,8 +12,7 @@ public class AtomicPositiveInteger extends Number {
     @SuppressWarnings("unused")
     private volatile int index = 0;
 
-    public AtomicPositiveInteger() {
-    }
+    public AtomicPositiveInteger() {}
 
     public AtomicPositiveInteger(int initialValue) {
         INDEX_UPDATER.set(this, initialValue);
@@ -135,5 +134,4 @@ public class AtomicPositiveInteger extends Number {
         AtomicPositiveInteger other = (AtomicPositiveInteger) obj;
         return intValue() == other.intValue();
     }
-
 }

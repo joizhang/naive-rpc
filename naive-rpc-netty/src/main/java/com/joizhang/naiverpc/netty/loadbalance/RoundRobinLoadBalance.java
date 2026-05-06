@@ -2,7 +2,6 @@ package com.joizhang.naiverpc.netty.loadbalance;
 
 import com.joizhang.naiverpc.loadbalance.AbstractLoadBalance;
 import com.joizhang.naiverpc.utils.AtomicPositiveInteger;
-
 import java.util.List;
 
 /**
@@ -18,5 +17,4 @@ public class RoundRobinLoadBalance extends AbstractLoadBalance {
         int round = ROUND.getAndIncrement();
         return remoteServiceAddresses.get(round % length);
     }
-
 }

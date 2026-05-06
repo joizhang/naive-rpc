@@ -2,15 +2,14 @@ package com.joizhang.naiverpc.spring.context;
 
 import com.joizhang.naiverpc.spring.beans.factory.annotation.ReferenceAnnotationBeanPostProcessor;
 import com.joizhang.naiverpc.spring.beans.factory.annotation.ServicePackagesHolder;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.support.GenericApplicationContext;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 注入{@link NaiveRpcSpringInitContext}, {@link ServicePackagesHolder}, {@link ReferenceAnnotationBeanPostProcessor}
@@ -20,8 +19,7 @@ public class NaiveRpcSpringInitializer {
 
     private static final Map<BeanDefinitionRegistry, NaiveRpcSpringInitContext> contextMap = new ConcurrentHashMap<>();
 
-    private NaiveRpcSpringInitializer() {
-    }
+    private NaiveRpcSpringInitializer() {}
 
     public static void initialize(BeanDefinitionRegistry registry) {
         if (contextMap.putIfAbsent(registry, new NaiveRpcSpringInitContext()) != null) {
@@ -42,15 +40,16 @@ public class NaiveRpcSpringInitializer {
             GenericApplicationContext genericApplicationContext = (GenericApplicationContext) registry;
             beanFactory = genericApplicationContext.getBeanFactory();
         } else {
-            throw new IllegalStateException("Can not find Spring BeanFactory from registry: " +
-                    registry.getClass().getName());
+            throw new IllegalStateException("Can not find Spring BeanFactory from registry: "
+                    + registry.getClass().getName());
         }
         return beanFactory;
     }
 
-    private static void initContext(NaiveRpcSpringInitContext context,
-                                    BeanDefinitionRegistry registry,
-                                    ConfigurableListableBeanFactory beanFactory) {
+    private static void initContext(
+            NaiveRpcSpringInitContext context,
+            BeanDefinitionRegistry registry,
+            ConfigurableListableBeanFactory beanFactory) {
         context.setRegistry(registry);
         context.setBeanFactory(beanFactory);
         // bind initialization context to spring context
@@ -62,8 +61,7 @@ public class NaiveRpcSpringInitializer {
     }
 
     private static void registerCommonBeans(BeanDefinitionRegistry registry) {
-        registerInfrastructureBean(
-                registry, ServicePackagesHolder.BEAN_NAME, ServicePackagesHolder.class);
+        registerInfrastructureBean(registry, ServicePackagesHolder.BEAN_NAME, ServicePackagesHolder.class);
 
         // Register @NaiveRpcReference Annotation Bean Processor as an infrastructure Bean
         registerInfrastructureBean(
@@ -78,9 +76,8 @@ public class NaiveRpcSpringInitializer {
      * @param beanName               the name of bean
      * @return if it's a first time to register, return <code>true</code>, or <code>false</code>
      */
-    private static boolean registerInfrastructureBean(BeanDefinitionRegistry beanDefinitionRegistry,
-                                                      String beanName,
-                                                      Class<?> beanType) {
+    private static boolean registerInfrastructureBean(
+            BeanDefinitionRegistry beanDefinitionRegistry, String beanName, Class<?> beanType) {
         boolean registered = false;
         if (!beanDefinitionRegistry.containsBeanDefinition(beanName)) {
             RootBeanDefinition beanDefinition = new RootBeanDefinition(beanType);
@@ -89,8 +86,8 @@ public class NaiveRpcSpringInitializer {
             registered = true;
 
             if (log.isDebugEnabled()) {
-                log.debug("The Infrastructure bean definition [" + beanDefinition
-                        + "with name [" + beanName + "] has been registered.");
+                log.debug("The Infrastructure bean definition [" + beanDefinition + "with name [" + beanName
+                        + "] has been registered.");
             }
         }
         return registered;

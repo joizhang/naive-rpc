@@ -11,7 +11,6 @@ public class ServicePackagesHolder {
 
     private final Set<String> scannedClasses = new HashSet<>();
 
-
     public void addScannedPackage(String apackage) {
         apackage = normalizePackage(apackage);
         synchronized (scannedPackages) {
@@ -63,5 +62,4 @@ public class ServicePackagesHolder {
         }
         return apackage;
     }
-
 }

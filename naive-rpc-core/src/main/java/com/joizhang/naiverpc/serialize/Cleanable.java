@@ -6,5 +6,4 @@ public interface Cleanable {
      * Clean up serializer
      */
     void cleanup();
-
 }

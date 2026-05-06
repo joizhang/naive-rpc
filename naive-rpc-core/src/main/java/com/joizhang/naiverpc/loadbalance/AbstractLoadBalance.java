@@ -16,5 +16,4 @@ public abstract class AbstractLoadBalance implements LoadBalance {
     }
 
     protected abstract String doSelect(List<String> remoteServiceAddresses);
-
 }

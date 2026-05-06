@@ -2,15 +2,14 @@ package com.joizhang.naiverpc.spring.beans.factory.annotation;
 
 import com.joizhang.naiverpc.spring.annotation.NaiveRpcService;
 import com.joizhang.naiverpc.utils.StringUtils;
-import lombok.experimental.UtilityClass;
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import lombok.experimental.UtilityClass;
+import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 
 @UtilityClass
 public final class ServiceAnnotationUtils {
@@ -22,8 +21,7 @@ public final class ServiceAnnotationUtils {
      * @param beanClass                   the default class of interface
      * @return the interface name if found
      */
-    public static String resolveInterfaceName(Map<String, Object> serviceAnnotationAttributes,
-                                              Class<?> beanClass) {
+    public static String resolveInterfaceName(Map<String, Object> serviceAnnotationAttributes, Class<?> beanClass) {
         // 1. get from NaiveRpcService.interfaceName()
         String interfaceClassName = getAttribute(serviceAnnotationAttributes, "interfaceName");
         if (StringUtils.hasText(interfaceClassName)) {
@@ -79,7 +77,6 @@ public final class ServiceAnnotationUtils {
         return value == null ? defaultValue : value;
     }
 
-
     /**
      * Filter default value of Annotation type
      *
@@ -87,8 +84,8 @@ public final class ServiceAnnotationUtils {
      * @param annotationAttributes annotation attributes
      * @return filtered annotation attributes
      */
-    public static Map<String, Object> filterDefaultValues(Class<? extends Annotation> annotationType,
-                                                          Map<String, Object> annotationAttributes) {
+    public static Map<String, Object> filterDefaultValues(
+            Class<? extends Annotation> annotationType, Map<String, Object> annotationAttributes) {
         Map<String, Object> filterDefaultValues = new LinkedHashMap<>(annotationAttributes.size());
         annotationAttributes.forEach((key, value) -> {
             if (!Objects.deepEquals(value, getDefaultValue(annotationType, key))) {

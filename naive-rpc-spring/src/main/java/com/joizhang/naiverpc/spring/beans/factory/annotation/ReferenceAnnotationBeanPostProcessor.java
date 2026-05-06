@@ -1,8 +1,14 @@
 package com.joizhang.naiverpc.spring.beans.factory.annotation;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import com.joizhang.naiverpc.spring.annotation.NaiveRpcReference;
 import com.joizhang.naiverpc.utils.ArrayUtils;
 import com.joizhang.naiverpc.utils.StringUtils;
+import java.lang.reflect.Member;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
@@ -17,13 +23,6 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.annotation.AnnotationAttributes;
-
-import java.lang.reflect.Member;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import static org.springframework.util.StringUtils.hasText;
 
 @Slf4j
 public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBeanPostProcessor
@@ -76,11 +75,7 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
                 Class<?> injectedType = fieldElement.field.getType();
                 AnnotationAttributes attributes = fieldElement.attributes;
                 String referenceBeanName = registerReferenceBean(
-                        fieldElement.getPropertyName(),
-                        injectedType,
-                        attributes,
-                        fieldElement.field
-                );
+                        fieldElement.getPropertyName(), injectedType, attributes, fieldElement.field);
 
                 fieldElement.injectedObject = referenceBeanName;
                 injectedFieldReferenceBeanCache.put(fieldElement, referenceBeanName);
@@ -93,11 +88,7 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
                 Class<?> injectedType = methodElement.getInjectedType();
                 AnnotationAttributes attributes = methodElement.attributes;
                 String referenceBeanName = registerReferenceBean(
-                        methodElement.getPropertyName(),
-                        injectedType,
-                        attributes,
-                        methodElement.method
-                );
+                        methodElement.getPropertyName(), injectedType, attributes, methodElement.method);
 
                 methodElement.injectedObject = referenceBeanName;
                 injectedMethodReferenceBeanCache.put(methodElement, referenceBeanName);
@@ -107,10 +98,9 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
         }
     }
 
-    public String registerReferenceBean(String propertyName,
-                                        Class<?> injectedType,
-                                        Map<String, Object> attributes,
-                                        Member member) throws BeansException {
+    public String registerReferenceBean(
+            String propertyName, Class<?> injectedType, Map<String, Object> attributes, Member member)
+            throws BeansException {
         boolean renameable = true;
         String referenceBeanName = getAttribute(attributes, ID_ATTRIBUTE);
         if (hasText(referenceBeanName)) {
@@ -123,11 +113,14 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
 
         String interfaceName = getInterfaceName(attributes, injectedType);
         if (StringUtils.isBlank(interfaceName)) {
-            throw new BeanCreationException("Need to specify the 'interfaceName' or 'interfaceClass' attribute of '@NaiveRpcReference'. " + checkLocation);
+            throw new BeanCreationException(
+                    "Need to specify the 'interfaceName' or 'interfaceClass' attribute of '@NaiveRpcReference'. "
+                            + checkLocation);
         }
 
         boolean isContains;
-        if ((isContains = beanDefinitionRegistry.containsBeanDefinition(referenceBeanName)) || beanDefinitionRegistry.isAlias(referenceBeanName)) {
+        if ((isContains = beanDefinitionRegistry.containsBeanDefinition(referenceBeanName))
+                || beanDefinitionRegistry.isAlias(referenceBeanName)) {
             String preReferenceBeanName = referenceBeanName;
             if (!isContains) {
                 String[] aliases = beanDefinitionRegistry.getAliases(referenceBeanName);
@@ -154,25 +147,30 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
             }
 
             if (!renameable) {
-                throw new BeanCreationException("Already exists another bean definition with the same bean name [" + referenceBeanName + "], " +
-                        "but cannot rename the reference bean name (specify the id attribute or java-config bean), " +
-                        "please modify the name of one of the beans: " +
-                        "prev: " + prevBeanDesc + ", new: " + newBeanDesc + ". " + checkLocation);
+                throw new BeanCreationException(
+                        "Already exists another bean definition with the same bean name [" + referenceBeanName + "], "
+                                + "but cannot rename the reference bean name (specify the id attribute or java-config bean), "
+                                + "please modify the name of one of the beans: "
+                                + "prev: "
+                                + prevBeanDesc + ", new: " + newBeanDesc + ". " + checkLocation);
             }
 
             int index = 2;
             String newReferenceBeanName = null;
-            while (newReferenceBeanName == null || beanDefinitionRegistry.containsBeanDefinition(newReferenceBeanName)
+            while (newReferenceBeanName == null
+                    || beanDefinitionRegistry.containsBeanDefinition(newReferenceBeanName)
                     || beanDefinitionRegistry.isAlias(newReferenceBeanName)) {
                 newReferenceBeanName = referenceBeanName + "#" + index;
                 index++;
             }
             newBeanDesc = newReferenceBeanName + "[" + interfaceName + "]";
 
-            log.warn("Already exists another bean definition with the same bean name [" + referenceBeanName + "], " +
-                    "rename reference bean to [" + newReferenceBeanName + "]. " +
-                    "It is recommended to modify the name of one of the beans to avoid injection problems. " +
-                    "prev: " + prevBeanDesc + ", new: " + newBeanDesc + ". " + checkLocation);
+            log.warn("Already exists another bean definition with the same bean name [" + referenceBeanName + "], "
+                    + "rename reference bean to ["
+                    + newReferenceBeanName + "]. "
+                    + "It is recommended to modify the name of one of the beans to avoid injection problems. "
+                    + "prev: "
+                    + prevBeanDesc + ", new: " + newBeanDesc + ". " + checkLocation);
             referenceBeanName = newReferenceBeanName;
         }
 
@@ -187,7 +185,8 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
 
         GenericBeanDefinition targetDefinition = new GenericBeanDefinition();
         targetDefinition.setBeanClass(interfaceClass);
-        beanDefinition.setDecoratedDefinition(new BeanDefinitionHolder(targetDefinition, referenceBeanName + "_decorated"));
+        beanDefinition.setDecoratedDefinition(
+                new BeanDefinitionHolder(targetDefinition, referenceBeanName + "_decorated"));
 
         beanDefinition.setAttribute(OBJECT_TYPE_ATTRIBUTE, interfaceClass);
 
@@ -227,21 +226,23 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
     }
 
     @Override
-    protected Object doGetInjectedBean(AnnotationAttributes attributes,
-                                       Object bean,
-                                       String beanName,
-                                       Class<?> injectedType,
-                                       AnnotatedInjectElement injectedElement) throws Exception {
+    protected Object doGetInjectedBean(
+            AnnotationAttributes attributes,
+            Object bean,
+            String beanName,
+            Class<?> injectedType,
+            AnnotatedInjectElement injectedElement)
+            throws Exception {
         if (injectedElement.injectedObject == null) {
-            throw new IllegalStateException("The AnnotatedInjectElement of @NaiveRpcReference should be inited before injection");
+            throw new IllegalStateException(
+                    "The AnnotatedInjectElement of @NaiveRpcReference should be inited before injection");
         }
         return getBeanFactory().getBean((String) injectedElement.injectedObject);
     }
 
     @Override
-    public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition,
-                                                Class<?> beanType,
-                                                String beanName) {}
+    public void postProcessMergedBeanDefinition(
+            RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {}
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

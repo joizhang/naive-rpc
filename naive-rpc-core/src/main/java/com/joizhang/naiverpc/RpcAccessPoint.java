@@ -2,7 +2,6 @@ package com.joizhang.naiverpc;
 
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.spi.SPI;
-
 import java.io.Closeable;
 import java.net.InetSocketAddress;
 
@@ -41,5 +40,4 @@ public interface RpcAccessPoint extends Closeable {
      * @return 远程服务引用
      */
     <T> T getRemoteService(NameService nameService, Class<T> serviceClass);
-
 }

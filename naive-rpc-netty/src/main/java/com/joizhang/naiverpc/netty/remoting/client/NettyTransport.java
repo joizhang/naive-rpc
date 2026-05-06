@@ -6,7 +6,6 @@ import com.joizhang.naiverpc.remoting.transport.InFlightRequests;
 import com.joizhang.naiverpc.remoting.transport.ResponseFuture;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
-
 import java.util.concurrent.CompletableFuture;
 
 public class NettyTransport implements Transport {
@@ -43,5 +42,4 @@ public class NettyTransport implements Transport {
         }
         return completableFuture;
     }
-
 }

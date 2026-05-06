@@ -10,5 +10,4 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = NaiveRpcUtils.NAIVE_RPC_PREFIX, name = "enabled", matchIfMissing = true)
 @EnableConfigurationProperties(NaiveRpcConfigurationProperties.class)
 @EnableNaiveRpcConfig
-public class NaiveRpcAutoConfiguration {
-}
+public class NaiveRpcAutoConfiguration {}

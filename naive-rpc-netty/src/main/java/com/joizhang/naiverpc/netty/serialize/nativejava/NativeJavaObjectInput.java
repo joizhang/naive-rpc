@@ -1,7 +1,6 @@
 package com.joizhang.naiverpc.netty.serialize.nativejava;
 
 import com.joizhang.naiverpc.serialize.ObjectInput;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -71,7 +70,7 @@ public class NativeJavaObjectInput implements ObjectInput {
         if (len < 0) {
             return null;
         } else if (len == 0) {
-            return new byte[]{};
+            return new byte[] {};
         } else {
             byte[] result = new byte[len];
             inputStream.readFully(result);

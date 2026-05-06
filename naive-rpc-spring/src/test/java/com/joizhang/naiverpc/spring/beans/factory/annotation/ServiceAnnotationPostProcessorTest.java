@@ -1,8 +1,11 @@
 package com.joizhang.naiverpc.spring.beans.factory.annotation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.joizhang.naiverpc.spring.context.annotation.EnableNaiveRpc;
 import com.joizhang.naiverpc.spring.context.annotation.NaiveRpcComponentScan;
 import com.joizhang.naiverpc.spring.context.annotation.api.HelloService;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +15,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {
-        ServiceAnnotationTestConfiguration.class,
-        ServiceAnnotationPostProcessorTest.class,
-        ServiceAnnotationPostProcessorTest.DuplicatedScanConfig.class
-})
+@ContextConfiguration(
+        classes = {
+            ServiceAnnotationTestConfiguration.class,
+            ServiceAnnotationPostProcessorTest.class,
+            ServiceAnnotationPostProcessorTest.DuplicatedScanConfig.class
+        })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@TestPropertySource(properties = {
-        "provider.package = com.joizhang.naiverpc.spring.context.annotation.provider",
-})
+@TestPropertySource(
+        properties = {
+            "provider.package = com.joizhang.naiverpc.spring.context.annotation.provider",
+        })
 @EnableNaiveRpc(scanBasePackages = "${provider.package}")
 public class ServiceAnnotationPostProcessorTest {
 
@@ -43,7 +44,5 @@ public class ServiceAnnotationPostProcessorTest {
     }
 
     @NaiveRpcComponentScan({"org.apache.dubbo.config.spring.context.annotation", "${provider.package}"})
-    static class DuplicatedScanConfig {
-
-    }
+    static class DuplicatedScanConfig {}
 }

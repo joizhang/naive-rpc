@@ -1,14 +1,13 @@
 package com.joizhang.naiverpc.netty.serialize.gson;
 
+import static com.joizhang.naiverpc.netty.serialize.SerializerType.GSON_SERIALIZATION_ID;
+
 import com.joizhang.naiverpc.serialize.ObjectInput;
 import com.joizhang.naiverpc.serialize.ObjectOutput;
 import com.joizhang.naiverpc.serialize.Serializer;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import static com.joizhang.naiverpc.netty.serialize.SerializerType.GSON_SERIALIZATION_ID;
 
 public class GsonSerializer implements Serializer {
 
@@ -31,5 +30,4 @@ public class GsonSerializer implements Serializer {
     public ObjectInput deserialize(InputStream inputStream) throws IOException {
         return new GsonObjectInput(inputStream);
     }
-
 }

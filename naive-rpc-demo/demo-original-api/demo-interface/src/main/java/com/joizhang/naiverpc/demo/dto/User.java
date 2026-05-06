@@ -1,8 +1,7 @@
 package com.joizhang.naiverpc.demo.dto;
 
-import lombok.*;
-
 import java.io.Serializable;
+import lombok.*;
 
 @Getter
 @Setter
@@ -18,5 +17,4 @@ public class User implements Serializable {
     private short age;
 
     private int version;
-
 }

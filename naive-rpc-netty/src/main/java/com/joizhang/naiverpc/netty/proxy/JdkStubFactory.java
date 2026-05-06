@@ -5,12 +5,11 @@ import com.joizhang.naiverpc.proxy.StubFactory;
 import com.joizhang.naiverpc.remoting.client.Transport;
 import com.joizhang.naiverpc.remoting.client.TransportClient;
 import com.joizhang.naiverpc.remoting.command.RpcRequest;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.InetSocketAddress;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 基于JDK动态代理的代理工厂
@@ -22,9 +21,8 @@ public class JdkStubFactory implements StubFactory {
     public <T> T createStub(NameService nameService, @NotNull Class<T> serviceClass, TransportClient client) {
         return (T) Proxy.newProxyInstance(
                 serviceClass.getClassLoader(),
-                new Class<?>[]{serviceClass},
-                new ProxyServiceStub<>(nameService, serviceClass, client)
-        );
+                new Class<?>[] {serviceClass},
+                new ProxyServiceStub<>(nameService, serviceClass, client));
     }
 
     static class ProxyServiceStub<T> extends AbstractServiceStub implements InvocationHandler {

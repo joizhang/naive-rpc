@@ -11,7 +11,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
-
 import java.util.concurrent.ThreadFactory;
 
 public class NettyEventLoopFactory {
@@ -32,5 +31,4 @@ public class NettyEventLoopFactory {
     public static Class<? extends ServerChannel> serverSocketChannelClass() {
         return Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class;
     }
-
 }

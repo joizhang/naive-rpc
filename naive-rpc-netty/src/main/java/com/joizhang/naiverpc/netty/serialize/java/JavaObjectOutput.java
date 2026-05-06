@@ -1,7 +1,6 @@
 package com.joizhang.naiverpc.netty.serialize.java;
 
 import com.joizhang.naiverpc.netty.serialize.nativejava.NativeJavaObjectOutput;
-
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -36,5 +35,4 @@ public class JavaObjectOutput extends NativeJavaObjectOutput {
     public void flushBuffer() throws IOException {
         getObjectOutputStream().flush();
     }
-
 }

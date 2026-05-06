@@ -35,5 +35,4 @@ public interface ObjectInput extends DataInput {
      * @throws ClassNotFoundException if an ClassNotFoundException occurs
      */
     <T> T readObject(Class<T> cls, Type type) throws IOException, ClassNotFoundException;
-
 }

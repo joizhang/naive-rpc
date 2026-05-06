@@ -1,8 +1,17 @@
 package com.joizhang.naiverpc.netty.nameservice;
 
+import static com.joizhang.naiverpc.spi.ServiceSupportConstant.LOAD_BALANCE_SERVICE_SUPPORT;
+
 import com.joizhang.naiverpc.loadbalance.LoadBalance;
-import com.joizhang.naiverpc.netty.loadbalance.RoundRobinLoadBalance;
 import com.joizhang.naiverpc.nameservice.NameService;
+import com.joizhang.naiverpc.netty.loadbalance.RoundRobinLoadBalance;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -11,20 +20,11 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-
-import static com.joizhang.naiverpc.spi.ServiceSupportConstant.LOAD_BALANCE_SERVICE_SUPPORT;
-
 @Slf4j
 public class ZookeeperNameService implements NameService {
 
-    public static final LoadBalance LOAD_BALANCE = LOAD_BALANCE_SERVICE_SUPPORT.getService(RoundRobinLoadBalance.class.getCanonicalName());
+    public static final LoadBalance LOAD_BALANCE =
+            LOAD_BALANCE_SERVICE_SUPPORT.getService(RoundRobinLoadBalance.class.getCanonicalName());
 
     private static final Collection<String> SCHEMES = Collections.singleton("zookeeper");
 
@@ -73,7 +73,10 @@ public class ZookeeperNameService implements NameService {
         String servicePath = ROOT_PATH + '/' + serviceName + socketAddress.toString();
         Stat stat = zkClient.checkExists().forPath(servicePath);
         if (Objects.isNull(stat)) {
-            zkClient.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(servicePath);
+            zkClient.create()
+                    .creatingParentsIfNeeded()
+                    .withMode(CreateMode.EPHEMERAL)
+                    .forPath(servicePath);
         }
     }
 
@@ -89,9 +92,7 @@ public class ZookeeperNameService implements NameService {
     }
 
     @Override
-    public void displayMetaData() {
-
-    }
+    public void displayMetaData() {}
 
     @Override
     public void close() {

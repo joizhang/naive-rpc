@@ -15,5 +15,4 @@ public class RequestEncoder extends CommandEncoder {
             throws Exception {
         super.encodeHeader(channelHandlerContext, header, byteBuf);
     }
-
 }

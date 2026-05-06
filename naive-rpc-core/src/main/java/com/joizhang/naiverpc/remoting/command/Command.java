@@ -18,5 +18,4 @@ public class Command {
      * 请求体
      */
     private Object payload;
-
 }

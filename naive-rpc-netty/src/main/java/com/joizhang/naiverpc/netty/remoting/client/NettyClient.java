@@ -8,7 +8,6 @@ import com.joizhang.naiverpc.utils.Constants;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
-
 import java.net.SocketAddress;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,8 +44,7 @@ public class NettyClient implements TransportClient {
             throw new IllegalArgumentException("address must not be null!");
         }
         if (ioEventGroup == null) {
-            ioEventGroup = NettyEventLoopFactory.eventLoopGroup(
-                    Constants.DEFAULT_IO_THREADS, "NettyClientWorker");
+            ioEventGroup = NettyEventLoopFactory.eventLoopGroup(Constants.DEFAULT_IO_THREADS, "NettyClientWorker");
         }
         if (bootstrap == null) {
             bootstrap = newBootstrap();
@@ -65,7 +63,8 @@ public class NettyClient implements TransportClient {
 
     private Bootstrap newBootstrap() {
         Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(ioEventGroup)
+        bootstrap
+                .group(ioEventGroup)
                 .channel(NettyEventLoopFactory.socketChannelClass())
                 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .handler(newChannelHandlerPipeline());
@@ -96,5 +95,4 @@ public class NettyClient implements TransportClient {
         }
         inFlightRequests.close();
     }
-
 }

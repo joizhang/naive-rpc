@@ -1,5 +1,7 @@
 package com.joizhang.naiverpc.netty.remoting.transport;
 
+import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
+
 import com.joizhang.naiverpc.netty.remoting.command.CodecTypeEnum;
 import com.joizhang.naiverpc.netty.remoting.command.MessageType;
 import com.joizhang.naiverpc.netty.remoting.command.RpcConstants;
@@ -12,21 +14,18 @@ import com.joizhang.naiverpc.serialize.Serializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-
 import java.io.IOException;
 import java.util.Arrays;
-
-import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
 
 public class CommandDecoder extends LengthFieldBasedFrameDecoder {
 
     public CommandDecoder() {
         /*
-         lengthFieldOffset: magic number is 4B, so value is 4
-         lengthFieldLength: full length is 4B, so value is 4
-         lengthAdjustment: full length include all data and read 8 bytes before, so the left length is (fullLength-8). so values is -8
-         initialBytesToStrip: we will check magic code and version manually, so do not strip any bytes. so values is 0
-         */
+        lengthFieldOffset: magic number is 4B, so value is 4
+        lengthFieldLength: full length is 4B, so value is 4
+        lengthAdjustment: full length include all data and read 8 bytes before, so the left length is (fullLength-8). so values is -8
+        initialBytesToStrip: we will check magic code and version manually, so do not strip any bytes. so values is 0
+        */
         this(RpcConstants.MAX_FRAME_LENGTH, 4, 4, -8, 0);
     }
 
@@ -37,8 +36,12 @@ public class CommandDecoder extends LengthFieldBasedFrameDecoder {
      * @param lengthAdjustment    The compensation value to add to the value of the length field.
      * @param initialBytesToStrip Number of bytes skipped.
      */
-    public CommandDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength,
-                          int lengthAdjustment, int initialBytesToStrip) {
+    public CommandDecoder(
+            int maxFrameLength,
+            int lengthFieldOffset,
+            int lengthFieldLength,
+            int lengthAdjustment,
+            int initialBytesToStrip) {
         super(maxFrameLength, lengthFieldOffset, lengthFieldLength, lengthAdjustment, initialBytesToStrip);
     }
 
@@ -104,7 +107,7 @@ public class CommandDecoder extends LengthFieldBasedFrameDecoder {
                 .rpcVersion(rpcVersion)
                 .messageType(messageType)
                 .codecType(codecType)
-                .requestId(requestId).build();
+                .requestId(requestId)
+                .build();
     }
-
 }

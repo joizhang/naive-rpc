@@ -22,11 +22,13 @@ public class ServiceBeanNameBuilder {
         this.environment = environment;
     }
 
-    private ServiceBeanNameBuilder(AnnotationAttributes attributes, Class<?> defaultInterfaceClass, Environment environment) {
+    private ServiceBeanNameBuilder(
+            AnnotationAttributes attributes, Class<?> defaultInterfaceClass, Environment environment) {
         this(ServiceAnnotationUtils.resolveInterfaceName(attributes, defaultInterfaceClass), environment);
     }
 
-    public static ServiceBeanNameBuilder create(AnnotationAttributes attributes, Class<?> defaultInterfaceClass, Environment environment) {
+    public static ServiceBeanNameBuilder create(
+            AnnotationAttributes attributes, Class<?> defaultInterfaceClass, Environment environment) {
         return new ServiceBeanNameBuilder(attributes, defaultInterfaceClass, environment);
     }
 
@@ -54,5 +56,4 @@ public class ServiceBeanNameBuilder {
         // Resolve placeholders
         return environment.resolvePlaceholders(rawBeanName);
     }
-
 }

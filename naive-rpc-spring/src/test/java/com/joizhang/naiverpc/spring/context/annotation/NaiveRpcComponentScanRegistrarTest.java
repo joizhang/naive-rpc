@@ -1,12 +1,11 @@
 package com.joizhang.naiverpc.spring.context.annotation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.joizhang.naiverpc.spring.context.annotation.api.HelloService;
 import com.joizhang.naiverpc.spring.context.annotation.provider.ProviderConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 
 public class NaiveRpcComponentScanRegistrarTest {
 
@@ -20,5 +19,4 @@ public class NaiveRpcComponentScanRegistrarTest {
             assertEquals("Hello, Joi", value);
         }
     }
-
 }

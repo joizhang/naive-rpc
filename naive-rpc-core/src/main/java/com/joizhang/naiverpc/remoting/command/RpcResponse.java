@@ -1,9 +1,8 @@
 package com.joizhang.naiverpc.remoting.command;
 
+import java.io.Serializable;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.io.Serializable;
 
 /**
  * RPC响应类
@@ -26,5 +25,4 @@ public class RpcResponse implements Serializable {
      * 响应体
      */
     private Object body;
-
 }

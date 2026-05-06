@@ -5,7 +5,6 @@ import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.proxy.ServiceStub;
 import com.joizhang.naiverpc.proxy.StubFactory;
 import com.joizhang.naiverpc.remoting.client.TransportClient;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -15,24 +14,23 @@ import java.util.stream.Collectors;
 @Deprecated
 public class DynamicStubFactory implements StubFactory {
 
-    private final static String STUB_SOURCE_TEMPLATE =
-            "package com.joizhang.naiverpc.netty.client.stubs;\n" +
-                    "import com.joizhang.naiverpc.netty.serialize.SerializeSupport;\n" +
-                    "\n" +
-                    "public class %s extends AbstractStub implements %s {\n" +
-                    "    @Override\n" +
-                    "    public %s %s(%s) {\n" +
-                    "        return SerializeSupport.parse(\n" +
-                    "                invokeRemote(\n" +
-                    "                        new RpcRequest(\n" +
-                    "                                \"%s\",\n" +
-                    "                                \"%s\",\n" +
-                    "                                SerializeSupport.serialize(%s)\n" +
-                    "                        )\n" +
-                    "                )\n" +
-                    "        );\n" +
-                    "    }\n" +
-                    "}";
+    private static final String STUB_SOURCE_TEMPLATE = "package com.joizhang.naiverpc.netty.client.stubs;\n"
+            + "import com.joizhang.naiverpc.netty.serialize.SerializeSupport;\n"
+            + "\n"
+            + "public class %s extends AbstractStub implements %s {\n"
+            + "    @Override\n"
+            + "    public %s %s(%s) {\n"
+            + "        return SerializeSupport.parse(\n"
+            + "                invokeRemote(\n"
+            + "                        new RpcRequest(\n"
+            + "                                \"%s\",\n"
+            + "                                \"%s\",\n"
+            + "                                SerializeSupport.serialize(%s)\n"
+            + "                        )\n"
+            + "                )\n"
+            + "        );\n"
+            + "    }\n"
+            + "}";
 
     @Override
     @SuppressWarnings("unchecked")
@@ -47,8 +45,16 @@ public class DynamicStubFactory implements StubFactory {
             String returnName = method.getReturnType().getName();
             String methodName = method.getName();
             String[] methodArgs = constructMethodArgs(method);
-            String source = String.format(STUB_SOURCE_TEMPLATE, stubSimpleName, classFullName,
-                    returnName, methodName, methodArgs[0], classFullName, methodName, methodArgs[1]);
+            String source = String.format(
+                    STUB_SOURCE_TEMPLATE,
+                    stubSimpleName,
+                    classFullName,
+                    returnName,
+                    methodName,
+                    methodArgs[0],
+                    classFullName,
+                    methodName,
+                    methodArgs[1]);
             // 编译源代码
             JavaStringCompiler compiler = new JavaStringCompiler();
             Map<String, byte[]> results = compiler.compile(stubSimpleName + ".java", source);
@@ -56,7 +62,8 @@ public class DynamicStubFactory implements StubFactory {
             Class<?> clazz = compiler.loadClass(stubFullName, results);
 
             // 把Transport赋值给桩
-            ServiceStub stubInstance = (ServiceStub) clazz.getDeclaredConstructor().newInstance();
+            ServiceStub stubInstance =
+                    (ServiceStub) clazz.getDeclaredConstructor().newInstance();
             stubInstance.setTransportClient(client);
             // 返回这个桩
             return (T) stubInstance;
@@ -68,8 +75,8 @@ public class DynamicStubFactory implements StubFactory {
     private String[] constructMethodArgs(Method method) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         assert parameterTypes.length == 1;
-        List<String> classNames = Arrays.stream(parameterTypes)
-                .map(Class::getName).collect(Collectors.toList());
+        List<String> classNames =
+                Arrays.stream(parameterTypes).map(Class::getName).collect(Collectors.toList());
         StringBuilder args = new StringBuilder();
         StringBuilder vars = new StringBuilder();
         for (int i = 0; i < classNames.size(); i++) {
@@ -81,7 +88,6 @@ public class DynamicStubFactory implements StubFactory {
                 vars.append("arg").append(i);
             }
         }
-        return new String[]{args.toString(), vars.toString()};
+        return new String[] {args.toString(), vars.toString()};
     }
-
 }

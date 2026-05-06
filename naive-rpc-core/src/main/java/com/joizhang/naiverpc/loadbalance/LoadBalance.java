@@ -1,7 +1,6 @@
 package com.joizhang.naiverpc.loadbalance;
 
 import com.joizhang.naiverpc.spi.SPI;
-
 import java.util.List;
 
 /**
@@ -17,5 +16,4 @@ public interface LoadBalance {
      * @return selected address
      */
     String select(List<String> remoteServiceAddresses);
-
 }

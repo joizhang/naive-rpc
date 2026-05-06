@@ -7,10 +7,9 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 @Slf4j
 @ChannelHandler.Sharable
@@ -41,5 +40,4 @@ public class ResponseInvocation extends SimpleChannelInboundHandler<Command> {
             ctx.close();
         }
     }
-
 }

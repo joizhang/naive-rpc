@@ -1,15 +1,14 @@
 package com.joizhang.naiverpc.spi;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.joizhang.naiverpc.netty.serialize.java.JavaSerializer;
 import com.joizhang.naiverpc.netty.serialize.nativejava.NativeJavaSerializer;
 import com.joizhang.naiverpc.serialize.Serializer;
-import org.junit.jupiter.api.Test;
-
 import java.util.Collection;
 import java.util.ServiceLoader;
 import java.util.stream.StreamSupport;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class ServiceSupportTest {
 
@@ -32,9 +31,7 @@ public class ServiceSupportTest {
 
     @Test
     public void testServiceLoader() {
-        StreamSupport
-                .stream(ServiceLoader.load(Serializer.class).spliterator(), false)
+        StreamSupport.stream(ServiceLoader.load(Serializer.class).spliterator(), false)
                 .forEach(System.out::println);
     }
-
 }

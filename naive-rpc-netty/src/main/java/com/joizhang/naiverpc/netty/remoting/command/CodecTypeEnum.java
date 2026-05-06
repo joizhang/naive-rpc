@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 @Getter
 public enum CodecTypeEnum {
-
     NATIVE_JAVA((byte) 0x01, NativeJavaSerializer.class.getCanonicalName()),
 
     JAVA((byte) 0x02, JavaSerializer.class.getCanonicalName()),
@@ -36,5 +35,4 @@ public enum CodecTypeEnum {
         }
         return null;
     }
-
 }

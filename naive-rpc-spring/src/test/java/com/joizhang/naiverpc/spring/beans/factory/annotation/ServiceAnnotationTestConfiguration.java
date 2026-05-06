@@ -13,5 +13,4 @@ public class ServiceAnnotationTestConfiguration {
         applicationConfig.setName("naiverpc-demo-application");
         return applicationConfig;
     }
-
 }

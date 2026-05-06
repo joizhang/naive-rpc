@@ -12,5 +12,4 @@ public interface ServiceProviderRegistry {
      * @param serviceProvider 服务的实例
      */
     <T> void addServiceProvider(Class<? extends T> serviceClass, T serviceProvider);
-
 }

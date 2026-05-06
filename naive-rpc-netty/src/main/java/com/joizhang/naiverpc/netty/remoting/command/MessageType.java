@@ -17,5 +17,4 @@ public interface MessageType {
      * pong
      */
     byte HEARTBEAT_RESPONSE_TYPE = 0x14;
-
 }

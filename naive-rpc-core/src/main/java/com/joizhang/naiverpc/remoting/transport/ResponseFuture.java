@@ -1,9 +1,8 @@
 package com.joizhang.naiverpc.remoting.transport;
 
 import com.joizhang.naiverpc.remoting.command.Command;
-import lombok.Getter;
-
 import java.util.concurrent.CompletableFuture;
+import lombok.Getter;
 
 @Getter
 public class ResponseFuture {
@@ -19,5 +18,4 @@ public class ResponseFuture {
         this.future = future;
         this.timestamp = System.nanoTime();
     }
-
 }

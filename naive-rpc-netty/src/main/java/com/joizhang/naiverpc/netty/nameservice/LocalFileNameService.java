@@ -1,11 +1,11 @@
 package com.joizhang.naiverpc.netty.nameservice;
 
-import com.joizhang.naiverpc.nameservice.NameService;
-import com.joizhang.naiverpc.netty.serialize.metadata.MetadataSerializer;
-import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
-import com.joizhang.naiverpc.serialize.Serializer;
-import lombok.extern.slf4j.Slf4j;
+import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
 
+import com.joizhang.naiverpc.nameservice.NameService;
+import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
+import com.joizhang.naiverpc.netty.serialize.metadata.MetadataSerializer;
+import com.joizhang.naiverpc.serialize.Serializer;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -19,8 +19,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LocalFileNameService implements NameService {
@@ -54,7 +53,7 @@ public class LocalFileNameService implements NameService {
         log.info("Register service: {}, uri: {}.", serviceName, socketAddress);
         byte[] bytes;
         try (RandomAccessFile raf = new RandomAccessFile(file, "rw");
-             FileChannel fileChannel = raf.getChannel()) {
+                FileChannel fileChannel = raf.getChannel()) {
             FileLock lock = fileChannel.lock();
             try {
                 long fileLength = raf.length();
@@ -72,8 +71,7 @@ public class LocalFileNameService implements NameService {
                     metadata = new Metadata();
                 }
 
-                List<InetSocketAddress> socketAddresses = metadata.computeIfAbsent(
-                        serviceName, k -> new ArrayList<>());
+                List<InetSocketAddress> socketAddresses = metadata.computeIfAbsent(serviceName, k -> new ArrayList<>());
                 if (!socketAddresses.contains(socketAddress)) {
                     socketAddresses.add(socketAddress);
                 }
@@ -93,7 +91,7 @@ public class LocalFileNameService implements NameService {
     public InetSocketAddress lookupService(String serviceName) throws IOException, ClassNotFoundException {
         Metadata metadata1;
         try (RandomAccessFile raf = new RandomAccessFile(file, "rw");
-             FileChannel fileChannel = raf.getChannel()) {
+                FileChannel fileChannel = raf.getChannel()) {
             FileLock lock = fileChannel.lock();
             try {
                 byte[] bytes = new byte[(int) raf.length()];
@@ -126,6 +124,5 @@ public class LocalFileNameService implements NameService {
     }
 
     @Override
-    public void close() {
-    }
+    public void close() {}
 }

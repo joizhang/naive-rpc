@@ -34,7 +34,8 @@ public class RequestInvocation extends SimpleChannelInboundHandler<Command> {
                 logger.warn("Response is null!");
             }
         } else {
-            throw new Exception(String.format("No handler for request with type: %d", request.getHeader().getMessageType()));
+            throw new Exception(String.format(
+                    "No handler for request with type: %d", request.getHeader().getMessageType()));
         }
     }
 

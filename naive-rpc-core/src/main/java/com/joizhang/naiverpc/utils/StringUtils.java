@@ -1,10 +1,9 @@
 package com.joizhang.naiverpc.utils;
 
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 @UtilityClass
 @Slf4j
@@ -75,6 +74,4 @@ public final class StringUtils {
         }
         return str1.equals(str2);
     }
-
 }
-
