@@ -1,4 +1,3 @@
 package com.joizhang.naiverpc.spi;
 
-public class ServiceLoadException extends RuntimeException {
-}
+public class ServiceLoadException extends RuntimeException {}

@@ -20,5 +20,4 @@ public interface StubFactory {
      * @return 代理实例
      */
     <T> T createStub(NameService nameService, Class<T> serviceClass, TransportClient client);
-
 }

@@ -1,13 +1,12 @@
 package com.joizhang.naiverpc.remoting.transport;
 
-import com.joizhang.naiverpc.remoting.server.RequestHandler;
-import lombok.extern.slf4j.Slf4j;
+import static com.joizhang.naiverpc.spi.ServiceSupportConstant.REQUEST_HANDLER_SERVICE_SUPPORT;
 
+import com.joizhang.naiverpc.remoting.server.RequestHandler;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-
-import static com.joizhang.naiverpc.spi.ServiceSupportConstant.REQUEST_HANDLER_SERVICE_SUPPORT;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 请求处理器的注册类
@@ -22,8 +21,10 @@ public class RequestHandlerRegistry {
         Map<Byte, RequestHandler> map = new java.util.HashMap<>();
         for (RequestHandler requestHandler : requestHandlers) {
             map.put(requestHandler.type(), requestHandler);
-            log.debug("Load request handler, type: {}, class: {}.",
-                    requestHandler.type(), requestHandler.getClass().getCanonicalName());
+            log.debug(
+                    "Load request handler, type: {}, class: {}.",
+                    requestHandler.type(),
+                    requestHandler.getClass().getCanonicalName());
         }
         this.handlerMap = Collections.unmodifiableMap(map);
     }
@@ -39,5 +40,4 @@ public class RequestHandlerRegistry {
     public RequestHandler get(byte type) {
         return handlerMap.get(type);
     }
-
 }

@@ -6,9 +6,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-@ConditionalOnProperty(prefix = NaiveRpcUtils.NAIVE_RPC_PREFIX, name = "enabled", matchIfMissing = true)
 @Configuration
+@ConditionalOnProperty(prefix = NaiveRpcUtils.NAIVE_RPC_PREFIX, name = "enabled", matchIfMissing = true)
 @EnableConfigurationProperties(NaiveRpcConfigurationProperties.class)
 @EnableNaiveRpcConfig
-public class NaiveRpcAutoConfiguration {
-}
+public class NaiveRpcAutoConfiguration {}

@@ -11,5 +11,4 @@ public class RequestDecoder extends CommandDecoder {
     protected Header decodeHeader(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) {
         return super.decodeHeader(channelHandlerContext, byteBuf);
     }
-
 }

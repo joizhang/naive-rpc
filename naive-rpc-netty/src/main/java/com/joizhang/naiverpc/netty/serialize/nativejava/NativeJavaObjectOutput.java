@@ -1,7 +1,6 @@
 package com.joizhang.naiverpc.netty.serialize.nativejava;
 
 import com.joizhang.naiverpc.serialize.ObjectOutput;
-
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -92,5 +91,4 @@ public class NativeJavaObjectOutput implements ObjectOutput {
     public void writeObject(Object obj) throws IOException {
         outputStream.writeObject(obj);
     }
-
 }

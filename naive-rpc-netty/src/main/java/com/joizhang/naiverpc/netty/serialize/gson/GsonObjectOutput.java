@@ -2,7 +2,6 @@ package com.joizhang.naiverpc.netty.serialize.gson;
 
 import com.google.gson.Gson;
 import com.joizhang.naiverpc.serialize.ObjectOutput;
-
 import java.io.*;
 
 public class GsonObjectOutput implements ObjectOutput {
@@ -82,5 +81,4 @@ public class GsonObjectOutput implements ObjectOutput {
         writer.println();
         writer.flush();
     }
-
 }

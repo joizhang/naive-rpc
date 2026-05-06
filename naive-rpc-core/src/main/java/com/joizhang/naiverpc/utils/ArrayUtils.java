@@ -24,5 +24,4 @@ public final class ArrayUtils {
     public static boolean isNotEmpty(final Object[] array) {
         return !isEmpty(array);
     }
-
 }

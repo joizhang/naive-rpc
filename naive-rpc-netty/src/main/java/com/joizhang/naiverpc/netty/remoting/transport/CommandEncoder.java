@@ -1,16 +1,16 @@
 package com.joizhang.naiverpc.netty.remoting.transport;
 
+import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
+
 import com.joizhang.naiverpc.netty.remoting.command.CodecTypeEnum;
+import com.joizhang.naiverpc.netty.remoting.command.RpcConstants;
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
 import com.joizhang.naiverpc.remoting.command.Command;
 import com.joizhang.naiverpc.remoting.command.Header;
-import com.joizhang.naiverpc.netty.remoting.command.RpcConstants;
 import com.joizhang.naiverpc.serialize.Serializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-
-import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
 
 /**
  * <pre>
@@ -32,8 +32,7 @@ import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVIC
 public class CommandEncoder extends MessageToByteEncoder<Command> {
 
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, Command msg, ByteBuf byteBuf)
-            throws Exception {
+    protected void encode(ChannelHandlerContext channelHandlerContext, Command msg, ByteBuf byteBuf) throws Exception {
         int fullLength = RpcConstants.HEAD_LENGTH;
         byteBuf.writeBytes(RpcConstants.MAGIC_NUMBER);
         // leave a place to write the value of full length
@@ -63,5 +62,4 @@ public class CommandEncoder extends MessageToByteEncoder<Command> {
         byteBuf.writeByte(RpcConstants.PADDING);
         byteBuf.writeInt(header.getRequestId());
     }
-
 }

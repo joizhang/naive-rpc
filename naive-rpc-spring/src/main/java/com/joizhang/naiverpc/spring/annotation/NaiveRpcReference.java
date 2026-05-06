@@ -16,5 +16,4 @@ public @interface NaiveRpcReference {
      * Interface class name, default value is empty string
      */
     String interfaceName() default "";
-
 }

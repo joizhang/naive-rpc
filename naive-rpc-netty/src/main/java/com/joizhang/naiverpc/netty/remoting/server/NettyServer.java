@@ -8,7 +8,6 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.handler.timeout.IdleStateHandler;
-
 import java.util.concurrent.TimeUnit;
 
 public class NettyServer implements TransportServer {
@@ -24,17 +23,16 @@ public class NettyServer implements TransportServer {
     public void start(RequestHandlerRegistry requestHandlerRegistry, int port) {
         this.port = port;
         this.requestHandlerRegistry = requestHandlerRegistry;
-        this.bossGroup = NettyEventLoopFactory.eventLoopGroup(1,
-                "NettyServerBoss");
-        this.workerGroup = NettyEventLoopFactory.eventLoopGroup(Constants.DEFAULT_IO_THREADS,
-                "NettyServerWorker");
+        this.bossGroup = NettyEventLoopFactory.eventLoopGroup(1, "NettyServerBoss");
+        this.workerGroup = NettyEventLoopFactory.eventLoopGroup(Constants.DEFAULT_IO_THREADS, "NettyServerWorker");
         this.bootstrap = newBootstrap();
         this.channel = doBind();
     }
 
     private ServerBootstrap newBootstrap() {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
-        serverBootstrap.group(this.bossGroup, this.workerGroup)
+        serverBootstrap
+                .group(this.bossGroup, this.workerGroup)
                 .channel(NettyEventLoopFactory.serverSocketChannelClass())
                 .option(ChannelOption.SO_REUSEADDR, Boolean.TRUE)
                 .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
@@ -54,8 +52,7 @@ public class NettyServer implements TransportServer {
                         // 响应编码器
                         .addLast("encoder", new ResponseEncoder())
                         // 空闲状态检测
-                        .addLast("server-idle-handler", new IdleStateHandler(
-                                0, 20, 0, TimeUnit.SECONDS))
+                        .addLast("server-idle-handler", new IdleStateHandler(0, 20, 0, TimeUnit.SECONDS))
                         // 请求处理
                         .addLast("handler", new RequestInvocation(requestHandlerRegistry));
             }
@@ -80,5 +77,4 @@ public class NettyServer implements TransportServer {
             channel.close();
         }
     }
-
 }

@@ -4,10 +4,9 @@ import com.joizhang.naiverpc.utils.AtomicPositiveInteger;
 
 public class RequestIdSupport {
 
-    private final static AtomicPositiveInteger NEXT_REQUEST_ID = new AtomicPositiveInteger(0);
+    private static final AtomicPositiveInteger NEXT_REQUEST_ID = new AtomicPositiveInteger(0);
 
     public static int next() {
         return NEXT_REQUEST_ID.getAndIncrement();
     }
-
 }

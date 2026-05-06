@@ -3,11 +3,10 @@ package com.joizhang.naiverpc.netty.serialize;
 import com.joizhang.naiverpc.serialize.ObjectInput;
 import com.joizhang.naiverpc.serialize.ObjectOutput;
 import com.joizhang.naiverpc.serialize.Serializer;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SerializeSupport {
@@ -48,5 +47,4 @@ public class SerializeSupport {
             return objectInput.readObject(clazz);
         }
     }
-
 }

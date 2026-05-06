@@ -12,5 +12,4 @@ public class HelloServiceImpl implements HelloService {
         log.info(msg);
         return msg;
     }
-
 }

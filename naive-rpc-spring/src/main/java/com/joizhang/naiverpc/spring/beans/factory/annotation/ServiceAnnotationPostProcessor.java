@@ -2,6 +2,8 @@ package com.joizhang.naiverpc.spring.beans.factory.annotation;
 
 import com.joizhang.naiverpc.spring.annotation.NaiveRpcService;
 import com.joizhang.naiverpc.spring.context.annotation.NaiveRpcClassPathBeanDefinitionScanner;
+import java.lang.annotation.Annotation;
+import java.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeansException;
@@ -32,12 +34,14 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.lang.annotation.Annotation;
-import java.util.*;
-
 @Slf4j
-public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPostProcessor, EnvironmentAware,
-        ResourceLoaderAware, BeanClassLoaderAware, ApplicationContextAware, InitializingBean {
+public class ServiceAnnotationPostProcessor
+        implements BeanDefinitionRegistryPostProcessor,
+                EnvironmentAware,
+                ResourceLoaderAware,
+                BeanClassLoaderAware,
+                ApplicationContextAware,
+                InitializingBean {
 
     public static final String BEAN_NAME = "naiveRpcServiceAnnotationPostProcessor";
 
@@ -141,7 +145,8 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
                 if (log.isInfoEnabled()) {
                     List<String> serviceClasses = new ArrayList<>(beanDefinitionHolders.size());
                     for (BeanDefinitionHolder beanDefinitionHolder : beanDefinitionHolders) {
-                        serviceClasses.add(beanDefinitionHolder.getBeanDefinition().getBeanClassName());
+                        serviceClasses.add(
+                                beanDefinitionHolder.getBeanDefinition().getBeanClassName());
                     }
                     log.info("Found " + beanDefinitionHolders.size()
                             + " classes annotated by naive-rpc @NaiveRpcService under package ["
@@ -156,7 +161,8 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
                 }
             } else {
                 if (log.isWarnEnabled()) {
-                    log.warn("No class annotated by naive-rpc @Service was found under package [" + packageToScan + "]");
+                    log.warn(
+                            "No class annotated by naive-rpc @Service was found under package [" + packageToScan + "]");
                 }
             }
             servicePackagesHolder.addScannedPackage(packageToScan);
@@ -167,26 +173,26 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
         BeanNameGenerator beanNameGenerator = null;
         if (registry instanceof SingletonBeanRegistry) {
             SingletonBeanRegistry singletonBeanRegistry = (SingletonBeanRegistry) registry;
-            beanNameGenerator = (BeanNameGenerator) singletonBeanRegistry.getSingleton(
-                    AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR);
+            beanNameGenerator = (BeanNameGenerator)
+                    singletonBeanRegistry.getSingleton(AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR);
         }
         if (beanNameGenerator == null) {
             if (log.isInfoEnabled()) {
                 log.info("BeanNameGenerator bean can't be found in BeanFactory with name ["
                         + AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR + "]");
-                log.info("BeanNameGenerator will be a instance of " +
-                        AnnotationBeanNameGenerator.class.getName() +
-                        " , it maybe a potential problem on bean name generation.");
+                log.info("BeanNameGenerator will be a instance of " + AnnotationBeanNameGenerator.class.getName()
+                        + " , it maybe a potential problem on bean name generation.");
             }
             beanNameGenerator = new AnnotationBeanNameGenerator();
         }
         return beanNameGenerator;
     }
 
-    private Set<BeanDefinitionHolder> findServiceBeanDefinitionHolders(ClassPathBeanDefinitionScanner scanner,
-                                                                       String packageToScan,
-                                                                       BeanDefinitionRegistry registry,
-                                                                       BeanNameGenerator beanNameGenerator) {
+    private Set<BeanDefinitionHolder> findServiceBeanDefinitionHolders(
+            ClassPathBeanDefinitionScanner scanner,
+            String packageToScan,
+            BeanDefinitionRegistry registry,
+            BeanNameGenerator beanNameGenerator) {
         Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents(packageToScan);
         Set<BeanDefinitionHolder> beanDefinitionHolders = new LinkedHashSet<>(beanDefinitions.size());
         for (BeanDefinition beanDefinition : beanDefinitions) {
@@ -197,6 +203,7 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
         return beanDefinitionHolders;
     }
 
+    @Deprecated
     @SuppressWarnings("unused")
     private void processScannedBeanDefinition(BeanDefinitionHolder beanDefinitionHolder) {
         Class<?> beanClass = resolveClass(beanDefinitionHolder);
@@ -207,7 +214,8 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
         // String annotatedServiceBeanName = beanDefinitionHolder.getBeanName();
         // ServiceBean Bean name
         String beanName = generateServiceBeanName(serviceAnnotationAttributes, serviceInterface);
-        //  AbstractBeanDefinition serviceBeanDefinition = buildServiceBeanDefinition(serviceAnnotationAttributes, serviceInterface, annotatedServiceBeanName);
+        //  AbstractBeanDefinition serviceBeanDefinition = buildServiceBeanDefinition(serviceAnnotationAttributes,
+        // serviceInterface, annotatedServiceBeanName);
         BeanDefinition serviceBeanDefinition = beanDefinitionHolder.getBeanDefinition();
         registerServiceBeanDefinition(beanName, serviceBeanDefinition, serviceInterface);
     }
@@ -223,8 +231,7 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
     }
 
     private Annotation findServiceAnnotation(Class<?> beanClass) {
-        return serviceAnnotationTypes
-                .stream()
+        return serviceAnnotationTypes.stream()
                 .map(annotationType -> AnnotatedElementUtils.findMergedAnnotation(beanClass, annotationType))
                 .filter(Objects::nonNull)
                 .findFirst()
@@ -238,23 +245,22 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
      * @param serviceInterface            the class of interface annotated {@link NaiveRpcService}
      * @return bean name
      */
-    @SuppressWarnings("unused")
     private String generateServiceBeanName(Map<String, Object> serviceAnnotationAttributes, String serviceInterface) {
         ServiceBeanNameBuilder builder = ServiceBeanNameBuilder.create(serviceInterface, environment);
         return builder.build();
     }
 
-    private void registerServiceBeanDefinition(String beanName,
-                                               BeanDefinition serviceBeanDefinition,
-                                               String serviceInterface) {
+    private void registerServiceBeanDefinition(
+            String beanName, BeanDefinition serviceBeanDefinition, String serviceInterface) {
         if (registry.containsBeanDefinition(beanName)) {
             BeanDefinition existingDefinition = registry.getBeanDefinition(beanName);
             if (existingDefinition.equals(serviceBeanDefinition)) {
                 return;
             }
-            String msg = "Found duplicated BeanDefinition of service interface [" + serviceInterface + "] " +
-                    "with bean name [" + beanName + "], existing definition [ " + existingDefinition + "], " +
-                    "new definition [" + serviceBeanDefinition + "]";
+            String msg = "Found duplicated BeanDefinition of service interface [" + serviceInterface + "] "
+                    + "with bean name ["
+                    + beanName + "], existing definition [ " + existingDefinition + "], " + "new definition ["
+                    + serviceBeanDefinition + "]";
             log.error(msg);
             throw new BeanDefinitionStoreException(serviceBeanDefinition.getResourceDescription(), beanName, msg);
         }
@@ -278,8 +284,8 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
             Map<String, Object> annotationAttributes = getServiceAnnotationAttributes(beanDefinition);
             if (annotationAttributes != null) {
                 // process @NaiveRpcService at java-config @bean method
-                processAnnotatedBeanDefinition(beanName,
-                        (AnnotatedBeanDefinition) beanDefinition, annotationAttributes);
+                processAnnotatedBeanDefinition(
+                        beanName, (AnnotatedBeanDefinition) beanDefinition, annotationAttributes);
             }
         }
 
@@ -298,8 +304,8 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
                     if (factoryMethodMetadata.isAnnotated(annotationType.getName())) {
                         Map<String, Object> annotationAttributes =
                                 factoryMethodMetadata.getAnnotationAttributes(annotationType.getName());
-                        return ServiceAnnotationUtils.filterDefaultValues(annotationType,
-                                Objects.requireNonNull(annotationAttributes));
+                        return ServiceAnnotationUtils.filterDefaultValues(
+                                annotationType, Objects.requireNonNull(annotationAttributes));
                     }
                 }
             }
@@ -307,16 +313,14 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
         return null;
     }
 
-    private void processAnnotatedBeanDefinition(String beanName,
-                                                AnnotatedBeanDefinition beanDefinition,
-                                                Map<String, Object> annotationAttributes) {
+    private void processAnnotatedBeanDefinition(
+            String beanName, AnnotatedBeanDefinition beanDefinition, Map<String, Object> annotationAttributes) {
         Map<String, Object> serviceAnnotationAttributes = new LinkedHashMap<>(annotationAttributes);
         // get bean class from return type
         MethodMetadata methodMetadata = Objects.requireNonNull(beanDefinition.getFactoryMethodMetadata());
         String returnTypeName = methodMetadata.getReturnTypeName();
         Class<?> beanClass = ClassUtils.resolveClassName(returnTypeName, classLoader);
-        String serviceInterface = ServiceAnnotationUtils.resolveInterfaceName(
-                serviceAnnotationAttributes, beanClass);
+        String serviceInterface = ServiceAnnotationUtils.resolveInterfaceName(serviceAnnotationAttributes, beanClass);
         // ServiceBean Bean name
         String serviceBeanName = generateServiceBeanName(serviceAnnotationAttributes, serviceInterface);
         registerServiceBeanDefinition(serviceBeanName, beanDefinition, serviceInterface);
@@ -324,8 +328,8 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.servicePackagesHolder = applicationContext.getBean(
-                ServicePackagesHolder.BEAN_NAME, ServicePackagesHolder.class);
+        this.servicePackagesHolder =
+                applicationContext.getBean(ServicePackagesHolder.BEAN_NAME, ServicePackagesHolder.class);
     }
 
     @Override
@@ -342,5 +346,4 @@ public class ServiceAnnotationPostProcessor implements BeanDefinitionRegistryPos
     public void setBeanClassLoader(@NotNull ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
-
 }

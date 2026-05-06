@@ -2,7 +2,6 @@ package com.joizhang.naiverpc.serialize;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Map;
 
 public interface ObjectInput extends DataInput {
 
@@ -36,5 +35,4 @@ public interface ObjectInput extends DataInput {
      * @throws ClassNotFoundException if an ClassNotFoundException occurs
      */
     <T> T readObject(Class<T> cls, Type type) throws IOException, ClassNotFoundException;
-
 }

@@ -21,5 +21,4 @@ public interface TransportServer {
      * 停止服务器
      */
     void stop();
-
 }

@@ -7,25 +7,26 @@ import com.joizhang.naiverpc.demo.service.UserService;
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.NettyRpcAccessPoint;
 import com.joizhang.naiverpc.spi.ServiceSupport;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.concurrent.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DemoThreadPoolClientApp {
 
-    private static final ServiceSupport<RpcAccessPoint> RPC_ACCESS_POINT_SERVICE_SUPPORT = ServiceSupport.getServiceSupport(RpcAccessPoint.class);
+    private static final ServiceSupport<RpcAccessPoint> RPC_ACCESS_POINT_SERVICE_SUPPORT =
+            ServiceSupport.getServiceSupport(RpcAccessPoint.class);
 
     public static void main(String[] args) throws Exception {
-        ExecutorService service = new ThreadPoolExecutor(
-                4,
-                4,
-                0, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<>(200),
-                Executors.defaultThreadFactory(),
-                new ThreadPoolExecutor.DiscardPolicy());
-
-        try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
+        try (ExecutorService service = new ThreadPoolExecutor(
+                        4,
+                        4,
+                        0,
+                        TimeUnit.SECONDS,
+                        new ArrayBlockingQueue<>(200),
+                        Executors.defaultThreadFactory(),
+                        new ThreadPoolExecutor.DiscardPolicy());
+                RpcAccessPoint rpcAccessPoint =
+                        RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
             NameService nameService = rpcAccessPoint.getNameService(DemoThreadPoolClientApp.class);
             HelloService helloService = DemoClientApp.lookupService(rpcAccessPoint, nameService, HelloService.class);
             UserService userService = DemoClientApp.lookupService(rpcAccessPoint, nameService, UserService.class);
@@ -34,7 +35,7 @@ public class DemoThreadPoolClientApp {
             CountDownLatch latch1 = new CountDownLatch(loopTime);
             for (int i = 0; i < loopTime; i++) {
                 final int seq = i;
-                service.execute(()-> {
+                service.execute(() -> {
                     String response = helloService.hello("joizhang " + seq);
                     log.info("收到响应: {}.", response);
                     latch1.countDown();
@@ -45,7 +46,7 @@ public class DemoThreadPoolClientApp {
             CountDownLatch latch2 = new CountDownLatch(loopTime);
             for (int i = 0; i < loopTime; i++) {
                 final int seq = i;
-                service.execute(()-> {
+                service.execute(() -> {
                     User user = new User();
                     user.setUsername("joizhang");
                     user.setAge((short) 28);
@@ -57,11 +58,8 @@ public class DemoThreadPoolClientApp {
                 });
             }
             latch2.await();
-
-            service.shutdown();
         } catch (InterruptedException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
-
 }

@@ -1,7 +1,6 @@
 package com.joizhang.naiverpc.serialize;
 
 import com.joizhang.naiverpc.spi.SPI;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,5 +27,4 @@ public interface Serializer {
      * @return 反序列化对象
      */
     ObjectInput deserialize(InputStream inputStream) throws IOException;
-
 }

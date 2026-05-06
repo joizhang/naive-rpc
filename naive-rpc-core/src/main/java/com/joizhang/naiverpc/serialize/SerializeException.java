@@ -9,5 +9,4 @@ public class SerializeException extends RuntimeException {
     public SerializeException(Throwable throwable) {
         super(throwable);
     }
-
 }

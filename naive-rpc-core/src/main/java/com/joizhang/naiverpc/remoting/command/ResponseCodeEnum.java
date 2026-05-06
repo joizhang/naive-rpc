@@ -7,7 +7,6 @@ import java.util.Map;
  * 响应码
  */
 public enum ResponseCodeEnum {
-
     CONTINUE(100, "Continue"),
 
     OK(200, "OK"),
@@ -46,5 +45,4 @@ public enum ResponseCodeEnum {
     public String getMessage() {
         return message;
     }
-
 }

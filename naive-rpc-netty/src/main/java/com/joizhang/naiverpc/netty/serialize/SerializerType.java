@@ -11,5 +11,4 @@ public interface SerializerType {
     byte GSON_SERIALIZATION_ID = 4;
 
     byte KRYO_SERIALIZATION_ID = 5;
-
 }

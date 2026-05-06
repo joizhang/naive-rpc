@@ -1,15 +1,14 @@
 package com.joizhang.naiverpc.netty.serialize.kryo;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
 import com.joizhang.naiverpc.netty.serialize.User;
 import com.joizhang.naiverpc.netty.serialize.kryo.utils.KryoUtils;
 import com.joizhang.naiverpc.serialize.Serializer;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
 
 public class KryoSerializerTest {
 
@@ -30,5 +29,4 @@ public class KryoSerializerTest {
         User user1 = SerializeSupport.deserialize(serializer, userBytes, user.getClass());
         assertEquals(user, user1);
     }
-
 }

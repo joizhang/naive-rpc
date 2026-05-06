@@ -5,7 +5,6 @@ import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.io.Input;
 import com.joizhang.naiverpc.netty.serialize.kryo.utils.KryoUtils;
 import com.joizhang.naiverpc.serialize.ObjectInput;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,7 +100,7 @@ public class KryoObjectInput implements ObjectInput, Closeable {
             if (len < 0) {
                 return null;
             } else if (len == 0) {
-                return new byte[]{};
+                return new byte[] {};
             } else {
                 return input.readBytes(len);
             }
@@ -115,8 +114,7 @@ public class KryoObjectInput implements ObjectInput, Closeable {
         try {
             return kryo.readObjectOrNull(input, String.class);
         } catch (KryoException e) {
-            throw new UnsupportedOperationException(
-                    "Kryo serialization must know the input type when deserialize.", e);
+            throw new UnsupportedOperationException("Kryo serialization must know the input type when deserialize.", e);
         }
     }
 

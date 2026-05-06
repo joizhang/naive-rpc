@@ -11,5 +11,4 @@ public @interface SPI {
      * default extension name
      */
     String value() default "";
-
 }

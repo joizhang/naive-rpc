@@ -1,9 +1,9 @@
 package com.joizhang.naiverpc.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.joizhang.naiverpc.config.NaiveRpcPropertiesSingleton;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NaiveRpcPropertiesSingletonTest {
 
@@ -13,5 +13,4 @@ public class NaiveRpcPropertiesSingletonTest {
         String applicationName = instance.getStringValue("naiverpc.application.name");
         assertEquals("naive-rpc-netty", applicationName);
     }
-
 }

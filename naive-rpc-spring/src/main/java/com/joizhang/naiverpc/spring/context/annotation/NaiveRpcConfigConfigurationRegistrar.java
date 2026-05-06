@@ -9,9 +9,8 @@ import org.springframework.core.type.AnnotationMetadata;
 public class NaiveRpcConfigConfigurationRegistrar implements ImportBeanDefinitionRegistrar {
 
     @Override
-    public void registerBeanDefinitions(@NotNull AnnotationMetadata importingClassMetadata,
-                                        @NotNull BeanDefinitionRegistry registry) {
+    public void registerBeanDefinitions(
+            @NotNull AnnotationMetadata importingClassMetadata, @NotNull BeanDefinitionRegistry registry) {
         NaiveRpcSpringInitializer.initialize(registry);
     }
-
 }

@@ -1,11 +1,10 @@
 package com.joizhang.naiverpc.netty.utils;
 
-import com.joizhang.naiverpc.utils.NetUtils;
-import org.junit.jupiter.api.Test;
-
-import java.net.InetSocketAddress;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.joizhang.naiverpc.utils.NetUtils;
+import java.net.InetSocketAddress;
+import org.junit.jupiter.api.Test;
 
 public class NetUtilsTest {
 
@@ -25,5 +24,4 @@ public class NetUtilsTest {
         String localHost = NetUtils.getLocalHost();
         System.out.println(localHost);
     }
-
 }

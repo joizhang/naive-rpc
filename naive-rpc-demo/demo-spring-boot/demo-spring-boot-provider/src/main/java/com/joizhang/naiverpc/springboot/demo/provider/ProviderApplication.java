@@ -1,9 +1,8 @@
 package com.joizhang.naiverpc.springboot.demo.provider;
 
+import java.util.concurrent.CountDownLatch;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.concurrent.CountDownLatch;
 
 @SpringBootApplication
 public class ProviderApplication {
@@ -13,5 +12,4 @@ public class ProviderApplication {
         System.out.println("naive-rpc service started");
         new CountDownLatch(1).await();
     }
-
 }

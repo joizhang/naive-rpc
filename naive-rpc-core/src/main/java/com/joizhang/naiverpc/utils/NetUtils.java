@@ -1,14 +1,13 @@
 package com.joizhang.naiverpc.utils;
 
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 @UtilityClass
 @Slf4j
@@ -49,12 +48,12 @@ public final class NetUtils {
         return RND_PORT_START + ThreadLocalRandom.current().nextInt(RND_PORT_RANGE);
     }
 
-    public synchronized static int getAvailablePort() {
+    public static synchronized int getAvailablePort() {
         int randomPort = getRandomPort();
         return getAvailablePort(randomPort);
     }
 
-    public synchronized static int getAvailablePort(int port) {
+    public static synchronized int getAvailablePort(int port) {
         if (port < MIN_PORT) {
             return port = MIN_PORT;
         }
@@ -96,9 +95,7 @@ public final class NetUtils {
     }
 
     public static boolean isLocalHost(String host) {
-        return host != null
-                && (LOCAL_IP_PATTERN.matcher(host).matches()
-                || host.equalsIgnoreCase(LOCALHOST_KEY));
+        return host != null && (LOCAL_IP_PATTERN.matcher(host).matches() || host.equalsIgnoreCase(LOCALHOST_KEY));
     }
 
     public static boolean isAnyHost(String host) {
@@ -118,8 +115,7 @@ public final class NetUtils {
     }
 
     public static InetSocketAddress getLocalSocketAddress(String host, int port) {
-        return isInvalidLocalHost(host) ?
-                new InetSocketAddress(port) : new InetSocketAddress(host, port);
+        return isInvalidLocalHost(host) ? new InetSocketAddress(port) : new InetSocketAddress(host, port);
     }
 
     static boolean isValidV4Address(InetAddress address) {
@@ -245,7 +241,6 @@ public final class NetUtils {
             log.warn(e.toString());
         }
 
-
         return localAddress;
     }
 
@@ -273,8 +268,11 @@ public final class NetUtils {
                 try {
                     matched = networkInterfaceDisplayName.matches(trimIgnoredInterface);
                 } catch (PatternSyntaxException e) {
-                    // if trimIgnoredInterface is a invalid regular expression, a PatternSyntaxException will be thrown out
-                    log.warn("exception occurred: " + networkInterfaceDisplayName + " matches " + trimIgnoredInterface, e);
+                    // if trimIgnoredInterface is a invalid regular expression, a PatternSyntaxException will be thrown
+                    // out
+                    log.warn(
+                            "exception occurred: " + networkInterfaceDisplayName + " matches " + trimIgnoredInterface,
+                            e);
                 } finally {
                     if (matched) {
                         return true;
@@ -442,7 +440,8 @@ public final class NetUtils {
      */
     public static boolean matchIpRange(String pattern, String host, int port) throws UnknownHostException {
         if (pattern == null || host == null) {
-            throw new IllegalArgumentException("Illegal Argument pattern or hostName. Pattern:" + pattern + ", Host:" + host);
+            throw new IllegalArgumentException(
+                    "Illegal Argument pattern or hostName. Pattern:" + pattern + ", Host:" + host);
         }
         pattern = pattern.trim();
         if ("*.*.*.*".equals(pattern) || "*".equals(pattern)) {
@@ -462,7 +461,7 @@ public final class NetUtils {
             splitCharacter = SPLIT_IPV6_CHARACTER;
         }
         String[] mask = pattern.split(splitCharacter);
-        //check format of pattern
+        // check format of pattern
         checkHostPattern(pattern, mask, isIpv4);
 
         host = inetAddress.getHostAddress();
@@ -491,7 +490,11 @@ public final class NetUtils {
                 if (ip < min || ip > max) {
                     return false;
                 }
-            } else if ("0".equals(ipAddress[i]) && ("0".equals(mask[i]) || "00".equals(mask[i]) || "000".equals(mask[i]) || "0000".equals(mask[i]))) {
+            } else if ("0".equals(ipAddress[i])
+                    && ("0".equals(mask[i])
+                            || "00".equals(mask[i])
+                            || "000".equals(mask[i])
+                            || "0000".equals(mask[i]))) {
                 continue;
             } else if (!mask[i].equals(ipAddress[i])) {
                 return false;
@@ -507,14 +510,17 @@ public final class NetUtils {
     private static void checkHostPattern(String pattern, String[] mask, boolean isIpv4) {
         if (!isIpv4) {
             if (mask.length != 8 && ipPatternContainExpression(pattern)) {
-                throw new IllegalArgumentException("If you config ip expression that contains '*' or '-', please fill qualified ip pattern like 234e:0:4567:0:0:0:3d:*. ");
+                throw new IllegalArgumentException(
+                        "If you config ip expression that contains '*' or '-', please fill qualified ip pattern like 234e:0:4567:0:0:0:3d:*. ");
             }
             if (mask.length != 8 && !pattern.contains("::")) {
-                throw new IllegalArgumentException("The host is ipv6, but the pattern is not ipv6 pattern : " + pattern);
+                throw new IllegalArgumentException(
+                        "The host is ipv6, but the pattern is not ipv6 pattern : " + pattern);
             }
         } else {
             if (mask.length != 4) {
-                throw new IllegalArgumentException("The host is ipv4, but the pattern is not ipv4 pattern : " + pattern);
+                throw new IllegalArgumentException(
+                        "The host is ipv4, but the pattern is not ipv4 pattern : " + pattern);
             }
         }
     }
@@ -547,6 +553,4 @@ public final class NetUtils {
         }
         return Integer.parseInt(ipSegment, 16);
     }
-
 }
-

@@ -7,7 +7,6 @@ import com.joizhang.naiverpc.proxy.ServiceStub;
 import com.joizhang.naiverpc.remoting.client.Transport;
 import com.joizhang.naiverpc.remoting.client.TransportClient;
 import com.joizhang.naiverpc.remoting.command.*;
-
 import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,11 +28,11 @@ public abstract class AbstractServiceStub implements ServiceStub {
                 .rpcVersion(RpcConstants.RPC_VERSION)
                 .messageType(MessageType.REQUEST_TYPE)
                 .codecType(CodecTypeEnum.JAVA.getCode()) // TODO get codec from properties file
-                .requestId(RequestIdSupport.next()).build();
+                .requestId(RequestIdSupport.next())
+                .build();
         Command requestCommand = new Command(requestHeader, request);
         try {
-            Command responseCommand = transport.send(requestCommand)
-                    .get(RPC_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            Command responseCommand = transport.send(requestCommand).get(RPC_TIMEOUT_SECONDS, TimeUnit.SECONDS);
             RpcResponse rpcResponse = (RpcResponse) responseCommand.getPayload();
             if (rpcResponse.getCode() == ResponseCodeEnum.OK.getCode()) {
                 return rpcResponse.getBody();
@@ -62,5 +61,4 @@ public abstract class AbstractServiceStub implements ServiceStub {
     public void setTransportClient(TransportClient client) {
         this.client = client;
     }
-
 }

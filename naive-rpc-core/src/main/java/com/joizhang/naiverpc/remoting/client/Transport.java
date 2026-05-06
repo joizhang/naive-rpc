@@ -2,7 +2,6 @@ package com.joizhang.naiverpc.remoting.client;
 
 import com.joizhang.naiverpc.remoting.command.Command;
 import com.joizhang.naiverpc.remoting.server.RequestHandler;
-
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -17,5 +16,4 @@ public interface Transport {
      * @return 返回值是一个Future，Future
      */
     CompletableFuture<Command> send(Command request);
-
 }

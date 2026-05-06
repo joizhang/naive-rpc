@@ -7,10 +7,9 @@ import com.joizhang.naiverpc.demo.service.UserService;
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.NettyRpcAccessPoint;
 import com.joizhang.naiverpc.spi.ServiceSupport;
-import lombok.extern.slf4j.Slf4j;
-
 import java.net.InetSocketAddress;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DemoClientApp {
@@ -28,8 +27,8 @@ public class DemoClientApp {
     }
 
     public static void main(String[] args) throws Exception {
-        try (RpcAccessPoint rpcAccessPoint = RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(
-                NettyRpcAccessPoint.class.getCanonicalName())) {
+        try (RpcAccessPoint rpcAccessPoint =
+                RPC_ACCESS_POINT_SERVICE_SUPPORT.getService(NettyRpcAccessPoint.class.getCanonicalName())) {
             NameService nameService = rpcAccessPoint.getNameService(DemoClientApp.class);
 
             HelloService helloService = DemoClientApp.lookupService(rpcAccessPoint, nameService, HelloService.class);
@@ -41,5 +40,4 @@ public class DemoClientApp {
             System.out.println(user);
         }
     }
-
 }

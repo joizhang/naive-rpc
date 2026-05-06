@@ -1,10 +1,10 @@
 package com.joizhang.naiverpc.netty;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.joizhang.naiverpc.nameservice.NameService;
 import com.joizhang.naiverpc.netty.nameservice.LocalFileNameService;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NettyRpcAccessPointTest {
 
@@ -15,5 +15,4 @@ public class NettyRpcAccessPointTest {
             assertTrue(nameService instanceof LocalFileNameService);
         }
     }
-
 }

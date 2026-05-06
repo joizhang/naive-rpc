@@ -1,8 +1,7 @@
 package com.joizhang.naiverpc.spring.context.annotation;
 
-import org.springframework.core.annotation.AliasFor;
-
 import java.lang.annotation.*;
+import org.springframework.core.annotation.AliasFor;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -17,5 +16,4 @@ public @interface EnableNaiveRpc {
 
     @AliasFor(annotation = NaiveRpcComponentScan.class, attribute = "basePackageClasses")
     Class<?>[] scanBasePackageClasses() default {};
-
 }

@@ -13,5 +13,4 @@ public interface RpcConstants {
     byte TOTAL_LENGTH = 16;
 
     int HEAD_LENGTH = 16;
-
 }

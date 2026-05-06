@@ -14,7 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>5.3.26</spring.version>
+        <spring.version>6.1.13</spring.version>
     </properties>
 
     <dependencies>
@@ -31,8 +31,8 @@
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j-log4j12.version}</version>
+            <artifactId>slf4j-reload4j</artifactId>
+            <version>${slf4j-reload4j.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

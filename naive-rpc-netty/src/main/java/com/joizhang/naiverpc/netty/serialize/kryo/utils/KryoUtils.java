@@ -23,5 +23,4 @@ public class KryoUtils {
     public static void setRegistrationRequired(boolean registrationRequired) {
         KRYO_FACTORY.setRegistrationRequired(registrationRequired);
     }
-
 }

@@ -26,5 +26,4 @@ public class Header {
      * 标识唯一请求
      */
     private int requestId;
-
 }

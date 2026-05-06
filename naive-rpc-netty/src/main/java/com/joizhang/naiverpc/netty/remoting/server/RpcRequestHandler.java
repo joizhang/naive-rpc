@@ -3,13 +3,12 @@ package com.joizhang.naiverpc.netty.remoting.server;
 import com.joizhang.naiverpc.netty.remoting.command.MessageType;
 import com.joizhang.naiverpc.remoting.command.*;
 import com.joizhang.naiverpc.remoting.server.RequestHandler;
-import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * RPC请求处理类
@@ -45,22 +44,25 @@ public class RpcRequestHandler implements RequestHandler {
                 Object result = method.invoke(serviceProvider, args);
                 rpcResponse = RpcResponse.builder()
                         .code(ResponseCodeEnum.OK.getCode())
-                        .body(result).build();
+                        .body(result)
+                        .build();
             } else {
                 // 如果没找到，返回NO_PROVIDER错误响应。
-                String error = MessageFormat.format("No service provider of {}#{}",
-                        rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
+                String error = MessageFormat.format(
+                        "No service provider of {}#{}", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
                 log.error(error);
                 rpcResponse = RpcResponse.builder()
                         .code(ResponseCodeEnum.NOT_FOUND.getCode())
-                        .error(error).build();
+                        .error(error)
+                        .build();
             }
         } catch (Throwable t) {
             // 发生异常，返回UNKNOWN_ERROR错误响应。
             log.error("Exception: ", t);
             rpcResponse = RpcResponse.builder()
                     .code(ResponseCodeEnum.INTERNAL_SERVER_ERROR.getCode())
-                    .error(t.getMessage()).build();
+                    .error(t.getMessage())
+                    .build();
         }
         Header responseHeader = Header.builder()
                 .rpcVersion(requestHeader.getRpcVersion())
@@ -74,7 +76,9 @@ public class RpcRequestHandler implements RequestHandler {
     @Override
     public <T> void addServiceProvider(@NotNull Class<? extends T> serviceClass, T serviceProvider) {
         serviceProviders.put(serviceClass.getCanonicalName(), serviceProvider);
-        log.debug("Add service: {}, provider: {}.",
-                serviceClass.getCanonicalName(), serviceProvider.getClass().getCanonicalName());
+        log.debug(
+                "Add service: {}, provider: {}.",
+                serviceClass.getCanonicalName(),
+                serviceProvider.getClass().getCanonicalName());
     }
 }

@@ -92,5 +92,4 @@ public interface DataOutput {
      * @throws IOException
      */
     void flushBuffer() throws IOException;
-
 }

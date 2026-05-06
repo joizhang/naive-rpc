@@ -1,11 +1,9 @@
 package com.joizhang.naiverpc.remoting.server;
 
-
 import com.joizhang.naiverpc.remoting.client.Transport;
 import com.joizhang.naiverpc.remoting.command.Command;
 import com.joizhang.naiverpc.remoting.transport.ServiceProviderRegistry;
 import com.joizhang.naiverpc.spi.SPI;
-
 import java.io.IOException;
 
 /**
@@ -27,5 +25,4 @@ public interface RequestHandler extends ServiceProviderRegistry {
      * @return 响应命令
      */
     Command handle(Command requestCommand) throws IOException, ClassNotFoundException;
-
 }

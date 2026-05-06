@@ -17,5 +17,4 @@ public @interface NaiveRpcService {
      * Interface class name, default value is empty string
      */
     String interfaceName() default "";
-
 }

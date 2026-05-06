@@ -75,5 +75,4 @@ public interface DataInput {
      * @throws IOException
      */
     byte[] readBytes() throws IOException;
-
 }

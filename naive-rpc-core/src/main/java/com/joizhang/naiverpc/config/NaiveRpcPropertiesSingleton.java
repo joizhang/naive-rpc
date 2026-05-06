@@ -1,11 +1,10 @@
 package com.joizhang.naiverpc.config;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class NaiveRpcPropertiesSingleton {
@@ -56,5 +55,4 @@ public class NaiveRpcPropertiesSingleton {
         }
         return value;
     }
-
 }

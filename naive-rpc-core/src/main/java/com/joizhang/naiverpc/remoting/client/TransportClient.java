@@ -1,7 +1,6 @@
 package com.joizhang.naiverpc.remoting.client;
 
 import com.joizhang.naiverpc.spi.SPI;
-
 import java.io.Closeable;
 import java.net.SocketAddress;
 import java.util.concurrent.TimeUnit;
@@ -43,5 +42,4 @@ public interface TransportClient extends Closeable {
      */
     @Override
     void close();
-
 }

@@ -1,20 +1,19 @@
 package com.joizhang.naiverpc.netty.nameservice;
 
+import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.joizhang.naiverpc.netty.serialize.SerializeSupport;
 import com.joizhang.naiverpc.netty.serialize.metadata.MetadataSerializer;
 import com.joizhang.naiverpc.serialize.Serializer;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-
-import static com.joizhang.naiverpc.spi.ServiceSupportConstant.SERIALIZER_SERVICE_SUPPORT;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class LocalFileNameServiceTest {
 
@@ -62,5 +61,4 @@ public class LocalFileNameServiceTest {
             e.printStackTrace();
         }
     }
-
 }

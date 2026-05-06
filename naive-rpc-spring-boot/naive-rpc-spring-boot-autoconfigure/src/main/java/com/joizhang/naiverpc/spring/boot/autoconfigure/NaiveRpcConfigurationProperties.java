@@ -10,5 +10,4 @@ public class NaiveRpcConfigurationProperties {
 
     @NestedConfigurationProperty
     private ApplicationConfig application = new ApplicationConfig();
-
 }
