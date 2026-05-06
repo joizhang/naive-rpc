@@ -3,6 +3,9 @@ package com.joizhang.naiverpc.remoting.transport;
 import java.io.Closeable;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.concurrent.TimeoutException;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 在途请求
@@ -10,6 +13,8 @@ import java.util.concurrent.*;
 public class InFlightRequests implements Closeable {
 
     private final static long TIMEOUT_SEC = 10L;
+
+    private static final long TIMEOUT_NANOS = TimeUnit.SECONDS.toNanos(TIMEOUT_SEC);
 
     private final Semaphore semaphore = new Semaphore(10);
 
@@ -34,7 +39,10 @@ public class InFlightRequests implements Closeable {
 
     private void removeTimeoutFutures() {
         futureMap.entrySet().removeIf(entry -> {
-            if (System.nanoTime() - entry.getValue().getTimestamp() > TIMEOUT_SEC * 1000000000L) {
+            if (System.nanoTime() - entry.getValue().getTimestamp() > TIMEOUT_NANOS) {
+                ResponseFuture future = entry.getValue();
+                future.getFuture().completeExceptionally(
+                        new TimeoutException("Request timeout, requestId: " + future.getRequestId()));
                 semaphore.release();
                 return true;
             } else {

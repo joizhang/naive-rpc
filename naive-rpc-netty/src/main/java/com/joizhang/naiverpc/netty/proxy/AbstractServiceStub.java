@@ -12,6 +12,7 @@ import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public abstract class AbstractServiceStub implements ServiceStub {
@@ -19,6 +20,8 @@ public abstract class AbstractServiceStub implements ServiceStub {
     protected final Map<InetSocketAddress, Transport> clientMap = new ConcurrentHashMap<>();
 
     private TransportClient client;
+
+    private static final long RPC_TIMEOUT_SECONDS = 10L;
 
     @Override
     public Object invokeRemote(Transport transport, RpcRequest request) {
@@ -29,13 +32,16 @@ public abstract class AbstractServiceStub implements ServiceStub {
                 .requestId(RequestIdSupport.next()).build();
         Command requestCommand = new Command(requestHeader, request);
         try {
-            Command responseCommand = transport.send(requestCommand).get();
+            Command responseCommand = transport.send(requestCommand)
+                    .get(RPC_TIMEOUT_SECONDS, TimeUnit.SECONDS);
             RpcResponse rpcResponse = (RpcResponse) responseCommand.getPayload();
             if (rpcResponse.getCode() == ResponseCodeEnum.OK.getCode()) {
                 return rpcResponse.getBody();
             } else {
                 throw new Exception(rpcResponse.getError());
             }
+        } catch (TimeoutException e) {
+            throw new RuntimeException("RPC request timeout after " + RPC_TIMEOUT_SECONDS + " seconds", e);
         } catch (ExecutionException e) {
             throw new RuntimeException(e.getCause());
         } catch (Throwable e) {
